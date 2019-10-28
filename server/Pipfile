@@ -4,9 +4,17 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+isort = "*"
+black = "==19.3b0"
 
 [packages]
 django = "==2.2.*"
+djangorestframework = "*"
+django-extensions = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
