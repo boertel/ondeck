@@ -96,7 +96,7 @@ class Assignee(models.Model):
 class Ticket(models.Model):
     index = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
-    description = models.TextField(null=True)
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)

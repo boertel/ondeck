@@ -45,4 +45,6 @@ export default styled(FullTicket)`
   flex-direction: column;
   padding: 10px;
   height: 100%;
+  min-width: 400px;
+  max-width: 800px;
 `;

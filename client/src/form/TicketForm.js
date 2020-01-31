@@ -4,7 +4,7 @@ import { useForm } from "react-form";
 
 import { Button, View } from "../ui";
 import { mutateTicket } from "../resources/tickets";
-import { InputField } from "./fields";
+import { InputField, TextareaField } from "./fields";
 
 function TicketForm({ title, description, id, column, onSubmit }) {
   const location = useLocation();
@@ -28,9 +28,13 @@ function TicketForm({ title, description, id, column, onSubmit }) {
   } = useForm({
     defaultValues,
     onSubmit: async (values, { reset }) => {
-      await mutate(values);
-      reset();
-      onSubmit();
+      try {
+        await mutate(values, { waitForRefetchQueries: true });
+        reset();
+        onSubmit();
+      } catch (exception) {
+        console.error(exception)
+      }
     }
   });
   return (
@@ -41,7 +45,7 @@ function TicketForm({ title, description, id, column, onSubmit }) {
         required={true}
         autoFocus={true}
       />
-      <InputField label="Description" field="description" required={true} />
+      <TextareaField label="Description" field="description" />
       <View className="align-center">
         <Button type="submit" disabled={!canSubmit}>
           {!!id ? "Update" : "Create"} Ticket

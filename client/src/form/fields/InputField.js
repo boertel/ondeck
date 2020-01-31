@@ -5,7 +5,7 @@ import { Input } from '../../ui'
 
 
 const InputField = React.forwardRef((props, ref) => {
-  const [field, fieldOptions, rest] = splitFormProps(props);
+  const [field, fieldOptions, { as, ...rest }] = splitFormProps(props);
 
   const {
     meta: { error, isTouched, isValidating },
@@ -13,7 +13,7 @@ const InputField = React.forwardRef((props, ref) => {
   } = useField(field, fieldOptions);
 
   return (
-    <Input {...getInputProps({ ref, ...rest })} />
+    <Input {...getInputProps({ ref, ...rest })} forwardedAs={as} />
   )
 })
 

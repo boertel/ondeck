@@ -2,17 +2,21 @@ import React from 'react'
 import styled from 'styled-components/macro';
 
 
-function Input({ icon: Icon, label, className, ...props }) {
+function Input({ icon: Icon, as: As, label, className, ...props }) {
   return (
     <div className={className}>
       <label>{label}
       <div className="input">
-        <input {...props} />
+        <As {...props} />
         {!!Icon && <Icon />}
       </div>
       </label>
     </div>
   )
+}
+
+Input.defaultProps = {
+  as: 'input',
 }
 
 export default styled(Input)`
@@ -52,7 +56,7 @@ export default styled(Input)`
     color: ${({ theme }) => theme.color};
   }
 
-  input {
+  textarea, input {
     width: 100%;
     background-color: transparent;
     color: ${({ theme }) => theme.color};
