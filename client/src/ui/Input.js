@@ -32,6 +32,10 @@ export default styled(Input)`
     border: none
   }
 
+  label {
+    color: ${({ theme }) => theme.primary};
+  }
+
   .input {
     display: flex;
     flex-direction: row-reverse;

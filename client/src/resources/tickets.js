@@ -9,14 +9,21 @@ const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
 
 export const useTickets = useMyQuery("tickets", defaultQueryFn);
 
-const defaultPostMutationFn = ({ workspaceSlug, boardSlug }) => data =>
-  api
-    .post(`/api/v1/workspaces/${workspaceSlug}/${boardSlug}/tickets/`, data)
+const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
+  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, boardSlug, 'tickets']
+  let method = 'post'
+  if (data.id) {
+    path.push(data.id)
+    method = 'put'
+  }
+  path.push('')
+  api[method](path.join('/'), data)
     .then(({ data }) => data);
+}
 
-export const addTicket = ({ workspaceSlug, boardSlug }) => {
+export const mutateTicket = ({ workspaceSlug, boardSlug }) => {
   /* eslint-disable react-hooks/rules-of-hooks */
-  return useMutation(defaultPostMutationFn({ workspaceSlug, boardSlug }), {
+  return useMutation(defaultMutationFn({ workspaceSlug, boardSlug }), {
     refetchQueries: ["tickets"]
   });
 };
