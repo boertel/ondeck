@@ -1,18 +1,18 @@
-import React, { Suspense } from 'react'
-import { NetworkErrorBoundary } from 'rest-hooks'
+import React from "react";
+import { ThemeProvider } from "styled-components";
 
-import Routes from './Routes'
+import "./App.css";
 
-const Spinner = () => <div>Loading...</div>
+import Routes from "./Routes";
+import theme, { GlobalStyle } from "./theme";
 
 const App = () => {
   return (
-    <Suspense fallback={<Spinner />}>
-      <NetworkErrorBoundary>
-        <Routes />
-      </NetworkErrorBoundary>
-    </Suspense>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Routes />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

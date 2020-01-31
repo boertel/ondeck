@@ -11,4 +11,4 @@ class WorkspaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workspace
-        fields = ("name", "slug", "created_at", "updated_at", "boards")
+        fields = ("name", "slug", "created_at", "updated_at", "boards", "key")

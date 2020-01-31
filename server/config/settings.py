@@ -54,7 +54,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:3008"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3004"]
 
 ROOT_URLCONF = "config.urls"
 
