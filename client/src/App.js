@@ -1,5 +1,7 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
 
 import "./App.css";
 
@@ -10,7 +12,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Routes />
+      <DndProvider backend={Backend}>
+        <Routes />
+      </DndProvider>
     </ThemeProvider>
   );
 };

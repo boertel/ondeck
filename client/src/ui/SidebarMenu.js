@@ -24,6 +24,10 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     transition: all .2s ease-in-out;
     text-decoration: none;
 
+    border-style: dashed;
+    border-color: transparent;
+    border-width: 1px;
+
     svg {
       margin-right: 4px;
     }
@@ -37,6 +41,14 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
       background-color: ${({ theme }) => theme.primary};
       color: ${({ theme }) => theme.background};
     }
+  }
+
+  &.canDrop a {
+    border-color: ${({ theme }) => theme.primary};
+  }
+
+  &.isHover a {
+    background-color: ${({ theme }) => theme.hoverBackground};
   }
 `
 

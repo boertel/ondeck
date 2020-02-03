@@ -1,47 +1,28 @@
-import React from "react";
-import { groupBy } from "lodash";
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Switch,
-  useRouteMatch,
-  useParams
-} from "react-router-dom";
+import React from 'react'
+import { groupBy } from 'lodash'
+import { BrowserRouter as Router, Link, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
-import {
-  Sidebar,
-  Loading,
-  Columns,
-  Column,
-  ColumnTitle,
-  Input,
-  Button
-} from "./ui";
-import SidebarMenu, { SidebarMenuItem } from "./ui/SidebarMenu";
-import { FullTicket, Ticket, Tickets } from "./components";
-import { useWorkspace, useBoard, useColumns, useTickets } from "./resources";
-import { BoardIcon, SearchIcon, AddIcon } from "./ui/icons";
-import { AddColumnForm } from "./form";
+import { Sidebar, Loading, Columns, Column, ColumnTitle, Input, Button } from './ui'
+import SidebarMenu, { SidebarMenuItem } from './ui/SidebarMenu'
+import { FullTicket, Ticket, Tickets } from './components'
+import Board from './components/Board'
+import { useWorkspace, useBoard, useColumns, useTickets } from './resources'
+import { BoardIcon, SearchIcon, AddIcon } from './ui/icons'
+import { AddColumnForm } from './form'
 
-function Board() {
-  const { path, url } = useRouteMatch();
-  const { workspaceSlug, boardSlug } = useParams();
-  const { columns, isLoadingColumns } = useColumns([
-    "columns",
-    { workspaceSlug, boardSlug }
-  ]);
-  const { tickets, isLoadingTickets } = useTickets([
-    "tickets",
-    { workspaceSlug, boardSlug }
-  ]);
+function FullBoard() {
+  const { path, url } = useRouteMatch()
+  const { workspaceSlug, boardSlug } = useParams()
+  const { columns, isLoadingColumns } = useColumns(['columns', { workspaceSlug, boardSlug }])
+  const { tickets, isLoadingTickets } = useTickets(['tickets', { workspaceSlug, boardSlug }])
 
-  let ticketsGroupByColumns = {};
+  let ticketsGroupByColumns = {}
   if (tickets) {
-    ticketsGroupByColumns = groupBy(tickets, "column");
+    ticketsGroupByColumns = groupBy(tickets, 'column')
   }
 
-  console.log(columns);
+  // TODO why so many console.log/render?
+  console.log(columns)
 
   return (
     <Switch>
@@ -49,22 +30,16 @@ function Board() {
         <Columns>
           {columns &&
             columns.map(({ id, name }) => (
-              <Column key={id}>
+              <Column key={id} id={id}>
                 <ColumnTitle>
                   <div>{name}</div>
-                  <Link
-                    to={{ pathname: `${url}/new`, search: `?column=${id}` }}
-                  >
+                  <Link to={{ pathname: `${url}/new`, search: `?column=${id}` }}>
                     <AddIcon />
                   </Link>
                 </ColumnTitle>
                 <Tickets>
                   {(ticketsGroupByColumns[id] || []).map(ticket => (
-                    <Ticket
-                      key={ticket.key}
-                      to={`${url}/${ticket.key}`}
-                      {...ticket}
-                    />
+                    <Ticket key={ticket.key} to={`${url}/${ticket.key}`} {...ticket} />
                   ))}
                 </Tickets>
               </Column>
@@ -81,19 +56,16 @@ function Board() {
         <FullTicket />
       </Route>
     </Switch>
-  );
+  )
 }
 
 function Workspace() {
-  const { path, url } = useRouteMatch();
-  const { workspaceSlug } = useParams();
+  const { path, url } = useRouteMatch()
+  const { workspaceSlug } = useParams()
 
-  const { workspace, isLoading } = useWorkspace([
-    "workspace",
-    { workspaceSlug }
-  ]);
+  const { workspace, isLoading } = useWorkspace(['workspace', { workspaceSlug }])
 
-  const boards = (workspace || {}).boards;
+  const boards = (workspace || {}).boards
 
   return (
     <>
@@ -105,10 +77,10 @@ function Workspace() {
               <h5>Boards</h5>
             </SidebarMenuItem>
             {boards.map(({ name, slug }) => (
-              <SidebarMenuItem key={slug} to={`${url}/${slug}`}>
+              <Board as={SidebarMenuItem} key={slug} to={`${url}/${slug}`}>
                 <BoardIcon />
                 {name}
-              </SidebarMenuItem>
+              </Board>
             ))}
           </SidebarMenu>
         )}
@@ -119,12 +91,12 @@ function Workspace() {
             Index
           </Route>
           <Route path={`${path}/:boardSlug`}>
-            <Board />
+            <FullBoard />
           </Route>
         </Switch>
       </main>
     </>
-  );
+  )
 }
 
 const Routes = () => {
@@ -137,7 +109,7 @@ const Routes = () => {
       </Switch>
       <footer></footer>
     </Router>
-  );
-};
+  )
+}
 
-export default Routes;
+export default Routes

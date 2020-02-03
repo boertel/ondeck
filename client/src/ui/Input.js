@@ -37,6 +37,7 @@ export default styled(Input)`
   }
 
   label {
+    width: 100%;
     color: ${({ theme }) => theme.primary};
   }
 
@@ -47,6 +48,7 @@ export default styled(Input)`
   }
 
   input + svg {
+    margin-right: 6px;
     color: ${({ theme }) => theme.placeholder};
   }
 

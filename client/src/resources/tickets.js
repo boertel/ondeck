@@ -12,9 +12,10 @@ export const useTickets = useMyQuery("tickets", defaultQueryFn);
 const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
   let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, boardSlug, 'tickets']
   let method = 'post'
+  console.log(data)
   if (data.id) {
     path.push(data.id)
-    method = 'put'
+    method = 'patch'
   }
   path.push('')
   api[method](path.join('/'), data)

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.2",
+    "classnames": "^2.2.6",
     "lodash": "^4.17.15",
     "polished": "^3.4.4",
     "react": "^16.11.0",

@@ -1,7 +1,9 @@
 import React from 'react'
 import { transparentize } from 'polished';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import styled from 'styled-components/macro';
+
+import { useDrag } from 'react-dnd';
 
 import { View } from '../../ui'
 
@@ -12,10 +14,15 @@ const TicketTitle = styled.h4`
   margin: 0;
 `
 
-const Ticket = ({ title, className, to, }) => {
-  const { url } = useRouteMatch()
+const Ticket = ({ title, className, id, to, }) => {
+  const [{ opacity }, drag] = useDrag({
+    item: { type: 'TICKET', id },
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.4 : 1,
+    })
+  })
   return (
-    <View as={Link} className={className} to={to}>
+    <View as={Link} className={className} to={to} ref={drag} style={{ opacity, }}>
       <TicketTitle>{title}</TicketTitle>
     </View>
   )
@@ -28,9 +35,10 @@ export default styled(Ticket)`
   border: 1px solid transparent;
   padding: 10px;
   margin-bottom: 8px;
-  transition-property: border-color, color;
+  transition-property: border-color, color, opacity;
   transition-duration: .2s;
   transition-timing-function: ease-in-out;
+  border-radius: ${({ theme }) => theme.radius};
 
   color: ${({ theme }) => theme.color};
   text-decoration: none;

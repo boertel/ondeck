@@ -15,6 +15,7 @@ django-cors-headers = "*"
 python-decouple = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
+django-allauth = "*"
 
 [requires]
 python_version = "3.7"
