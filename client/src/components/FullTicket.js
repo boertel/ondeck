@@ -7,12 +7,9 @@ import { View } from "../ui";
 import { TicketForm } from "../form";
 
 const FullTicket = ({ className }) => {
-  const { workspaceSlug, boardSlug, ticketSlug } = useParams();
+  const { ticketSlug } = useParams();
   // TODO should we fetch only `ticketSlug` here?
-  const { tickets, isLoading } = useTickets([
-    "tickets",
-    { workspaceSlug, boardSlug }
-  ]);
+  const { tickets, isLoading } = useTickets("tickets");
 
   const history = useHistory();
   useEffect(() => {

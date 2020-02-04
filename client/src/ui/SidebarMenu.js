@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { NavLink } from 'react-router-dom'
 
-const SidebarMenuItem = ({ to, className, ...rest }) => {
+const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
   const children = to ? <NavLink to={to} activeClassName="active">{rest.children}</NavLink> : rest.children;
-  return <li className={className}>{children}</li>
-}
+  return <li className={className} ref={ref}>{children}</li>
+})
 
 const StyledSidebarMenuItem = styled(SidebarMenuItem)`
   h5 {

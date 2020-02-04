@@ -27,7 +27,13 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [config("HOST", "ondeck.test")]
+
+COOKIE_DOMAIN = config("HOST", "ondeck.test")
+CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
+SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
+
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
 
 # Application definition
@@ -110,6 +116,12 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication"
+    ]
+}
 
 SITE_ID = 1
 

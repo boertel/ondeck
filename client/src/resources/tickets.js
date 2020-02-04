@@ -1,30 +1,33 @@
-import { useMutation } from "react-query";
-import { useMyQuery } from "./utils";
-import api from "./api";
+import { useMyQuery, useMyMutation } from './utils'
+import api from './api'
 
 const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
-  fetch(`/api/v1/workspaces/${workspaceSlug}/${boardSlug}/tickets/`).then(res =>
-    res.json()
-  );
+  fetch(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`).then(res => res.json())
 
-export const useTickets = useMyQuery("tickets", defaultQueryFn);
-
-const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
-  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, boardSlug, 'tickets']
+const getApiParameters = ({ workspaceSlug, boardSlug }) => getPk => {
   let method = 'post'
-  console.log(data)
-  if (data.id) {
-    path.push(data.id)
+  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, 'boards', boardSlug, 'tickets']
+  const pk = getPk()
+  if (pk) {
+    path.push(pk)
     method = 'patch'
   }
   path.push('')
-  api[method](path.join('/'), data)
-    .then(({ data }) => data);
+  return {
+    path: path.join('/'),
+    method,
+  }
 }
 
-export const mutateTicket = ({ workspaceSlug, boardSlug }) => {
-  /* eslint-disable react-hooks/rules-of-hooks */
-  return useMutation(defaultMutationFn({ workspaceSlug, boardSlug }), {
-    refetchQueries: ["tickets"]
-  });
-};
+const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
+  const { path, method } = getApiParameters({ workspaceSlug, boardSlug })(() => data.id)
+  return api[method](path, data).then(({ data }) => data)
+}
+
+const deleteFn = ({ workspaceSlug, boardSlug }) => pk => {
+  return api.delete(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${pk}/`).then(({ data }) => ({}))
+}
+
+export const useTickets = useMyQuery('tickets', defaultQueryFn)
+export const mutateTicket = useMyMutation('tickets', defaultMutationFn)
+export const deleteTicket = useMyMutation('tickets', deleteFn)

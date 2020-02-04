@@ -7,17 +7,17 @@ from .views import WorkspaceView, BoardView, TicketViewSet, ColumnViewSet, TagVi
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(
-    r"(?P<workspace_slug>[\w-]+)/(?P<board_slug>[\w-]+)/tickets", TicketViewSet
+    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tickets", TicketViewSet
 )
 router.register(
-    r"(?P<workspace_slug>[\w-]+)/(?P<board_slug>[\w-]+)/columns", ColumnViewSet
+    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/columns", ColumnViewSet
 )
-router.register(r"(?P<workspace_slug>[\w-]+)/(?P<board_slug>[\w-]+)/tags", TagViewSet)
+router.register(
+    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tags", TagViewSet
+)
+router.register(r"(?P<workspace_slug>[\w-]+)/boards", BoardView)
 
-urlpatterns = [
-    path("<slug:workspace_slug>/", WorkspaceView.as_view()),
-    path("<slug:workspace_slug>/<slug:board_slug>/", BoardView.as_view()),
-]
+urlpatterns = [path("<slug:workspace_slug>/", WorkspaceView.as_view())]
 
 # The API URLs are now determined automatically by the router.
 urlpatterns += [path("", include(router.urls))]

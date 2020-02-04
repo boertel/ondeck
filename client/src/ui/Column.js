@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import classNames from 'classnames'
-import { useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 import { useDrop } from 'react-dnd'
 
@@ -11,12 +10,14 @@ import View from './View';
 function Column({ id: columnId, className, ...props }) {
   const accept = ['TICKET']
 
-  const [ mutate ] = mutateTicket(useParams())
-  const onDrop = useCallback((ticket) => {
-    mutate({
-      id: ticket.id,
-      column: columnId,
-    })
+  const [ mutate ] = mutateTicket()
+  const onDrop = useCallback(({ id, fromColumnId }) => {
+    if (columnId !== fromColumnId) {
+      mutate({
+        id,
+        column: columnId,
+      })
+    }
   }, [columnId, mutate])
 
   const [{ isHover, canDrop }, drop] = useDrop({

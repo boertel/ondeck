@@ -8,13 +8,12 @@ import { FullTicket, Ticket, Tickets } from './components'
 import Board from './components/Board'
 import { useWorkspace, useBoard, useColumns, useTickets } from './resources'
 import { BoardIcon, SearchIcon, AddIcon } from './ui/icons'
-import { AddColumnForm } from './form'
+import { AddColumnForm, AddBoardForm, } from './form'
 
 function FullBoard() {
   const { path, url } = useRouteMatch()
-  const { workspaceSlug, boardSlug } = useParams()
-  const { columns, isLoadingColumns } = useColumns(['columns', { workspaceSlug, boardSlug }])
-  const { tickets, isLoadingTickets } = useTickets(['tickets', { workspaceSlug, boardSlug }])
+  const { columns } = useColumns('columns')
+  const { tickets } = useTickets('tickets')
 
   let ticketsGroupByColumns = {}
   if (tickets) {
@@ -22,7 +21,7 @@ function FullBoard() {
   }
 
   // TODO why so many console.log/render?
-  console.log(columns)
+  //console.log(columns)
 
   return (
     <Switch>
@@ -63,7 +62,7 @@ function Workspace() {
   const { path, url } = useRouteMatch()
   const { workspaceSlug } = useParams()
 
-  const { workspace, isLoading } = useWorkspace(['workspace', { workspaceSlug }])
+  const { workspace, isLoading } = useWorkspace('workspace')
 
   const boards = (workspace || {}).boards
 
@@ -82,6 +81,9 @@ function Workspace() {
                 {name}
               </Board>
             ))}
+          <SidebarMenuItem>
+            <AddBoardForm />
+          </SidebarMenuItem>
           </SidebarMenu>
         )}
       </Sidebar>

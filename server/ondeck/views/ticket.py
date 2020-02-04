@@ -11,4 +11,5 @@ class TicketViewSet(RootViewSet):
         return self.queryset.filter(board=self.board)
 
     def perform_create(self, serializer):
-        return serializer.save(board=self.board)
+        instance = serializer.save(board=self.board)
+        instance.add_owner(self.request.user)

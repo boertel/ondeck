@@ -1,13 +1,12 @@
 import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
 import { useForm } from "react-form";
 
 import { Button } from "../ui";
 import { InputField } from "./fields";
-import { addColumn } from '../resources/columns';
+import { mutateColumn } from '../resources/columns';
 
 function AddColumnForm() {
-  const [mutate] = addColumn(useParams())
+  const [mutate] = mutateColumn()
 
   const {
     Form,

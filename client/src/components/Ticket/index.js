@@ -14,9 +14,9 @@ const TicketTitle = styled.h4`
   margin: 0;
 `
 
-const Ticket = ({ title, className, id, to, }) => {
+const Ticket = ({ title, className, id, column: fromColumnId, board: fromBoardId, to, }) => {
   const [{ opacity }, drag] = useDrag({
-    item: { type: 'TICKET', id },
+    item: { type: 'TICKET', id, fromColumnId, fromBoardId, },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.4 : 1,
     })

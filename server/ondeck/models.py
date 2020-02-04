@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.utils.text import slugify
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
@@ -33,11 +34,11 @@ class Workspace(models.Model):
 
 class Membership(models.Model):
     class Role:
-        owner = "owner"
+        OWNER = "owner"
 
         @classmethod
         def as_choices(cls):
-            return ((cls.owner, "Owner"),)
+            return ((cls.OWNER, "Owner"),)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     board = models.ForeignKey("Board", on_delete=models.CASCADE)
@@ -48,13 +49,24 @@ class Membership(models.Model):
 
 class Board(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=80, unique=True)
+    slug = models.SlugField(max_length=80, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     workspace = models.ForeignKey(
         Workspace, on_delete=models.CASCADE, related_name="boards"
     )
     members = models.ManyToManyField(User, through=Membership)
+
+    def add_owner(self, user):
+        owner = Membership.objects.create(
+            user=user, board=self, role=Membership.Role.OWNER
+        )
+        return owner
+
+    def save(self, *args, **kwargs):
+        if self.slug == "":
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
 
 class Tag(models.Model):
@@ -80,11 +92,11 @@ class Column(models.Model):
 
 class Assignee(models.Model):
     class Role:
-        owner = "owner"
+        OWNER = "owner"
 
         @classmethod
         def as_choices(cls):
-            return ((cls.owner, "Owner"),)
+            return ((cls.OWNER, "Owner"),)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ticket = models.ForeignKey("Ticket", on_delete=models.CASCADE)
@@ -105,6 +117,12 @@ class Ticket(models.Model):
     tags = models.ManyToManyField(Tag)
     assignees = models.ManyToManyField(User, through=Assignee)
 
+    def add_owner(self, user):
+        owner = Assignee.objects.create(
+            user=user, ticket=self, role=Assignee.Role.OWNER
+        )
+        return owner
+
     @property
     def key(self):
         return "{}-{}".format(self.board.workspace.key, self.index)
@@ -116,10 +134,11 @@ def assign_last_key(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Ticket)
-def save_new_last_index(sender, instance, **kwargs):
-    workspace = instance.board.workspace
-    workspace.last_index = instance.index + 1
-    workspace.save()
+def save_new_last_index(sender, instance, created, **kwargs):
+    if created:
+        workspace = instance.board.workspace
+        workspace.last_index = instance.index + 1
+        workspace.save()
 
 
 class Activity(models.Model):

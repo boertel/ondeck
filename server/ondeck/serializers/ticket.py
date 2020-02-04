@@ -6,6 +6,7 @@ from .column import ColumnSerializer
 
 class TicketSerializer(serializers.ModelSerializer):
     key = serializers.CharField(read_only=True)
+    board = serializers.CharField(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         many=True, allow_null=True, read_only=True
     )
@@ -18,8 +19,10 @@ class TicketSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "column",
+            "board",
             "tags",
             "assignees",
             "created_at",
             "updated_at",
+            "assignees",
         )
