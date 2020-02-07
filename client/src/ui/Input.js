@@ -27,7 +27,7 @@ export default styled(Input)`
   width: 100%;
 
   border-radius: ${({ theme }) => theme.radius};
-  padding: 4px;
+  padding: 4px 0;
   margin-bottom: 8px;
 
   border: 1px solid ${({ theme }) => theme.borderColor};
@@ -35,6 +35,7 @@ export default styled(Input)`
   &.no-border {
     border: none
   }
+
 
   label {
     width: 100%;
@@ -47,6 +48,10 @@ export default styled(Input)`
     align-items: center;
   }
 
+  &.primary .input {
+    color: ${({ theme }) => theme.primary};
+  }
+
   input + svg {
     margin-right: 6px;
     color: ${({ theme }) => theme.placeholder};
@@ -55,13 +60,13 @@ export default styled(Input)`
   input:focus + svg,
   input:not(:placeholder-shown) + svg
   {
-    color: ${({ theme }) => theme.color};
+    color: currentColor;
   }
 
-  textarea, input {
+  textarea, input, select {
     width: 100%;
     background-color: transparent;
-    color: ${({ theme }) => theme.color};
+    color: inherit;
     font-size: 1em;
     border: 2px solid transparent;
     outline: none;

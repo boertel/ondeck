@@ -4,10 +4,9 @@ import api from './api'
 const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
   fetch(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`).then(res => res.json())
 
-const getApiParameters = ({ workspaceSlug, boardSlug }) => getPk => {
+const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   let method = 'post'
   let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, 'boards', boardSlug, 'tickets']
-  const pk = getPk()
   if (pk) {
     path.push(pk)
     method = 'patch'
@@ -20,7 +19,7 @@ const getApiParameters = ({ workspaceSlug, boardSlug }) => getPk => {
 }
 
 const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
-  const { path, method } = getApiParameters({ workspaceSlug, boardSlug })(() => data.id)
+  const { path, method } = getApiParameters({ workspaceSlug, boardSlug })(data.id)
   return api[method](path, data).then(({ data }) => data)
 }
 

@@ -1,50 +1,34 @@
-import React, { useState, useMemo } from 'react'
-import styled from 'styled-components/macro'
-import classNames from 'classnames'
+import React, { useMemo } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 import { useForm } from 'react-form'
 
-import { Button } from '../ui'
 import { AddIcon } from '../ui/icons'
 import { InputField } from './fields'
 import { mutateBoard } from '../resources/board'
 
-function AddBoardForm({ className, }) {
-  const [showForm, setShowForm] = useState(false)
+function AddBoardForm() {
   const [mutate] = mutateBoard()
 
-  const toggleForm = () => setShowForm(!showForm)
+  const history = useHistory()
+  const { workspaceSlug } = useParams()
 
   const {
     Form,
-    meta: { isSubmitting, canSubmit },
     reset,
   } = useForm({
     defaultValues: useMemo(() => ({ name: '' }), []),
     onSubmit: async (values, instance) => {
-      await mutate(values)
+      const { slug } = await mutate(values)
       reset()
+      history.push(`/workspaces/${workspaceSlug}/${slug}`)
     },
   })
 
   return (
-    <div className={className}>
-      <Button onClick={toggleForm} className="outline"><AddIcon /> Add Board</Button>
-      <Form className={classNames({ showForm })}>
-        <InputField field="name" required={true} autoFocus={showForm} />
-        <Button type="submit" disabled={!canSubmit}>
-          Add Board
-        </Button>
-      </Form>
-    </div>
+    <Form>
+      <InputField icon={AddIcon} field="name" className="no-border" placeholder="Add Board" />
+    </Form>
   )
 }
 
-export default styled(AddBoardForm)`
-  form {
-    opacity: 0;
-    transition: opacity .2s ease-in-out;
-  }
-  form.showForm {
-    opacity: 1;
-  }
-`
+export default AddBoardForm

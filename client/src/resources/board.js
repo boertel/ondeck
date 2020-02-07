@@ -1,21 +1,37 @@
 import { useMyQuery, useMyMutation } from './utils'
 
-import api from "./api";
+import api from './api'
 
-
-const defaultQueryFn = ({ workspaceSlug, boardSlug, }) => fetch(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/`).then(res => res.json())
-
-const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
-  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, 'boards']
+const getApiParameters = ({ workspaceSlug, }) => pk => {
   let method = 'post'
-  if (boardSlug) {
-    method = 'patch'
-    path.push(boardSlug)
+  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, 'boards']
+  if (pk) {
+    path.push(pk)
+    method = method || 'patch'
   }
   path.push('')
-  return api[method](path.join('/'), data).then(({ data }) => data)
+  return {
+    path: path.join('/'),
+    method,
+  }
 }
 
+const defaultQueryFn = (params) => {
+  // TODO update when needed to request one board (it needs const getPk = () => boardSlug)
+  const { path, } = getApiParameters(params)(params.boardSlug)
+  return api.get(path).then(({ data }) => data)
+}
 
-export const useBoard = useMyQuery('board', defaultQueryFn)
-export const mutateBoard = useMyMutation('board', defaultMutationFn)
+const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
+  const { path, method } = getApiParameters({ workspaceSlug })(boardSlug)
+  return api[method](path, data).then(({ data }) => data)
+}
+
+const deleteFn = ({ workspaceSlug, boardSlug }) => () => {
+  const { path, } = getApiParameters({ workspaceSlug })(boardSlug)
+  return api.delete(path).then(() => {})
+}
+
+export const useBoards = useMyQuery('boards', defaultQueryFn)
+export const mutateBoard = useMyMutation('boards', defaultMutationFn)
+export const deleteBoard = useMyMutation('boards', deleteFn)

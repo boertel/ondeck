@@ -4,6 +4,7 @@ from ..models import Board
 
 
 class BoardView(RootViewSet):
+    lookup_field = "slug"
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
 
@@ -16,6 +17,3 @@ class BoardView(RootViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(workspace=self.workspace)
-
-    def get_object(self):
-        return self.board

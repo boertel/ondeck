@@ -2,20 +2,21 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { NavLink } from 'react-router-dom'
 
-const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
+//const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
+const SidebarMenuItem = ({ to, className, ...rest }) => {
   const children = to ? <NavLink to={to} activeClassName="active">{rest.children}</NavLink> : rest.children;
-  return <li className={className} ref={ref}>{children}</li>
-})
+  return <li className={className}>{children}</li>
+}
 
 const StyledSidebarMenuItem = styled(SidebarMenuItem)`
   h5 {
     display: flex;
     align-items: center;
-    padding: 6px 8px;
+    padding: 6px 10px;
     margin: 0 0 4px 0;
   }
 
-  a {
+  & > * {
     display: flex;
     align-items: center;
     padding: 6px 8px;
@@ -32,16 +33,22 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
       margin-right: 4px;
     }
 
+  }
+
+  & > a {
     &:hover, &:focus {
       background-color: ${({ theme }) => theme.hoverBackground};
       text-decoration: none;
     }
+  }
 
+  & > a {
     &.active {
       background-color: ${({ theme }) => theme.primary};
       color: ${({ theme }) => theme.background};
     }
   }
+
 
   &.canDrop a {
     border-color: ${({ theme }) => theme.primary};

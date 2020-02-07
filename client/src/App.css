@@ -27,7 +27,6 @@ header {
 
 nav {
     grid-area: nav;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
     padding: 20px 10px;
 }
 

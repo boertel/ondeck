@@ -4,16 +4,17 @@ import { createGlobalStyle } from 'styled-components'
 
 
 const colors = {
-  color: '#E1E3E5',
-  primary: '#FD7065',
-  foreground: '#373737',
-  background: '#1F2023',
+  color: '#373737',
+  primary: '#22986C',
+  foreground: '#FFF',
+  background: '#FFF',
   placeholder: '#999',
+  sidebar: '#F7F7F7',
 }
 
 const theme = {
   ...colors,
-  borderColor: 'rgba(255, 255, 255, 0.15)',
+  borderColor: 'rgba(0, 0, 0, 0.15)',
   hoverBackground: transparentize(0.85, colors.primary),
   radius: '4px',
 }

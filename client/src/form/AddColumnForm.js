@@ -1,24 +1,24 @@
-import React, { useMemo } from "react";
-import { useForm } from "react-form";
+import React, { useMemo } from 'react'
+import { useForm } from 'react-form'
 
-import { Button } from "../ui";
-import { InputField } from "./fields";
-import { mutateColumn } from '../resources/columns';
+import { Button } from '../ui'
+import { InputField } from './fields'
+import { mutateColumn } from '../resources/columns'
 
 function AddColumnForm() {
   const [mutate] = mutateColumn()
 
   const {
     Form,
-    meta: { isSubmitting, canSubmit },
-    reset
+    meta: { canSubmit },
+    reset,
   } = useForm({
-    defaultValues: useMemo(() => ({ name: "" }), []),
+    defaultValues: useMemo(() => ({ name: '' }), []),
     onSubmit: async (values, instance) => {
-      await mutate(values);
-      reset();
-    }
-  });
+      await mutate(values)
+      reset()
+    },
+  })
 
   return (
     <Form>
@@ -27,7 +27,7 @@ function AddColumnForm() {
         Add Column
       </Button>
     </Form>
-  );
+  )
 }
 
-export default AddColumnForm;
+export default AddColumnForm

@@ -1,12 +1,12 @@
 import { useWorkspace } from './workspace'
-import { useBoard } from './board'
+import { useBoards } from './board'
 import { useColumns } from './columns'
 import { useTickets } from './tickets'
 
 
 export {
   useWorkspace,
-  useBoard,
+  useBoards,
   useColumns,
   useTickets,
 }

@@ -13,4 +13,6 @@ const Sidebar = props => {
 
 export default styled(Sidebar)`
   flex-direction: column;
+  background-color: ${({ theme }) => theme.sidebar};
+  border-radius: 0;
 `

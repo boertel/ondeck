@@ -130,7 +130,8 @@ class Ticket(models.Model):
 
 @receiver(pre_save, sender=Ticket)
 def assign_last_key(sender, instance, **kwargs):
-    instance.index = instance.board.workspace.last_index
+    if instance.pk is None:
+        instance.index = instance.board.workspace.last_index
 
 
 @receiver(post_save, sender=Ticket)

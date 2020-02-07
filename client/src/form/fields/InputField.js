@@ -8,7 +8,6 @@ const InputField = React.forwardRef((props, ref) => {
   const [field, fieldOptions, { as, ...rest }] = splitFormProps(props);
 
   const {
-    meta: { error, isTouched, isValidating },
     getInputProps
   } = useField(field, fieldOptions);
 
