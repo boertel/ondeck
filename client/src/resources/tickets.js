@@ -6,7 +6,11 @@ const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
 
 const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   let method = 'post'
-  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug, 'boards', boardSlug, 'tickets']
+  let path = ['', 'api', 'v1', 'workspaces', workspaceSlug]
+  if (boardSlug) {
+    path = path.concat(['boards', boardSlug])
+  }
+  path.push('tickets')
   if (pk) {
     path.push(pk)
     method = 'patch'
@@ -18,8 +22,8 @@ const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   }
 }
 
-const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
-  const { path, method } = getApiParameters({ workspaceSlug, boardSlug })(data.id)
+export const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
+  const { method, path } = getApiParameters({ workspaceSlug, boardSlug })(data.id)
   return api[method](path, data).then(({ data }) => data)
 }
 

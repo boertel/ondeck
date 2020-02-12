@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Ticket
+from ..models import Ticket, Board
 
 
 class ParentTicketSerializer(serializers.PrimaryKeyRelatedField):
@@ -16,9 +16,19 @@ class ParentTicketSerializer(serializers.PrimaryKeyRelatedField):
         return queryset
 
 
+class BoardSerializer(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        workspace = self.context.get("view").workspace
+        queryset = super().get_queryset()
+        if not workspace or not queryset:
+            return None
+        queryset = queryset.filter(workspace=workspace)
+        return queryset
+
+
 class TicketSerializer(serializers.ModelSerializer):
     key = serializers.CharField(read_only=True)
-    board = serializers.PrimaryKeyRelatedField(read_only=True)
+    board = BoardSerializer(allow_null=True, queryset=Board.objects, required=False)
     parent = ParentTicketSerializer(
         allow_null=True, queryset=Ticket.objects, required=False
     )

@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { useLocation, useParams, useHistory } from 'react-router-dom'
 import { useForm } from 'react-form'
 
 import { Button, View } from '../ui'
 import { TrashIcon } from '../ui/icons'
 import { mutateTicket, deleteTicket, useTickets } from '../resources/tickets'
-import { SelectField, InputField, TextareaField } from './fields'
+import { SelectField, EditorField, InputField } from './fields'
 
 function TicketForm({ title, description, id, column, parent, onSubmit }) {
   const location = useLocation()
@@ -54,17 +54,17 @@ function TicketForm({ title, description, id, column, parent, onSubmit }) {
   return (
     <Form>
       <InputField label="Title" field="title" required={true} autoFocus={true} />
+      <EditorField label="Description" field="description" />
       <SelectField label="Parent" field="parent" filterValue={v => parseInt(v, 10)}>
         <option />
         {tickets
-          .filter(ticket => ticket.id !== id)
+          .filter(ticket => ticket.id !== id && !ticket.parent)
           .map(({ id, title }) => (
             <option value={id} key={id}>
               {title}
             </option>
           ))}
       </SelectField>
-      <TextareaField label="Description" field="description" />
       <View className="align-center">
         <Button type="submit" disabled={!canSubmit}>
           {!!id ? 'Update' : 'Create'} Ticket

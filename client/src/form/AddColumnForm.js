@@ -1,31 +1,29 @@
-import React, { useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-form'
 
-import { Button } from '../ui'
+import { View, Button } from '../ui'
+import { EditIcon } from '../ui/icons'
 import { InputField } from './fields'
 import { mutateColumn } from '../resources/columns'
 
-function AddColumnForm() {
+function AddColumnForm({ name, id }) {
   const [mutate] = mutateColumn()
 
-  const {
-    Form,
-    meta: { canSubmit },
-    reset,
-  } = useForm({
-    defaultValues: useMemo(() => ({ name: '' }), []),
+  const isEditing = !!id
+
+  const { Form, reset } = useForm({
+    defaultValues: useMemo(() => ({ name, id }), [name, id]),
     onSubmit: async (values, instance) => {
       await mutate(values)
-      reset()
+      if (!isEditing) {
+        reset()
+      }
     },
   })
 
   return (
     <Form>
       <InputField field="name" required={true} />
-      <Button type="submit" disabled={!canSubmit}>
-        Add Column
-      </Button>
     </Form>
   )
 }

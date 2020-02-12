@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PlusSquare, Clipboard, Search, Trash2 } from 'react-feather'
+import { PlusSquare, Clipboard, Search, Trash2, Edit2, } from 'react-feather'
 
 const SearchIcon = (props) => <Search width="1em" height="1em" {...props} />
 
@@ -9,4 +9,5 @@ export {
   SearchIcon,
   Trash2 as TrashIcon,
   PlusSquare as AddIcon,
+  Edit2 as EditIcon,
 }

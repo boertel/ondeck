@@ -10,6 +10,10 @@ const Button = ({ to, ...props }) => {
   }
 }
 
+Button.defaultProps = {
+  type: 'button',
+}
+
 export default styled(Button)`
   font-size: 14px;
   background-color: ${({ theme }) => theme.primary};

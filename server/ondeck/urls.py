@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import WorkspaceView, BoardView, TicketViewSet, ColumnViewSet, TagViewSet
+from .views import WorkspaceView, BoardViewSet, TicketViewSet, ColumnViewSet, TagViewSet
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -15,7 +15,8 @@ router.register(
 router.register(
     r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tags", TagViewSet
 )
-router.register(r"(?P<workspace_slug>[\w-]+)/boards", BoardView)
+router.register(r"(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
+router.register(r"(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
 
 urlpatterns = [path("<slug:workspace_slug>/", WorkspaceView.as_view())]
 

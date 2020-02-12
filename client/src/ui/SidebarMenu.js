@@ -2,11 +2,17 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { NavLink } from 'react-router-dom'
 
-//const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
-const SidebarMenuItem = ({ to, className, ...rest }) => {
-  const children = to ? <NavLink to={to} activeClassName="active">{rest.children}</NavLink> : rest.children;
-  return <li className={className}>{children}</li>
-}
+//const SidebarMenuItem = ({ to, className, ...rest }) => {
+const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
+  const children = to ? (
+    <NavLink to={to} activeClassName="active">
+      {rest.children}
+    </NavLink>
+  ) : (
+    rest.children
+  )
+  return <li className={className} ref={ref}>{children}</li>
+})
 
 const StyledSidebarMenuItem = styled(SidebarMenuItem)`
   h5 {
@@ -22,7 +28,7 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     padding: 6px 8px;
     margin: 6px 0;
     border-radius: ${({ theme }) => theme.radius};
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     text-decoration: none;
 
     border-style: dashed;
@@ -32,11 +38,11 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     svg {
       margin-right: 4px;
     }
-
   }
 
   & > a {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: ${({ theme }) => theme.hoverBackground};
       text-decoration: none;
     }
@@ -49,7 +55,6 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     }
   }
 
-
   &.canDrop a {
     border-color: ${({ theme }) => theme.primary};
   }
@@ -59,9 +64,7 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
   }
 `
 
-export {
-  StyledSidebarMenuItem as SidebarMenuItem,
-}
+export { StyledSidebarMenuItem as SidebarMenuItem }
 
 export default styled.ul`
   padding: 0;

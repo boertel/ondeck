@@ -6,6 +6,7 @@ import Input from './Input';
 import Loading from './Loading';
 import Sidebar from './Sidebar';
 import View from './View';
+import Editor from './Editor';
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   Loading,
   Sidebar,
   View,
+  Editor,
 };

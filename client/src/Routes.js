@@ -2,23 +2,22 @@ import React from 'react'
 import { groupBy } from 'lodash'
 import { BrowserRouter as Router, Link, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
+import { useModal } from './hooks/useModal'
 import { Sidebar, Columns, Column, ColumnTitle, Input, Button } from './ui'
 import SidebarMenu, { SidebarMenuItem } from './ui/SidebarMenu'
 import { FullTicket, Ticket, Tickets } from './components'
 import Board from './components/Board'
 import BoardHeader from './components/Board/BoardHeader'
-import {deleteColumn } from './resources/columns'
 import { useBoards, useColumns, useTickets } from './resources'
-import { TrashIcon, BoardIcon, SearchIcon, AddIcon } from './ui/icons'
+import { BoardIcon, SearchIcon, AddIcon } from './ui/icons'
 import { AddColumnForm, AddBoardForm } from './form'
+import CommandKModal from './modals/CommandKModal'
 
 function FullBoard() {
   const { path, url } = useRouteMatch()
   const { columns } = useColumns('columns')
   const { tickets } = useTickets('tickets')
-  const { data: board, } = useBoards(['boards', useParams()])
-
-  const [ removeColumn ] = deleteColumn()
+  const { data: board } = useBoards(['boards', useParams()])
 
   let ticketsGroupByColumns = {}
   if (tickets) {
@@ -36,10 +35,7 @@ function FullBoard() {
           {columns &&
             columns.map(({ id, name }) => (
               <Column key={id} id={id}>
-                <ColumnTitle>
-                  <div>{name}</div>
-                  <Button onClick={() => removeColumn(id)}><TrashIcon /></Button>
-                </ColumnTitle>
+                <ColumnTitle name={name} id={id} />
                 <Tickets>
                   {(ticketsGroupByColumns[id] || []).map(ticket => (
                     <Ticket key={ticket.key} to={`${url}/${ticket.key}`} {...ticket} />
@@ -71,12 +67,14 @@ function Workspace() {
   //const { workspace } = useWorkspace()
   const { boards } = useBoards()
 
+  const [ openModal, ] = useModal(CommandKModal)
+
   return (
     <>
       <Sidebar>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Input type="search" className="no-border" placeholder="Search..." icon={SearchIcon} />
+            <Input type="search" className="no-border" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
           </SidebarMenuItem>
         </SidebarMenu>
         {boards && (
@@ -84,12 +82,14 @@ function Workspace() {
             <SidebarMenuItem>
               <h5>Boards</h5>
             </SidebarMenuItem>
-            {boards.sort((a, b) => a.id - b.id).map(({ name, slug }) => (
-              <Board as={SidebarMenuItem} key={slug} to={`${url}/${slug}`}>
-                <BoardIcon />
-                {name}
-              </Board>
-            ))}
+            {boards
+              .sort((a, b) => a.id - b.id)
+              .map(({ name, slug, id }) => (
+                <Board as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${url}/${slug}`}>
+                  <BoardIcon />
+                  {name}
+                </Board>
+              ))}
             <SidebarMenuItem>
               <AddBoardForm />
             </SidebarMenuItem>

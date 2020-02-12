@@ -1,7 +1,28 @@
-import styled from 'styled-components'
+import React, { useState } from 'react'
+import styled from 'styled-components/macro'
 
+import { View, Button } from './'
+import { EditIcon, TrashIcon } from './icons'
+import { AddColumnForm } from '../form'
+import { deleteColumn } from '../resources/columns'
 
-export default styled.h3`
+function ColumnTitle({ className, name, id, ...props }) {
+  const [removeColumn] = deleteColumn()
+  const [readOnly, setReadOnly] = useState(true)
+  return (
+    <View>
+      <AddColumnForm name={name} id={id} readOnly={readOnly} />
+      <Button>
+        <EditIcon />
+      </Button>
+      <Button onClick={() => removeColumn(id)}>
+        <TrashIcon />
+      </Button>
+    </View>
+  )
+}
+
+export default styled(ColumnTitle)`
   display: flex;
   justify-content: space-between;
   align-items: center;

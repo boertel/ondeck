@@ -3,7 +3,7 @@ from ..serializers import BoardSerializer
 from ..models import Board
 
 
-class BoardView(RootViewSet):
+class BoardViewSet(RootViewSet):
     lookup_field = "slug"
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
