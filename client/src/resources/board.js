@@ -16,7 +16,7 @@ const getApiParameters = ({ workspaceSlug, }) => pk => {
   }
 }
 
-const defaultQueryFn = (params) => {
+const defaultQueryFn = (key, params) => {
   // TODO update when needed to request one board (it needs const getPk = () => boardSlug)
   const { path, } = getApiParameters(params)(params.boardSlug)
   return api.get(path).then(({ data }) => data)

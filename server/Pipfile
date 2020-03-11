@@ -16,6 +16,8 @@ python-decouple = "*"
 dj-database-url = "*"
 psycopg2-binary = "*"
 django-allauth = "*"
+requests-oauthlib = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

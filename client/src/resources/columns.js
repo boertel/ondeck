@@ -15,7 +15,7 @@ const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   }
 }
 
-const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
+const defaultQueryFn = (key, { workspaceSlug, boardSlug }) =>
   api(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/columns/`).then(({ data }) => data)
 
 const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {

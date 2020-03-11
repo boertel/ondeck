@@ -16,4 +16,4 @@ class BoardViewSet(RootViewSet):
         instance.add_owner(self.request.user)
 
     def get_queryset(self):
-        return self.queryset.filter(workspace=self.workspace)
+        return self.queryset.filter(workspace=self.workspace).order_by("position")

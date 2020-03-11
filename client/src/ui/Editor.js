@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components/macro'
 import marked from 'marked'
-
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { useDrop } from 'react-dnd'
 
-function useFiles() {
+import useUpload from './UploadInput'
+
+function useDropFiles() {
   const [files, setFiles] = useState([])
   const [collected, ref] = useDrop({
     accept: [NativeTypes.FILE],
@@ -39,18 +40,22 @@ const CHARACTERS = {
 
 function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   const ref = useRef(null)
+
+  const [collected, dropzone, files] = useDropFiles()
+  const [ f, ] = useUpload(files)
+
   const onKeyDown = evt => {
     const { selectionStart, selectionEnd } = ref.current
-    const targetValue = evt.target.value
+    const targetValue = ref.current.value
     const start = targetValue.substring(0, selectionStart)
     const end = targetValue.substring(selectionEnd)
     const selection = targetValue.substring(selectionStart, selectionEnd)
 
-    if (evt.key === 'Tab') {
+    if (evt.key === 'Tab' && !evt.shiftKey) {
       const newValue = start + characters.tab + end
       // somehow we need both to keep caret at the right place
-      evt.target.value = newValue
-      onChange({ evt: { target: { value: newValue }}})
+      ref.current.value = newValue
+      onChange({ target: { value: newValue }})
       ref.current.selectionStart = ref.current.selectionEnd = selectionStart + characters.tab.length
       evt.preventDefault()
     }
@@ -61,15 +66,15 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
       if (evt.key === 'b' || evt.key === 'i' || evt.key === 'u') {
         const character = characters[CHARACTERS[evt.key]]
         const newValue = start + character + selection + character + end
-        evt.target.value = newValue
-        onChange({ evt: { target: { value: newValue }}})
+        ref.current.value = newValue
+        onChange({ target: { value: newValue }})
         ref.current.selectionStart = ref.current.selectionEnd = selectionStart + character.length * 2 + selection.length
         evt.preventDefault()
       }
     }
   }
 
-  const onResize = evt => {
+  const onResize = () => {
     const maxHeight = parseInt(getComputedStyle(ref.current)['max-height'], 10)
     const { scrollHeight } = ref.current
     if (scrollHeight < maxHeight) {
@@ -78,8 +83,10 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     }
   }
 
+  useEffect(() => onResize(), [])
+
   return (
-    <div className="editor">
+    <div className="editor" ref={dropzone}>
       <textarea
         ref={ref}
         placeholder="Leave a comment"

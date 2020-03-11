@@ -30,6 +30,7 @@ class Workspace(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     # organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    # TODO protected slug (actions)
 
 
 class Membership(models.Model):
@@ -56,6 +57,10 @@ class Board(models.Model):
         Workspace, on_delete=models.CASCADE, related_name="boards"
     )
     members = models.ManyToManyField(User, through=Membership)
+    position = models.PositiveIntegerField(null=True)
+
+    class Meta:
+        ordering = ("position",)
 
     def add_owner(self, user):
         owner = Membership.objects.create(
@@ -84,7 +89,7 @@ class Column(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="columns")
 
     def __str__(self):
         return 'Column(id={}, name="{}")'.format(self.pk, self.name)
@@ -112,8 +117,8 @@ class Ticket(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True)
-    column = models.ForeignKey(Column, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    column = models.ForeignKey(Column, on_delete=models.SET_NULL, null=True)
+    board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag)
     assignees = models.ManyToManyField(User, through=Assignee)
 

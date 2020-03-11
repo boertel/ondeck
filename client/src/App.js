@@ -2,7 +2,6 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { DndProvider } from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
-import { ModalProvider } from './hooks/useModal'
 
 import './App.css'
 
@@ -14,9 +13,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <DndProvider backend={Backend}>
-        <ModalProvider>
-          <Routes />
-        </ModalProvider>
+        <Routes />
       </DndProvider>
     </ThemeProvider>
   )

@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 import { useTickets } from "../resources";
 import { View } from "../ui";
+import { BackIcon } from '../ui/icons'
 import { TicketForm } from "../form";
 
 const FullTicket = ({ className }) => {
@@ -32,6 +33,7 @@ const FullTicket = ({ className }) => {
 
   return (
     <View className={className}>
+      <a onClick={() => history.goBack()}><BackIcon /></a>
       <TicketForm {...ticket} onSubmit={() => history.goBack()} />
     </View>
   );

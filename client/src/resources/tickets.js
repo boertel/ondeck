@@ -1,7 +1,7 @@
 import { useMyQuery, useMyMutation } from './utils'
 import api from './api'
 
-const defaultQueryFn = ({ workspaceSlug, boardSlug }) =>
+const defaultQueryFn = (key, { workspaceSlug, boardSlug }) =>
   fetch(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`).then(res => res.json())
 
 const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {

@@ -1,9 +1,13 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 
 
 function CommandK() {
+  console.log(useParams())
   return (
-    <h3>Command K</h3>
+    <div>
+      <input type="text" autoFocus={true} />
+    </div>
   )
 }
 

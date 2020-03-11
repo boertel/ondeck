@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
-import { View, Button } from './'
-import { EditIcon, TrashIcon } from './icons'
-import { AddColumnForm } from '../form'
-import { deleteColumn } from '../resources/columns'
+import { View, Button } from '../../ui'
+import { EditIcon, TrashIcon } from '../../ui/icons'
+import { AddColumnForm } from '../../form'
+import { deleteColumn } from '../../resources/columns'
 
 function ColumnTitle({ className, name, id, ...props }) {
   const [removeColumn] = deleteColumn()

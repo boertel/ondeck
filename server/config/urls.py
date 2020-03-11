@@ -18,11 +18,12 @@ from django.urls import path, include
 from django.conf import settings
 
 from ondeck import urls
+from identity import urls as identity_urls
 
 urlpatterns = [
     path("api/v1/workspaces/", include(urls)),
-    path("accounts/", include("allauth.urls")),
     path("admin/", admin.site.urls),
+    path("identity/", include(identity_urls)),
 ]
 
 if settings.DEBUG:

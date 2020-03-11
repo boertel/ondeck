@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import styled from 'styled-components/macro'
 import { useDrop } from 'react-dnd'
 
-import { mutateTicket } from '../resources/tickets'
-import View from './View';
+import { mutateTicket } from '../../resources/tickets'
+import View from '../../ui/View';
 
 
 function Column({ id: columnId, className, ...props }) {
@@ -56,3 +56,4 @@ export default styled(Column)`
     background-color: ${({ theme }) => theme.hoverBackground};
   }
 `
+
