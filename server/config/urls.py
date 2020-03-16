@@ -19,11 +19,13 @@ from django.conf import settings
 
 from ondeck import urls
 from identity import urls as identity_urls
+from upload import urls as upload_urls
 
 urlpatterns = [
     path("api/v1/workspaces/", include(urls)),
     path("admin/", admin.site.urls),
     path("identity/", include(identity_urls)),
+    path("upload/", include(upload_urls)),
 ]
 
 if settings.DEBUG:

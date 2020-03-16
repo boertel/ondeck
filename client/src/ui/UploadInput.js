@@ -1,35 +1,97 @@
-import { useState, useCallback } from 'react'
-import S3Upload from 'react-s3-uploader/s3upload'
+import { useEffect, useReducer, } from 'react'
+import axios from 'axios'
+import { v4 as uuid4 } from 'uuid'
+
+import api from '../resources/api'
 
 
-const S3_BUCKET_URL = 'ondeck-dev'
+const handleUpload = async (file, { dispatch }) => {
+  if (!file) {
+    return
+  }
+  const params = {
+    filename: file.name,
+    filetype: file.type,
+    path: 'uploads',
+  }
+
+  const response = await api.get('/upload', { params })
+  const { signedUrl, src, contentType } = response.data
+
+  dispatch({
+    type: 'start',
+    key: file.key,
+    payload: {
+      placeholder: `![Uploading ${src}...]()`,
+      src: '',
+      //src: window.URL.createObjectURL(file),
+    }
+  })
+
+  await axios.put(signedUrl, file, {
+    headers: { 'Content-Type': contentType, },
+    onUploadProgress: ({ total, loaded }) => {
+      dispatch({
+        type: 'progress',
+        key: file.key,
+        payload: {
+          progress: loaded / total,
+        }
+      })
+    }
+  })
+
+  dispatch({
+    type: 'finish',
+    key: file.key,
+    payload: {
+      content: `![${src}](${src})`,
+      src,
+    }
+  })
+}
+
+function reducer(state, action) {
+  const { key, payload } = action
+  switch(action.type) {
+    case 'start':
+    case 'finish':
+      return {
+        ...state,
+        [key]: {
+          ...(state[key] || {}),
+          ...payload
+        }
+      }
+    default:
+      return state
+  }
+}
 
 const useUpload = files => {
-  /*
-  const [progress, setProgress] = useState(0)
+  const [state, dispatch] = useReducer(reducer, {})
 
-  const onUploadError = () => {}
-  const onUploadFinished = () => {}
-  const onProgress = (progress) => setProgress(progress)
+  const upload = (file) => {
+    file.key = uuid4()
+    return handleUpload(file, { dispatch })
+  }
 
-  new S3Upload({
-    files,
-    contentDisposition: 'auto',
-    uploadRequestHeaders: { 'x-amz-acl': 'public-read' },
-    onError: onUploadError,
-    onFinishS3Put: onUploadFinished,
-    onProgress,
-    server: '/api/dashboard',
-    signingUrl: '/s3/sign',
-    signingUrlQueryParams: { path: 'uploaded-image/' },
-    s3Url: S3_BUCKET_URL,
-  })
-  */
-  useCallback(() => {
-    console.log(files)
+  const uploadFiles = (files) => {
+    const uploads = Array.from(files).map(async file => {
+      return await upload(file)
+    })
+
+    Promise.all(uploads)
+  }
+
+  useEffect(() => {
+    if (files.length) {
+      uploadFiles(files)
+    }
   }, [files])
 
-  return [files]
+
+  return { uploads: state, uploadFiles }
 }
 
 export default useUpload

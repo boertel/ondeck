@@ -1,4 +1,5 @@
 import React from 'react'
+import { ReactQueryDevtools } from 'react-query-devtools'
 import { ThemeProvider } from 'styled-components'
 import { DndProvider } from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
@@ -15,6 +16,7 @@ const App = () => {
       <DndProvider backend={Backend}>
         <Routes />
       </DndProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </ThemeProvider>
   )
 }

@@ -7,12 +7,11 @@ import { useDrop } from 'react-dnd'
 import useUpload from './UploadInput'
 
 function useDropFiles() {
-  const [files, setFiles] = useState([])
+  const [files, setFiles] = useState({})
   const [collected, ref] = useDrop({
     accept: [NativeTypes.FILE],
     drop(item, monitor) {
       const { files } = monitor.getItem()
-      console.log(files)
       setFiles(files)
     },
     collect: monitor => ({
@@ -27,7 +26,7 @@ function useDropFiles() {
 function DropArea() {
   return (
     <p className="dropArea">
-      <label>Attach files by dragging & dropping, selecting or pasting them.</label>
+      <label>Attach files by dragging &amp; dropping, selecting or pasting them.</label>
     </p>
   )
 }
@@ -42,7 +41,61 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   const ref = useRef(null)
 
   const [collected, dropzone, files] = useDropFiles()
-  const [ f, ] = useUpload(files)
+  const { uploads, uploadFiles } = useUpload(files)
+
+  const done = useRef({})
+
+  useEffect(() => {
+    const { selectionStart, selectionEnd } = ref.current
+    for (const key in uploads) {
+    if (!done.current[key]) {
+        const { placeholder, content, src } = uploads[key];
+        const targetValue = ref.current.value
+        const start = targetValue.substring(0, selectionStart)
+        const end = targetValue.substring(selectionEnd)
+
+        if (!ref.current.value.includes(placeholder)) {
+          ref.current.value = start + placeholder + end
+        } else if (!ref.current.value.includes(content)) {
+          ref.current.value = ref.current.value.replace(placeholder, content)
+          done.current[key] = true
+        }
+        onChange({ target: { value: ref.current.value }})
+      }
+    }
+  }, [uploads])
+
+  const onPaste = evt => {
+    const { files } = evt.clipboardData
+    if (files.length) {
+      uploadFiles(files)
+      evt.preventDefault()
+    }
+  }
+
+  /*
+  useEffect(() => {
+    const { selectionStart, selectionEnd } = ref.current
+    for (const key in f) {
+      const { alt, src, } = f[key]
+      const targetValue = ref.current.value
+      const start = targetValue.substring(0, selectionStart)
+      const end = targetValue.substring(selectionEnd)
+
+      const content = `![${alt}](${src})`
+      const lookFor = new RegExp(`!\\[(.*)\\]\\((${src})\\)`)
+      console.log(content)
+      if (lookFor.test(ref.current.value)) {
+        ref.current.value = start + content + end
+      } else {
+        ref.current.value.replace(lookFor, content)
+      }
+
+      onChange({ target: { value: ref.current.value }})
+      ref.current.selectionStart = ref.current.selectionEnd = ref.current.selectionStart + content.length
+    }
+  }, [JSON.stringify(f)])
+  */
 
   const onKeyDown = evt => {
     const { selectionStart, selectionEnd } = ref.current
@@ -91,6 +144,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
         ref={ref}
         placeholder="Leave a comment"
         onChange={evt => onChange(evt)}
+        onPaste={onPaste}
         value={value}
         onKeyDown={onKeyDown}
         onInput={onResize}

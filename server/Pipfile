@@ -18,6 +18,7 @@ psycopg2-binary = "*"
 django-allauth = "*"
 requests-oauthlib = "*"
 requests = "*"
+boto = "*"
 
 [requires]
 python_version = "3.7"
