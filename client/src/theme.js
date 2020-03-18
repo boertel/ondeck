@@ -1,8 +1,6 @@
 import { transparentize } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
-
-
 const colors = {
   color: '#373737',
   primary: '#22986C',
@@ -19,8 +17,17 @@ const theme = {
   radius: '4px',
 }
 
-
 export const GlobalStyle = createGlobalStyle`
+  @import url("https://rsms.me/inter/inter.css");
+  html {
+    font-family: "Inter", sans-serif;
+  }
+  @supports (font-variation-settings: normal) {
+    html {
+      font-family: "Inter var", sans-serif;
+    }
+  }
+
   html, body, #root {
     color: ${({ theme }) => theme.color};
     margin: 0;

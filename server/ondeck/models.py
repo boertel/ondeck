@@ -11,7 +11,7 @@ from django.dispatch import receiver
 
 
 class User(AbstractUser):
-    pass
+    name = models.CharField(max_length=250)
 
 
 class Organization(models.Model):
