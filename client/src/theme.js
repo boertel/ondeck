@@ -1,4 +1,4 @@
-import { transparentize } from 'polished'
+import { transparentize, darken } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
 const colors = {
@@ -13,17 +13,17 @@ const colors = {
 const theme = {
   ...colors,
   borderColor: 'rgba(0, 0, 0, 0.15)',
-  hoverBackground: transparentize(0.85, colors.primary),
+  hoverBackground: darken(0.10, colors.primary),
   radius: '4px',
 }
 
 export const GlobalStyle = createGlobalStyle`
   @import url("https://rsms.me/inter/inter.css");
-  html {
+  html, button, input {
     font-family: "Inter", sans-serif;
   }
   @supports (font-variation-settings: normal) {
-    html {
+    html, button, input {
       font-family: "Inter var", sans-serif;
     }
   }

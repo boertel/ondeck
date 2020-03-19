@@ -15,17 +15,40 @@ Button.defaultProps = {
 }
 
 export default styled(Button)`
-  font-size: 14px;
-  background-color: ${({ theme }) => theme.primary};
-  border: none;
+  margin: 0;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
   border-radius: ${({ theme }) => theme.radius};
-  color: ${({ theme }) => theme.background};
-  padding: 4px 8px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); // makeshift border
+  background-color: ${({ theme }) => theme.primary};
+  border: 2px solid var(--gray-700);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  appearance: none;
+  display: inline-block;
+  line-height: initial;
+  transition: background-color 200ms ease-in-out, border 200ms ease-in-out,
+    transform 200ms ease-in-out;
+  -webkit-touch-callout: none;
+  user-select: none;
 
-  &:focus,
-  &.focused {
-    outline: 0;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 0 0 .1875rem ${({ theme }) => theme.hoverBackground};
+  &:hover {
+    cursor: pointer;
+    background: ${({ theme }) => theme.hoverBackground};
+  }
+
+  &:focus-visible {
+    border-color: var(--focus-ring-color);
+    outline: none;
+  }
+
+  svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
+
+  & + button {
+    margin-left: 12px;
   }
 `

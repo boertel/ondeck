@@ -190,11 +190,22 @@ const MyEditor = React.forwardRef(({ className, value, onChange }, ref) => {
 export default styled(MyEditor)`
   width: 100%;
   .editor {
-    background-color: #fafbfc;
+    background-color: rgb(248, 248, 248);
+    border-radius: ${({ theme }) => theme.radius};
+    border-style: solid;
+    border-width: 2px;
+    border-color: ${({ theme }) => theme.borderColor};
 
     &:focus-within {
-      border-radius: 3px;
-      box-shadow: inset 0 1px 2px rgba(27,31,35,.075),0 0 0 .2em  rgba(3,102,214,.3);
+      border-style: solid;
+      border-width: 2px;
+      border-radius: ${({ theme }) => theme.radius};
+      border-color: ${({ theme }) => theme.primary};
+
+      .dropArea {
+        border-color: ${({ theme }) => theme.primary};
+        color: ${({ theme }) => theme.primary};
+      }
     }
 
     textarea {
@@ -207,49 +218,24 @@ export default styled(MyEditor)`
       margin: 0;
       resize: vertical;
       line-height: 1.6;
-      font-size: 16px;
-      color: #24292e;
+      font-size: 1rem;
+      color: ${({ theme }) => theme.color};
+      background-color: transparent;
       outline: none;
-      box-shadow: inset 0 1px 2px rgba(27,31,35,.075);
-      background-color: #fafbfc;
+      border: none;
     }
 
-    &:focus {
-      background-color: #fff;
-      outline: none;
-      border-color: #2188ff;
-    }
-
-    &:focus + .dropArea {
-      border-color: #2188ff;
-    }
-
-  .dropArea {
+    .dropArea {
       display: flex;
       position: relative;
       justify-content: space-between;
       padding: 7px 10px;
       margin: 0;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 16px;
-      color: #586069;
+      color: ${({ theme }) => theme.color};
+      border-top: 2px dashed ${({ theme }) => theme.borderColor};
     }
-
-  > * {
-    border: 1px solid #d1d5da;
-    border-bottom: 1px dashed #c3c8cf;
-    border-top-width: 0;
-    border-radius: 0;
-  }
-
-  > :first-child {
-    border-top-width: 1px;
-    border-radius: 3px 3px 0 0;
-  }
-
-  > :last-child {
-    border-style: solid;
-    border-radius: 0 0 3px 3px;
   }
 
   .preview {

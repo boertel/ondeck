@@ -67,7 +67,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit }) {
       </SelectField>
       <View className="align-center">
         <Button type="submit" disabled={!canSubmit}>
-          {!!id ? 'Update' : 'Create'} Ticket
+          {!!id ? 'Save' : 'Create Ticket'}
         </Button>
         {isEditing && (
           <Button onClick={onDelete} type="button">
