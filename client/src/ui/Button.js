@@ -26,7 +26,7 @@ export default styled(Button)`
   font-weight: bold;
   appearance: none;
   display: inline-block;
-  line-height: initial;
+  line-height: 1rem;
   transition: background-color 200ms ease-in-out, border 200ms ease-in-out,
     transform 200ms ease-in-out;
   -webkit-touch-callout: none;

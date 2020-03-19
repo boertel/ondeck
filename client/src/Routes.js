@@ -14,7 +14,6 @@ import CommandKModal from './modals/CommandKModal'
 
 function FullBoard() {
   const { path } = useRouteMatch()
-  console.log("PATH", path)
   return (
     <Switch>
       <Route exact path={path}>
