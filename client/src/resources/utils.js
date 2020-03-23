@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useParams } from 'react-router-dom'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation, queryCache } from 'react-query'
 
 
 export function useMyQuery(name, defaultQueryFn) {
@@ -31,7 +31,9 @@ export function useMyMutation(name, defaultMutationFn) {
   return function (mutationFn, options={}) {
     mutationFn = mutationFn || defaultMutationFn
     return useMutation(mutationFn(useParams()), {
-      refetchQueries: [name],
+      onSuccess: () => {
+        queryCache.refetchQueries(name)
+      },
       ...options,
     })
   }

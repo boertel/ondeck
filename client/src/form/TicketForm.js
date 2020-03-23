@@ -59,9 +59,9 @@ function TicketForm({ title, description, id, column, parent, onSubmit }) {
         <option />
         {tickets
           .filter(ticket => ticket.id !== id && !ticket.parent)
-          .map(({ id, title }) => (
+          .map(({ id, title, key, }) => (
             <option value={id} key={id}>
-              {title}
+              {key}: {title}
             </option>
           ))}
       </SelectField>
