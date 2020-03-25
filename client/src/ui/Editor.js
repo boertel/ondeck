@@ -190,7 +190,7 @@ const MyEditor = React.forwardRef(({ className, value, onChange, name, id, }, re
 export default styled(MyEditor)`
   width: 100%;
   .editor {
-    background-color: rgb(248, 248, 248);
+    background-color: var(--bg);
     border-radius: var(--border-radius);
     border-style: solid;
     border-width: 2px;
@@ -200,7 +200,7 @@ export default styled(MyEditor)`
       border-style: solid;
       border-width: 2px;
       border-radius: var(--border-radius);
-      border-color: var(--border-color);
+      border-color: var(--primary);
 
       .dropArea {
         border-color: var(--border-color);

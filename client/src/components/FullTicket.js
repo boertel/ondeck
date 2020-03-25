@@ -40,7 +40,7 @@ const FullTicket = ({ className }) => {
 };
 
 export default styled(FullTicket)`
-  background-color: ${({ theme }) => theme.foreground};
+  background-color: var(--fg);
   flex-direction: column;
   padding: 10px;
   height: 100%;

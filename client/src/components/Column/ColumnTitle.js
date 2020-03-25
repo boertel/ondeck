@@ -20,7 +20,7 @@ function ColumnTitle({ className, name, id, ...props }) {
       <Button onClick={() => removeColumn(id)}>
         <TrashIcon />
       </Button>
-      <Button to={{ pathname: `${url}/new`, search: `?column=${id}` }}>
+      <Button to={{ pathname: `${url}/new`, search: `?column=${id}` }} className="primary">
         <AddIcon />
       </Button>
     </View>

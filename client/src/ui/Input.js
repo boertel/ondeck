@@ -29,11 +29,20 @@ export default styled(Input)`
   }
 
   .input {
+    position: relative;
     display: flex;
     align-items: center;
 
     svg {
-      margin: 0 4px;
+      margin: 0 0.5rem;
+      position: absolute;
+      right: 0;
+    }
+
+    &:focus-within {
+      svg {
+        color: var(--primary);
+      }
     }
   }
 
@@ -66,12 +75,17 @@ export default styled(Input)`
     select {
       border-color: transparent;
     }
+
+    .input {
+      color: var(--placeholder);
+    }
   }
 
   input:hover,
   select:hover,
   textarea:hover {
-    border-color: var(--border-color);
+    outline: none;
+    border-color: var(--border-color-hover);
   }
 
   input:focus,

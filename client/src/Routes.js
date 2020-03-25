@@ -43,7 +43,7 @@ function Workspace() {
       <Sidebar>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Input type="search" className="no-border" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
+            <Input type="search" className="transparent" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

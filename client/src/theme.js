@@ -7,7 +7,7 @@ const colors = {
   secondary: '#FCC530',
   danger: '#E96A73',
   foreground: '#FFF',
-  background: 'rgb(248, 248, 248)',
+  background: '#F7F7F7',
   placeholder: '#999',
   sidebar: '#F7F7F7',
 }
@@ -25,6 +25,7 @@ export const GlobalStyle = createGlobalStyle`
     --primary: ${({ theme }) => theme.primary};
     --primary-hover: ${({ theme }) => transparentize(0.8, theme.primary)};
     --border-color: ${({ theme }) => theme.borderColor};
+    --border-color-hover: ${({ theme }) => theme.borderColor};
     --fg: ${({ theme }) => theme.foreground};
     --bg: ${({ theme }) => theme.background};
     --placeholder: ${({ theme }) => theme.placeholder};

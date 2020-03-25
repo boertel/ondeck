@@ -1,6 +1,7 @@
+import React from 'react'
 import styled from 'styled-components/macro'
 
-const View = styled.div`
+const View = styled(({ alignItems, justifyContent, ...props }) => <div {...props} />)`
   display: flex;
   border-radius: var(--border-radius);
   width: 100%;
