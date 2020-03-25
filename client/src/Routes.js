@@ -37,7 +37,7 @@ function Workspace() {
   const { boards } = useBoards()
 
   const [openModal] = useModal(CommandKModal)
-  useEffect(() => openModal(), [])
+  //useEffect(() => openModal(), [])
 
   return (
     <>

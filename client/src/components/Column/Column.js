@@ -29,15 +29,13 @@ function Column({ id: columnId, className, ...props }) {
     })
   })
   return (
-    <View {...props} ref={drop} className={classNames(className, {canDrop, isHover, })} />
+    <View flexDirection="column" {...props} ref={drop} className={classNames(className, {canDrop, isHover, })} />
   )
 }
 
 export default styled(Column)`
   height: 100%;
   background-color: var(--bg);
-  flex-direction: column;
-  justify-content: flex-start;
   padding: 10px;
 
   transition-property: background-color, border-color;

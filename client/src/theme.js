@@ -31,7 +31,6 @@ export const GlobalStyle = createGlobalStyle`
     --bg: ${({ theme }) => theme.background};
     --placeholder: ${({ theme }) => theme.placeholder};
     --border-radius: ${({ theme }) => theme.radius};
-    --border-radius: ${({ theme }) => theme.radius};
     --overlay: ${({ theme }) => theme.overlay};
   }
 

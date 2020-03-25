@@ -190,7 +190,7 @@ const MyEditor = React.forwardRef(({ className, value, onChange, name, id, }, re
 export default styled(MyEditor)`
   width: 100%;
   .editor {
-    background-color: var(--bg);
+    background-color: var(--fg);
     border-radius: var(--border-radius);
     border-style: solid;
     border-width: 2px;
@@ -239,6 +239,10 @@ export default styled(MyEditor)`
   }
 
   .preview {
+    border: 2px solid var(--border-color);
+    padding: 12px;
+    border-radius: var(--border-radius);
+
     pre {
       background-color: #ccc;
       padding: 12px;

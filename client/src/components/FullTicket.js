@@ -33,7 +33,6 @@ const FullTicket = ({ className }) => {
 
   return (
     <View className={className}>
-      <a onClick={() => history.goBack()}><BackIcon /></a>
       <TicketForm {...ticket} onSubmit={() => history.goBack()} />
     </View>
   );

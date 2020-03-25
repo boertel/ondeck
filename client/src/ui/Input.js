@@ -62,7 +62,7 @@ export default styled(Input)`
     border-width: 2px;
     border-style: solid;
     border-color: var(--border-color);
-    background-color: var(--bg);
+    background-color: var(--fg);
     color: var(--default);
     border-radius: var(--border-radius);
     appearance: none;
@@ -82,6 +82,7 @@ export default styled(Input)`
     textarea,
     select {
       border-color: transparent;
+      background-color: transparent;
     }
 
     .input {

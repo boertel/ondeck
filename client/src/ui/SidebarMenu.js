@@ -66,7 +66,6 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
 
   &.isHover a {
     background-color: var(--primary-hover);
-    color: var(--fg);
   }
 `
 
