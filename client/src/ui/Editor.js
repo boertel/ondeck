@@ -178,10 +178,10 @@ function Preview({ value }) {
   return <div className="preview">{value ? <Markdown value={value} /> : 'Nothing to preview'}</div>
 }
 
-const MyEditor = React.forwardRef(({ className, value, onChange }, ref) => {
+const MyEditor = React.forwardRef(({ className, value, onChange, name, id, }, ref) => {
   return (
     <div className={className}>
-      <Editor ref={ref} value={value} onChange={onChange} />
+      <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} />
       <Preview value={value} />
     </div>
   )
@@ -191,20 +191,20 @@ export default styled(MyEditor)`
   width: 100%;
   .editor {
     background-color: rgb(248, 248, 248);
-    border-radius: ${({ theme }) => theme.radius};
+    border-radius: var(--border-radius);
     border-style: solid;
     border-width: 2px;
-    border-color: ${({ theme }) => theme.borderColor};
+    border-color: var(--border-color);
 
     &:focus-within {
       border-style: solid;
       border-width: 2px;
-      border-radius: ${({ theme }) => theme.radius};
-      border-color: ${({ theme }) => theme.primary};
+      border-radius: var(--border-radius);
+      border-color: var(--border-color);
 
       .dropArea {
-        border-color: ${({ theme }) => theme.primary};
-        color: ${({ theme }) => theme.primary};
+        border-color: var(--border-color);
+        color: var(--primary);
       }
     }
 
@@ -219,7 +219,7 @@ export default styled(MyEditor)`
       resize: vertical;
       line-height: 1.6;
       font-size: 1rem;
-      color: ${({ theme }) => theme.color};
+      color: var(--default);
       background-color: transparent;
       outline: none;
       border: none;
@@ -233,15 +233,17 @@ export default styled(MyEditor)`
       margin: 0;
       font-size: 14px;
       line-height: 16px;
-      color: ${({ theme }) => theme.color};
-      border-top: 2px dashed ${({ theme }) => theme.borderColor};
+      color: var(--default);
+      border-top: 2px dashed var(--border-color);
     }
   }
 
   .preview {
-    code {
+    pre {
       background-color: #ccc;
-      padding: 2px;
+      padding: 12px;
+      border-radius: var(--border-radius);
+      overflow: scroll;
     }
   }
 `

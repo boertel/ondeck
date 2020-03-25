@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
+import { useRouteMatch, } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
 import { View, Button } from '../../ui'
-import { EditIcon, TrashIcon } from '../../ui/icons'
+import { EditIcon, TrashIcon, AddIcon } from '../../ui/icons'
 import { AddColumnForm } from '../../form'
 import { deleteColumn } from '../../resources/columns'
 
 function ColumnTitle({ className, name, id, ...props }) {
+  const { url } = useRouteMatch()
   const [removeColumn] = deleteColumn()
   const [readOnly, setReadOnly] = useState(true)
   return (
@@ -17,6 +19,9 @@ function ColumnTitle({ className, name, id, ...props }) {
       </Button>
       <Button onClick={() => removeColumn(id)}>
         <TrashIcon />
+      </Button>
+      <Button to={{ pathname: `${url}/new`, search: `?column=${id}` }}>
+        <AddIcon />
       </Button>
     </View>
   )

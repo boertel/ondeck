@@ -3,11 +3,10 @@ import { groupBy } from 'lodash'
 import { useParams, useRouteMatch, Link } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import { Columns, Tickets, } from '../../ui'
+import { Columns, Tickets, Button } from '../../ui'
 import Column, { ColumnTitle } from '../Column'
 import Ticket from '../Ticket'
 import { AddColumnForm } from '../../form'
-import { AddIcon } from '../../ui/icons'
 
 import { useColumns, useTickets, useBoards } from '../../resources'
 
@@ -40,9 +39,6 @@ const Board = props => {
                   <Ticket key={ticket.key} to={`${url}/${ticket.key}`} {...ticket} />
                 ))}
               </Tickets>
-              <Link to={{ pathname: `${url}/new`, search: `?column=${id}` }}>
-                <AddIcon /> New Ticket
-              </Link>
             </Column>
           ))}
         {showAddColumnForm && (

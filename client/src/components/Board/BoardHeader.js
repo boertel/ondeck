@@ -1,12 +1,11 @@
 import React from 'react'
-import styled from 'styled-components/macro'
 
 import { useParams, useHistory, } from 'react-router-dom'
 import { Button, View } from '../../ui'
 import { TrashIcon, AddIcon } from '../../ui/icons'
 import { deleteBoard } from '../../resources/board'
 
-const BoardHeader = ({ name, slug, onAddColumn, ...props }) => {
+const BoardHeader = ({ name, slug, onAddColumn, id, ...props }) => {
   const history = useHistory()
   const { workspaceSlug } = useParams()
   const [ remove ] = deleteBoard(null, {refetchQueries: [['boards', { workspaceSlug, }]]})
@@ -15,7 +14,7 @@ const BoardHeader = ({ name, slug, onAddColumn, ...props }) => {
     history.push(`/workspaces/${workspaceSlug}`)
   }
   return (
-    <View as="header" {...props}>
+    <View justifyContent="space-between" alignItems="center">
       <h4>{name}</h4>
       <div>
         <Button onClick={onAddColumn}>
@@ -29,7 +28,4 @@ const BoardHeader = ({ name, slug, onAddColumn, ...props }) => {
   )
 }
 
-export default styled(BoardHeader)`
-  margin-bottom: 12px;
-  justify-content: space-between;
-`
+export default BoardHeader

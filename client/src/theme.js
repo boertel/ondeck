@@ -4,8 +4,10 @@ import { createGlobalStyle } from 'styled-components'
 const colors = {
   color: '#373737',
   primary: '#22986C',
+  secondary: '#FCC530',
+  danger: '#E96A73',
   foreground: '#FFF',
-  background: '#FFF',
+  background: 'rgb(248, 248, 248)',
   placeholder: '#999',
   sidebar: '#F7F7F7',
 }
@@ -18,28 +20,29 @@ const theme = {
 }
 
 export const GlobalStyle = createGlobalStyle`
-  @import url("https://rsms.me/inter/inter.css");
-  html, button, input {
-    font-family: "Inter", sans-serif;
-  }
-  @supports (font-variation-settings: normal) {
-    html, button, input {
-      font-family: "Inter var", sans-serif;
-    }
+  :root {
+    --default: ${({ theme }) => theme.color};
+    --primary: ${({ theme }) => theme.primary};
+    --primary-hover: ${({ theme }) => transparentize(0.8, theme.primary)};
+    --border-color: ${({ theme }) => theme.borderColor};
+    --fg: ${({ theme }) => theme.foreground};
+    --bg: ${({ theme }) => theme.background};
+    --placeholder: ${({ theme }) => theme.placeholder};
+    --border-radius: ${({ theme }) => theme.radius};
   }
 
   html, body, #root {
-    color: ${({ theme }) => theme.color};
+    color: var(--default);
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: ${({ theme }) => theme.background};
+    background-color: var(--fg);
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
   }
 
   ::placeholder {
-    color: ${({ theme }) => theme.placeholder}
+    color: var(--placeholder);
   }
 
   * {
@@ -47,8 +50,9 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: ${({ theme }) => theme.primary};
+    color: var(--primary);
     text-decoration: none;
+    cursor: pointer;
 
     &:hover, &:focus {
       text-decoration: underline;

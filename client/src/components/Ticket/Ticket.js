@@ -29,18 +29,18 @@ const Ticket = ({ title, className, id, column: fromColumnId, board: fromBoardId
 }
 
 export default styled(Ticket)`
-  background-color: ${({ theme }) => theme.foreground};
+  background-color: var(--fg);
   width: 100%;
   justify-content: flex-start;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   padding: 10px;
   margin-bottom: 8px;
   transition-property: border-color, color, opacity;
   transition-duration: .2s;
   transition-timing-function: ease-in-out;
-  border-radius: ${({ theme }) => theme.radius};
+  border-radius: var(--border-radius);
 
-  color: ${({ theme }) => theme.color};
+  color: var(--default);
   text-decoration: none;
   outline: none;
 
@@ -49,8 +49,7 @@ export default styled(Ticket)`
     outline: none;
     text-decoration: none;
   }
+
   &:focus {
-    box-shadow: inset 0 0 0 1px rgba(0,0,0, .25), 0 0 0 .1875rem ${({ theme }) => transparentize(.25, theme.primary)};
   }
 `
-

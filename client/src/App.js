@@ -7,11 +7,13 @@ import Backend from 'react-dnd-html5-backend'
 import './App.css'
 
 import Routes from './Routes'
+import Favicon from './ui/Favicon'
 import theme, { GlobalStyle } from './theme'
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
+      <Favicon emoji="⛵️" />
       <GlobalStyle />
       <DndProvider backend={Backend}>
         <Routes />

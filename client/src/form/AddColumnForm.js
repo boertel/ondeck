@@ -23,7 +23,7 @@ function AddColumnForm({ name, id }) {
 
   return (
     <Form>
-      <InputField field="name" required={true} />
+      <InputField field="name" className="transparent" required={true} />
     </Form>
   )
 }

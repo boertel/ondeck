@@ -27,7 +27,7 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     align-items: center;
     padding: 6px 8px;
     margin: 6px 0;
-    border-radius: ${({ theme }) => theme.radius};
+    border-radius: var(--border-radius);
     transition: all 0.2s ease-in-out;
     text-decoration: none;
 
@@ -43,24 +43,25 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
   & > a {
     &:hover,
     &:focus {
-      background-color: ${({ theme }) => theme.hoverBackground};
+      background-color: var(--primary-hover);
       text-decoration: none;
     }
   }
 
   & > a {
     &.active {
-      background-color: ${({ theme }) => theme.primary};
-      color: ${({ theme }) => theme.background};
+      background-color: var(--primary);
+      color: var(--fg);
     }
   }
 
   &.canDrop a {
-    border-color: ${({ theme }) => theme.primary};
+    border-color: var(--primary);
   }
 
   &.isHover a {
-    background-color: ${({ theme }) => theme.hoverBackground};
+    background-color: var(--primary-hover);
+    color: var(--fg);
   }
 `
 

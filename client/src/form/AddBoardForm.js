@@ -26,7 +26,7 @@ function AddBoardForm() {
 
   return (
     <Form>
-      <InputField icon={AddIcon} field="name" className="no-border" placeholder="Add Board" />
+      <InputField icon={AddIcon} field="name" className="transparent" placeholder="Add Board" />
     </Form>
   )
 }

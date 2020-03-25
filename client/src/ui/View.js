@@ -1,9 +1,17 @@
 import styled from 'styled-components/macro'
 
-export default styled.div`
+const View = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  border-radius: ${({ theme }) => theme.radius};
+  border-radius: var(--border-radius);
   width: 100%;
+
+  align-items: ${({ alignItems }) => alignItems};
+  justify-content: ${({ justifyContent }) => justifyContent};
 `
+
+View.defaultProps = {
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+}
+
+export default View;

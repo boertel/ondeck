@@ -15,26 +15,28 @@ Button.defaultProps = {
 }
 
 export default styled(Button)`
+  display: inline-flex;
+  padding: 0.65rem 0.5rem;
   margin: 0;
-  padding: 0.5rem 1.25rem;
   font-size: 1rem;
-  border-radius: ${({ theme }) => theme.radius};
-  background-color: ${({ theme }) => theme.primary};
-  border: 2px solid var(--gray-700);
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-color);
+  background-color: var(--bg);
+  color: var(--default);
+  border-radius: var(--border-radius);
   appearance: none;
-  display: inline-block;
-  line-height: 1rem;
+  text-decoration: none;
   transition: background-color 200ms ease-in-out, border 200ms ease-in-out,
     transform 200ms ease-in-out;
   -webkit-touch-callout: none;
   user-select: none;
+  line-height: 1rem;
 
   &:hover {
     cursor: pointer;
-    background: ${({ theme }) => theme.hoverBackground};
+    text-decoration: none;
+    background-color: var(--border-color);
   }
 
   &:focus-visible {
@@ -42,13 +44,48 @@ export default styled(Button)`
     outline: none;
   }
 
-  svg {
-    display: block;
-    width: 1em;
-    height: 1em;
+  &.primary, &[type="submit"] {
+    background-color: var(--primary);
+    color: var(--fg);
+
+    &:hover, &:focus {
+    }
   }
 
-  & + button {
+  &.link {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--primary);
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  &.outline {
+    background-color: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
+
+    &:hover, &:focus {
+      background-color: var(--primary);
+      color: var(--fg);
+    }
+  }
+
+  svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    &:first-child {
+      margin-left: 4px;
+    }
+    &:last-child {
+      margin-right: 4px;
+    }
+  }
+
+  & + & {
     margin-left: 12px;
   }
 `

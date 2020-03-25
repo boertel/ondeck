@@ -35,9 +35,7 @@ function Column({ id: columnId, className, ...props }) {
 
 export default styled(Column)`
   height: 100%;
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${({ theme }) => theme.borderColor };
+  background-color: var(--bg);
   flex-direction: column;
   justify-content: flex-start;
   padding: 10px;
@@ -48,12 +46,12 @@ export default styled(Column)`
 
   &.canDrop {
     border-style: dashed;
-    border-color: ${({ theme }) => theme.primary};
+    border-color: var(--primary);
     border-width: 1px;
   }
 
   &.isHover {
-    background-color: ${({ theme }) => theme.hoverBackground};
+    background-color: var(--primary-hover);
   }
 `
 

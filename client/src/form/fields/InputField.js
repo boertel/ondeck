@@ -12,7 +12,7 @@ const InputField = React.forwardRef((props, ref) => {
   } = useField(field, fieldOptions);
 
   return (
-    <Input {...getInputProps({ ref, ...rest })} forwardedAs={as} />
+    <Input name={field} id={field} {...getInputProps({ ref, ...rest })} forwardedAs={as} />
   )
 })
 
