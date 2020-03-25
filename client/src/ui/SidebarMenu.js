@@ -40,6 +40,11 @@ const StyledSidebarMenuItem = styled(SidebarMenuItem)`
     }
   }
 
+  & > form {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   & > a {
     &:hover,
     &:focus {

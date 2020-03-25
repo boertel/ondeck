@@ -21,12 +21,20 @@ Input.defaultProps = {
 }
 
 export default styled(Input)`
+  &.full-width {
+    width: 100%;
+    .input {
+      width: 100%;
+    }
+  }
+
   margin-bottom: 12px;
 
   & > label {
     display: inline-flex;
     margin-bottom: 6px;
   }
+
 
   .input {
     position: relative;

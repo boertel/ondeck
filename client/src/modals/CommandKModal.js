@@ -7,7 +7,6 @@ function CommandKModal({ closeModal, }) {
   return (
     <>
       <CommandK />
-      <button onClick={closeModal}>Close</button>
     </>
   )
 }

@@ -1,6 +1,18 @@
 import React, { useState, useContext, createContext } from 'react'
 import Modal from 'react-modal'
 
+const styles = {
+  overlay: {
+    backgroundColor: 'var(--overlay)',
+  },
+  content: {
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+    maxWidth: '800px',
+    margin: '0 auto',
+  }
+}
+
 const ModalContext = createContext()
 
 export const ModalProvider = ({ children }) => {
@@ -19,7 +31,7 @@ export const ModalProvider = ({ children }) => {
   return (
     <ModalContext.Provider value={value}>
       {children}
-      <Modal isOpen={modal.isOpen} onRequestClose={closeModal}>
+      <Modal isOpen={modal.isOpen} onRequestClose={closeModal} style={styles}>
         {!!WrappedComponent && <WrappedComponent closeModal={closeModal} />}
       </Modal>
     </ModalContext.Provider>

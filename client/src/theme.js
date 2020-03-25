@@ -10,6 +10,7 @@ const colors = {
   background: '#F7F7F7',
   placeholder: '#999',
   sidebar: '#F7F7F7',
+  overlay: 'rgba(38, 38, 38, 0.8)',
 }
 
 const theme = {
@@ -30,6 +31,8 @@ export const GlobalStyle = createGlobalStyle`
     --bg: ${({ theme }) => theme.background};
     --placeholder: ${({ theme }) => theme.placeholder};
     --border-radius: ${({ theme }) => theme.radius};
+    --border-radius: ${({ theme }) => theme.radius};
+    --overlay: ${({ theme }) => theme.overlay};
   }
 
   html, body, #root {

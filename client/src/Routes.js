@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
 import { ModalProvider } from './hooks/useModal'
@@ -37,13 +37,14 @@ function Workspace() {
   const { boards } = useBoards()
 
   const [openModal] = useModal(CommandKModal)
+  useEffect(() => openModal(), [])
 
   return (
     <>
       <Sidebar>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Input type="search" className="transparent" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
+            <Input type="search" className="transparent full-width" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
