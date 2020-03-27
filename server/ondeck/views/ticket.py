@@ -16,13 +16,11 @@ class TicketViewSet(RootViewSet):
     def get_serializer_class(self):
         return self.serializer_class
 
-    """
     # TODO if we want to use <KEY>-<INDEX> as Ticket identifier
     def get_object(self):
         pk = self.kwargs.get("pk")
         index = pk.split("-")[1]
         return self.queryset.get(index=index)
-    """
 
     def get_queryset(self):
         if hasattr(self, "board"):

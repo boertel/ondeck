@@ -1,4 +1,6 @@
-import { useMyQuery, useMyMutation } from './utils'
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useMyMutation } from './utils'
+import { useQuery, useMutation } from 'react-query'
 import api from './api'
 
 
@@ -20,30 +22,63 @@ const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   }
 }
 
-const defaultQueryFn = (key, { workspaceSlug, boardSlug }) => {
-  const { path } = getApiParameters({ workspaceSlug, boardSlug })()
-  return api.get(path).then(({ data }) => data)
-}
-
-export const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
-  const { method, path } = getApiParameters({ workspaceSlug, boardSlug })(data.id)
-  return api[method](path, data).then(({ data }) => data)
-}
-
-const deleteFn = ({ workspaceSlug, boardSlug }) => pk => {
-  return api.delete(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${pk}/`).then(({ data }) => ({}))
-}
-
-export const useTickets = useMyQuery('tickets', defaultQueryFn)
-
-export const useTicketVersions = useMyQuery('versions', (key, { workspaceSlug, boardSlug, ticketId, }) => {
-  const { path } = getApiParameters({ workspaceSlug, boardSlug })(ticketId)
-  return api.get(`${path}versions/`).then(({ data }) => data);
-})
-
-export const mutateTicket = useMyMutation('tickets', defaultMutationFn)
-export const deleteTicket = useMyMutation('tickets', deleteFn, {
-  onSuccess: (data, variables, queryCache) => {
-    queryCache.removeQueries(['versions', variables])
+const getTicketPath = ({ workspaceSlug, boardSlug, ticketSlug }) => {
+  let method = 'post'
+  let path = ['', 'workspaces', workspaceSlug]
+  if (boardSlug) {
+    path = path.concat(['boards', boardSlug])
   }
-})
+  path.push('tickets')
+  if (ticketSlug) {
+    path.push(ticketSlug)
+    method = 'patch'
+  }
+  path.push('')
+  return {
+    path: path.join('/'),
+    method,
+  }
+}
+
+const getTickets = async (key, params) => {
+  const { path } = getTicketPath(params)
+  const { data } = await api.get(path)
+  return data
+}
+
+const getTicketVersions = async (key, params) => {
+  const { path } = getTicketPath(params)
+  const { data } = await api.get(`${path}versions/`)
+  return data
+}
+
+const createOrUpdateTicket = async (params, variables) => {
+  const { path, method, } = getTicketPath(params)
+  const { data } = await api[method](path, variables)
+  return data
+}
+
+const _deleteTicket = async (params) => {
+  const { path, } = getTicketPath(params)
+  await api.delete(path)
+  return {}
+}
+
+
+export const useTickets = (params) => {
+  return useQuery(['tickets', params], getTickets)
+}
+
+export const useTicketVersions = (params) => {
+  return useQuery(params.ticketSlug && ['versions', params], getTicketVersions)
+}
+
+export const mutateTicket = (params) => {
+  const mutateFn = async data => await createOrUpdateTicket(params, data)
+  return useMutation(mutateFn)
+}
+
+export const deleteTicket = (params) => {
+  const mutateFn = async data => await _deleteTicket(params)
+  return useMutation(mutateFn)
+}

@@ -8,9 +8,9 @@ import { TicketForm } from '../form'
 import Versions from './Ticket/Versions'
 
 const FullTicket = ({ className }) => {
-  const { ticketSlug } = useParams()
+  const params = useParams()
   // TODO should we fetch only `ticketSlug` here?
-  const { tickets, isLoading } = useTickets()
+  const { data: ticket, isLoading } = useTickets(params)
 
   const history = useHistory()
   useEffect(() => {
@@ -25,11 +25,9 @@ const FullTicket = ({ className }) => {
     }
   }, [history])
 
-  if (!tickets || isLoading) {
+  if (!ticket || isLoading) {
     return null
   }
-
-  const ticket = tickets.find(({ key }) => key === ticketSlug) || {}
 
   return (
     <View className={className}>

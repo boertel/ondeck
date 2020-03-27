@@ -1,20 +1,21 @@
 import React, { useState } from 'react'
 import { groupBy } from 'lodash'
-import { useParams, useRouteMatch, } from 'react-router-dom'
+import { useParams, useRouteMatch } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import { Columns, Tickets, } from '../../ui'
+import { Columns, Tickets } from '../../ui'
 import Column, { ColumnTitle } from '../Column'
 import Ticket from '../Ticket'
 import { AddColumnForm } from '../../form'
-
 import { useColumns, useTickets, useBoards } from '../../resources'
 
 const Board = props => {
   const { url } = useRouteMatch()
-  const { columns } = useColumns()
-  const { tickets } = useTickets()
-  const { data: board } = useBoards(['boards', useParams()])
+  const params = useParams()
+
+  const { data: board } = useBoards(params)
+  const { data: columns } = useColumns(params)
+  const { data: tickets } = useTickets(params)
 
   const [showAddColumnForm, setShowAddColumnForm] = useState(false)
 
@@ -23,12 +24,9 @@ const Board = props => {
     ticketsGroupByColumns = groupBy(tickets, 'column')
   }
 
-  // TODO why so many console.log/render?
-  //console.log(columns)
-
   return (
     <>
-      {board && <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)}/>}
+      {board && <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)} />}
       <Columns>
         {columns &&
           columns.map(({ id, name }) => (

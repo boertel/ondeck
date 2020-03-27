@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useQuery } from 'react-query'
 import { BrowserRouter as Router, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
 
 import { ModalProvider } from './hooks/useModal'
@@ -7,18 +8,17 @@ import { Sidebar, Input } from './ui'
 import SidebarMenu, { SidebarMenuItem } from './ui/SidebarMenu'
 import { FullTicket } from './components'
 import Board, { BoardMenuItem } from './components/Board'
-import { useBoards } from './resources'
+import api from './resources/api'
 import { BoardIcon, SearchIcon, ActionsIcon } from './ui/icons'
 import { AddBoardForm } from './form'
 import CommandKModal from './modals/CommandKModal'
+import { useBoards } from './resources'
 
 function FullBoard() {
   const { path } = useRouteMatch()
   return (
     <Switch>
-      <Route exact path={path}>
-        <Board />
-      </Route>
+      <Route exact path={path}><Board /></Route>
       <Route exact path={`${path}/new`}>
         <FullTicket />
       </Route>
@@ -34,7 +34,7 @@ function Workspace() {
   const { workspaceSlug } = useParams()
 
   //const { workspace } = useWorkspace()
-  const { boards } = useBoards()
+  const { data: boards } = useBoards({ workspaceSlug })
 
   const [openModal] = useModal(CommandKModal)
   //useEffect(() => openModal(), [])
@@ -44,7 +44,13 @@ function Workspace() {
       <Sidebar>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Input type="search" className="transparent full-width" placeholder="Search..." icon={SearchIcon} onClick={openModal} />
+            <Input
+              type="search"
+              className="transparent full-width"
+              placeholder="Search..."
+              icon={SearchIcon}
+              onClick={openModal}
+            />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

@@ -12,10 +12,10 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const location = useLocation()
   const params = new URLSearchParams(location.search)
   const paramColumn = params.get('column') || column
-  const { workspaceSlug, boardSlug } = useParams()
+  const { workspaceSlug, boardSlug, ticketSlug } = useParams()
   const history = useHistory()
 
-  const { tickets } = useTickets()
+  const { data: tickets } = useTickets({ workspaceSlug, boardSlug })
 
   const defaultValues = useMemo(
     () => ({
@@ -28,7 +28,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
     [title, description, paramColumn, id, parent]
   )
 
-  const [mutate] = mutateTicket()
+  const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
   const {
     Form,
     meta: { canSubmit },
@@ -36,7 +36,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
     defaultValues,
     onSubmit: async (values, { reset }) => {
       try {
-        await mutate(values, { waitForRefetchQueries: true })
+        await mutate(values)
         reset()
         onSubmit()
       } catch (exception) {
@@ -48,7 +48,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const isEditing = !!id
   const back = `/workspaces/${workspaceSlug}/${boardSlug}`
 
-  const [remove] = deleteTicket()
+  const [remove] = deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
   const onDelete = async () => {
     await remove(id)
     history.push(back)
@@ -66,7 +66,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
       <EditorField label="Description" field="description" />
       <SelectField label="Parent" field="parent" filterValue={v => parseInt(v, 10)}>
         <option />
-        {tickets
+        {(tickets || [])
           .filter(ticket => ticket.id !== id && !ticket.parent)
           .map(({ id, title, key }) => (
             <option value={id} key={id}>
