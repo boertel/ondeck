@@ -1,8 +1,6 @@
 import { useMyQuery, useMyMutation } from './utils'
 import api from './api'
 
-const defaultQueryFn = (key, { workspaceSlug, boardSlug }) =>
-  fetch(`/api/v1/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`).then(res => res.json())
 
 const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   let method = 'post'
@@ -22,6 +20,11 @@ const getApiParameters = ({ workspaceSlug, boardSlug }) => pk => {
   }
 }
 
+const defaultQueryFn = (key, { workspaceSlug, boardSlug }) => {
+  const { path } = getApiParameters({ workspaceSlug, boardSlug })()
+  return api.get(path).then(({ data }) => data)
+}
+
 export const defaultMutationFn = ({ workspaceSlug, boardSlug }) => data => {
   const { method, path } = getApiParameters({ workspaceSlug, boardSlug })(data.id)
   return api[method](path, data).then(({ data }) => data)
@@ -32,5 +35,15 @@ const deleteFn = ({ workspaceSlug, boardSlug }) => pk => {
 }
 
 export const useTickets = useMyQuery('tickets', defaultQueryFn)
+
+export const useTicketVersions = useMyQuery('versions', (key, { workspaceSlug, boardSlug, ticketId, }) => {
+  const { path } = getApiParameters({ workspaceSlug, boardSlug })(ticketId)
+  return api.get(`${path}versions/`).then(({ data }) => data);
+})
+
 export const mutateTicket = useMyMutation('tickets', defaultMutationFn)
-export const deleteTicket = useMyMutation('tickets', deleteFn)
+export const deleteTicket = useMyMutation('tickets', deleteFn, {
+  onSuccess: (data, variables, queryCache) => {
+    queryCache.removeQueries(['versions', variables])
+  }
+})

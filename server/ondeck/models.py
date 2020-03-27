@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
+import reversion
+
 
 # u = User.objects.create_user(username="ben", email="ben@comediadesign.com");
 # w = Workspace.objects.create(name="On deck", slug="ondeck", owner=u);
@@ -110,6 +112,7 @@ class Assignee(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+@reversion.register()
 class Ticket(models.Model):
     index = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
@@ -158,6 +161,7 @@ class Activity(models.Model):
 
     type = models.CharField(max_length=100, choices=Type.as_choices())
     message = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -19,7 +19,8 @@ export function useMyQuery(name, defaultQueryFn) {
         ...variables,
       }
     }
-    const output = useQuery([str, variables], queryFn, options)
+
+    const output = useQuery(queryKey !== false ? [str, variables] : false, queryFn, options)
     return {
       ...output,
       [name]: output.data,
@@ -27,12 +28,14 @@ export function useMyQuery(name, defaultQueryFn) {
   }
 }
 
-export function useMyMutation(name, defaultMutationFn) {
+export function useMyMutation(name, defaultMutationFn, defaultOptions={}) {
   return function (mutationFn, options={}) {
     mutationFn = mutationFn || defaultMutationFn
     return useMutation(mutationFn(useParams()), {
-      onSuccess: () => {
+      ...defaultOptions,
+      onSuccess: (data, variables) => {
         queryCache.refetchQueries(name)
+        defaultOptions.onSuccess && defaultOptions.onSuccess(data, variables, queryCache)
       },
       ...options,
     })

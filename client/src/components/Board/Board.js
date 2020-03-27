@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { groupBy } from 'lodash'
-import { useParams, useRouteMatch, Link } from 'react-router-dom'
+import { useParams, useRouteMatch, } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import { Columns, Tickets, Button } from '../../ui'
+import { Columns, Tickets, } from '../../ui'
 import Column, { ColumnTitle } from '../Column'
 import Ticket from '../Ticket'
 import { AddColumnForm } from '../../form'
@@ -12,8 +12,8 @@ import { useColumns, useTickets, useBoards } from '../../resources'
 
 const Board = props => {
   const { url } = useRouteMatch()
-  const { columns } = useColumns('columns')
-  const { tickets } = useTickets('tickets')
+  const { columns } = useColumns()
+  const { tickets } = useTickets()
   const { data: board } = useBoards(['boards', useParams()])
 
   const [showAddColumnForm, setShowAddColumnForm] = useState(false)
