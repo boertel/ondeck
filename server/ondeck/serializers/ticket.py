@@ -28,6 +28,7 @@ class BoardSerializer(serializers.PrimaryKeyRelatedField):
 
 class TicketSerializer(serializers.ModelSerializer):
     key = serializers.CharField(read_only=True)
+    pk = serializers.CharField(read_only=True, source="key")
     board = BoardSerializer(allow_null=True, queryset=Board.objects, required=False)
     parent = ParentTicketSerializer(
         allow_null=True, queryset=Ticket.objects, required=False
@@ -41,6 +42,7 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "key",
+            "pk",
             "title",
             "description",
             "column",

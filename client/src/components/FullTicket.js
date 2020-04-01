@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components/macro'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useTickets } from '../resources'
 import { View } from '../ui'
@@ -12,18 +12,18 @@ const FullTicket = ({ className }) => {
   // TODO should we fetch only `ticketSlug` here?
   const { data: ticket, isLoading } = useTickets(params)
 
-  const history = useHistory()
+  const navigate = useNavigate()
   useEffect(() => {
     const onEscape = evt => {
       if (evt.key === 'Escape') {
-        history.goBack()
+        navigate(-1)
       }
     }
     window.addEventListener('keydown', onEscape)
     return () => {
       window.removeEventListener('keydown', onEscape)
     }
-  }, [history])
+  }, [navigate])
 
   if (!ticket || isLoading) {
     return null
@@ -31,7 +31,7 @@ const FullTicket = ({ className }) => {
 
   return (
     <View className={className}>
-      <TicketForm {...ticket} onSubmit={() => history.goBack()} />
+      <TicketForm {...ticket} onSubmit={() => navigate(-1)} />
       <Versions ticket={ticket} />
     </View>
   )

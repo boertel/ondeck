@@ -13,9 +13,9 @@ const TicketTitle = styled.h4`
   margin: 0;
 `
 
-const Ticket = React.memo(({ title, className, id, column: fromColumnId, board: fromBoardId, to, }) => {
+const Ticket = React.memo(({ title, className, pk, column: fromColumnId, board: fromBoardId, to, }) => {
   const [{ opacity, }, drag] = useDrag({
-    item: { type: 'TICKET', id, fromColumnId, fromBoardId, },
+    item: { type: 'TICKET', pk, fromColumnId, fromBoardId, },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.4 : 1,
     })

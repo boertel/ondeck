@@ -42,7 +42,7 @@ export default styled(Input)`
     align-items: center;
 
     svg {
-      margin: 0 0.5rem;
+      margin: 0 0.5em;
       position: absolute;
       right: 0;
     }
@@ -57,8 +57,8 @@ export default styled(Input)`
   input,
   textarea,
   select {
-    padding: 0.65rem 0.5rem;
-    font-size: 1rem;
+    padding: 0.65em 0.5em;
+    font-size: 1em;
     border-width: 2px;
     border-style: solid;
     border-color: var(--border-color);
@@ -67,8 +67,8 @@ export default styled(Input)`
     border-radius: var(--border-radius);
     appearance: none;
     width: 100%;
-    line-height: 1rem;
-    height: calc(1rem + 0.65rem * 2 + 4px);
+    line-height: 1em;
+    height: calc(1em + 0.65em * 2 + 4px);
   }
 
   textarea {
@@ -105,11 +105,11 @@ export default styled(Input)`
   }
 
   select {
-    height: 2.5rem;
+    height: 2.5em;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="currentColor" d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>');
     background-repeat: no-repeat;
-    background-size: 1rem;
-    background-position: center right 0.5rem;
+    background-size: 1em;
+    background-position: center right 0.5em;
   }
 
   select[multiple] {

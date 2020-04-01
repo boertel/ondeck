@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import View from './View';
 import Editor from './Editor';
 import Tickets from './Tickets';
+import SearchInput from './SearchInput';
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   View,
   Editor,
   Tickets,
+  SearchInput,
 };

@@ -71,6 +71,7 @@ class Board(models.Model):
         return owner
 
     def save(self, *args, **kwargs):
+        # TODO what to do when renaming an board?
         if self.slug == "":
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)

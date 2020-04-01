@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { groupBy } from 'lodash'
-import { useParams, useRouteMatch } from 'react-router-dom'
+import { useParams, } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
 import { Columns, Tickets } from '../../ui'
@@ -10,7 +10,6 @@ import { AddColumnForm } from '../../form'
 import { useColumns, useTickets, useBoards } from '../../resources'
 
 const Board = props => {
-  const { url } = useRouteMatch()
   const params = useParams()
 
   const { data: board } = useBoards(params)
@@ -26,7 +25,7 @@ const Board = props => {
 
   return (
     <>
-      {board && <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)} />}
+      <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)} />
       <Columns>
         {columns &&
           columns.map(({ id, name }) => (
@@ -34,7 +33,7 @@ const Board = props => {
               <ColumnTitle name={name} id={id} />
               <Tickets>
                 {(ticketsGroupByColumns[id] || []).map(ticket => (
-                  <Ticket key={ticket.key} to={`${url}/${ticket.key}`} {...ticket} />
+                  <Ticket key={ticket.key} to={`${ticket.key}`} {...ticket} />
                 ))}
               </Tickets>
             </Column>

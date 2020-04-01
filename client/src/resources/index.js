@@ -1,6 +1,6 @@
-import { useWorkspace } from './workspace'
-import { useBoards } from './board'
+import { useWorkspaces } from './workspaces'
+import { useBoards } from './boards'
 import { useColumns } from './columns'
 import { useTickets, useTicketVersions } from './tickets'
 
-export { useWorkspace, useBoards, useColumns, useTickets, useTicketVersions }
+export { useWorkspaces, useBoards, useColumns, useTickets, useTicketVersions }

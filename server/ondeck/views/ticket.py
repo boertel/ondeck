@@ -16,7 +16,6 @@ class TicketViewSet(RootViewSet):
     def get_serializer_class(self):
         return self.serializer_class
 
-    # TODO if we want to use <KEY>-<INDEX> as Ticket identifier
     def get_object(self):
         pk = self.kwargs.get("pk")
         index = pk.split("-")[1]
@@ -59,7 +58,7 @@ class TicketViewSet(RootViewSet):
         for version in versions:
             changes = {}
             current = version.field_dict
-            if previous and version != versions[versions.count() - 1]:
+            if previous:
                 for k, v in current.items():
                     if k not in [
                         "updated_at",

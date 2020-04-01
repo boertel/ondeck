@@ -1,4 +1,4 @@
-from .workspace import WorkspaceView
+from .workspace import WorkspaceViewSet
 from .board import BoardViewSet
 from .ticket import TicketViewSet
 from .column import ColumnViewSet

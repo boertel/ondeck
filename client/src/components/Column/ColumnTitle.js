@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useRouteMatch, } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
 import { View, Button } from '../../ui'
@@ -8,8 +8,8 @@ import { AddColumnForm } from '../../form'
 import { deleteColumn } from '../../resources/columns'
 
 function ColumnTitle({ className, name, id, ...props }) {
-  const { url } = useRouteMatch()
-  const [removeColumn] = deleteColumn()
+  const params = useParams()
+  const [removeColumn] = deleteColumn(params)
   const [readOnly, setReadOnly] = useState(true)
   return (
     <View>
@@ -20,7 +20,7 @@ function ColumnTitle({ className, name, id, ...props }) {
       <Button onClick={() => removeColumn(id)}>
         <TrashIcon />
       </Button>
-      <Button to={{ pathname: `${url}/new`, search: `?column=${id}` }} className="primary">
+      <Button to={{ pathname: `new`, search: `?column=${id}` }} className="primary">
         <AddIcon />
       </Button>
     </View>

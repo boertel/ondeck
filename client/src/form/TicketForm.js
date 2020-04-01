@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { useLocation, useParams, useHistory } from 'react-router-dom'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
 
 import { Button, View } from '../ui'
@@ -13,7 +13,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const params = new URLSearchParams(location.search)
   const paramColumn = params.get('column') || column
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { data: tickets } = useTickets({ workspaceSlug, boardSlug })
 
@@ -37,8 +37,8 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
     onSubmit: async (values, { reset }) => {
       try {
         await mutate(values)
-        reset()
         onSubmit()
+        reset()
       } catch (exception) {
         console.error(exception)
       }
@@ -51,7 +51,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const [remove] = deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
   const onDelete = async () => {
     await remove(id)
-    history.push(back)
+    navigate(back)
   }
   return (
     <Form className={className}>

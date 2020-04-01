@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom'
 
-import SearchInput from './SearchInput'
+import SearchInput from '../../ui/SearchInput'
 
 
 function CommandK() {

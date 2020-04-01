@@ -1,13 +1,13 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-form'
 
-import { View, Button } from '../ui'
-import { EditIcon } from '../ui/icons'
 import { InputField } from './fields'
 import { mutateColumn } from '../resources/columns'
 
 function AddColumnForm({ name, id }) {
-  const [mutate] = mutateColumn()
+  const params = useParams()
+  const [mutate] = mutateColumn(params)
 
   const isEditing = !!id
 
@@ -23,9 +23,13 @@ function AddColumnForm({ name, id }) {
 
   return (
     <Form>
-      <InputField field="name" className="transparent" required={true} />
+      <InputField field="name" className="transparent" required={true} autoFocus={!isEditing} />
     </Form>
   )
+}
+
+AddColumnForm.defaultProps = {
+  name: '',
 }
 
 export default AddColumnForm

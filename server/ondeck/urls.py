@@ -2,7 +2,13 @@ from django.conf.urls import url
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import WorkspaceView, BoardViewSet, TicketViewSet, ColumnViewSet, TagViewSet
+from .views import (
+    WorkspaceViewSet,
+    BoardViewSet,
+    TicketViewSet,
+    ColumnViewSet,
+    TagViewSet,
+)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -17,8 +23,9 @@ router.register(
 )
 router.register(r"(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
 router.register(r"(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
+router.register(r"", WorkspaceViewSet)
 
-urlpatterns = [path("<slug:workspace_slug>/", WorkspaceView.as_view())]
+urlpatterns = []
 
 # The API URLs are now determined automatically by the router.
 urlpatterns += [path("", include(router.urls))]

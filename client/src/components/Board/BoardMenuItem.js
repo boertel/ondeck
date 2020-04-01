@@ -1,17 +1,18 @@
 import React, { useCallback } from 'react'
+import {useParams} from 'react-router-dom'
 import { useDrop } from 'react-dnd'
 import classNames from 'classnames'
 
 import { mutateTicket, } from '../../resources/tickets'
 
 function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...props }) {
-  const [mutate] = mutateTicket()
+  const params = useParams()
+  const [mutate] = mutateTicket(params)
 
   const onDrop = useCallback(
-    ticket => {
-      console.log(ticket, boardId, boardSlug)
+    ({ pk, }) => {
       mutate({
-        id: ticket.id,
+        pk,
         board: boardId,
       })
     },

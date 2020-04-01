@@ -1,21 +1,22 @@
 import React from 'react'
 
-import { useParams, useHistory, } from 'react-router-dom'
+import { useParams, useNavigate, } from 'react-router-dom'
 import { Button, View } from '../../ui'
 import { TrashIcon, AddIcon } from '../../ui/icons'
-import { deleteBoard } from '../../resources/board'
+import { deleteBoard } from '../../resources/boards'
+import AddBoardForm from '../../form/AddBoardForm'
 
 const BoardHeader = ({ name, slug, onAddColumn, id, ...props }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { workspaceSlug } = useParams()
-  const [ remove ] = deleteBoard(null, {refetchQueries: [['boards', { workspaceSlug, }]]})
+  const [ remove ] = deleteBoard({ workspaceSlug, boardSlug: slug })
   const onDelete = async () => {
-    await remove(slug)
-    history.push(`/workspaces/${workspaceSlug}`)
+    await remove()
+    navigate(`/workspaces/${workspaceSlug}`)
   }
   return (
     <View justifyContent="space-between" alignItems="center">
-      <h4>{name}</h4>
+      <h4><AddBoardForm name={name} /></h4>
       <div>
         <Button onClick={onAddColumn}>
           <AddIcon />

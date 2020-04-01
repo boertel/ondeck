@@ -3,10 +3,14 @@ import styled from 'styled-components/macro'
 import { View } from '../ui'
 
 
-const Tickets = props => {
-  return <View {...props} />
+// TODO better more abstract scrolling component
+// also add classnames to add padding-right if scrollbar is present
+const Tickets = ({ children, ...props }) => {
+  return <View {...props}><div>{children}</div></View>
 }
 
 export default styled(Tickets)`
   flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
 `

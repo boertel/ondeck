@@ -5,8 +5,6 @@ import { ThemeProvider } from 'styled-components'
 import { DndProvider } from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 
-import './App.css'
-
 import Routes from './Routes'
 import Favicon from './ui/Favicon'
 import theme, { GlobalStyle } from './theme'

@@ -1,15 +1,15 @@
 import React, {useRef, useEffect} from 'react'
+import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
 
-const options = [
-  { value: 'create', label: 'Create a ticket' },
-  { value: 'archive', label: 'Archive ticket' },
-  { value: 'vanilla', label: 'Go to [Inspiration] board' },
-]
-
 const styles = {
+  container: (provided) => {
+    return {
+      ...provided,
+      width: '100%',
+    }
+  },
   control: (provided, state) => {
-    console.log(state.isFocused)
     return {
       ...provided,
       borderWidth: '2px',
@@ -17,6 +17,7 @@ const styles = {
       boxShadow: 'none',
       backgroundColor: 'var(--bg)',
       fontSize: '1rem',
+      width: '100%',
     }
   },
 }
@@ -44,17 +45,12 @@ const theme = defaultTheme => ({
   },
 })
 
-const loadOptions = (inputValue, callback) => {
-  setTimeout(() => {
-    callback(options)
-  }, 1000)
-}
-
-const SearchInput = () => {
+const SearchInput = ({ ...props }) => {
   const ref = useRef()
   useEffect(() => {
     ref.current.focus()
   }, [])
-  return <AsyncSelect ref={ref} options={options} loadOptions={loadOptions} styles={styles} theme={theme} />
+  const AsComponent = props.loadOptions ? AsyncSelect : Select
+  return <AsComponent ref={ref} styles={styles} theme={theme} {...props} />
 }
 export default SearchInput
