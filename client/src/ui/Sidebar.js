@@ -2,17 +2,21 @@ import React from 'react'
 import styled from 'styled-components'
 import View from "./View";
 
-const Sidebar = props => {
+const Sidebar = ({ children, ...props }) => {
   return (
-    <View
-      as="nav"
-      {...props}
-    />
+    <nav {...props}>
+      <View flexDirection="column" justifyContent="space-between">{children}</View>
+    </nav>
   );
 };
 
 export default styled(Sidebar)`
-  flex-direction: column;
   background-color: ${({ theme }) => theme.sidebar};
-  border-radius: 0;
+  > div {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    height: 100%;
+  }
 `

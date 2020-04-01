@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Routes, Route, useParams } from 'react-router-dom'
 
 import { useModal } from '../../hooks/useModal'
-import { Sidebar, Input } from '../../ui'
+import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
 import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'
 import { FullTicket } from '../'
@@ -12,6 +12,7 @@ import CommandKModal from '../../modals/CommandKModal'
 import { AddBoardForm } from '../../form'
 import { useBoards } from '../../resources'
 import Workspaces from './Workspaces'
+import UserMenu from '../User/UserMenu'
 
 function Workspace({ className }) {
   const { workspaceSlug } = useParams()
@@ -25,42 +26,47 @@ function Workspace({ className }) {
   return (
     <div className={className}>
       <Sidebar>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div><Workspaces workspaceSlug={workspaceSlug} /></div>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Input
-              type="search"
-              className="transparent full-width"
-              placeholder="Search..."
-              icon={SearchIcon}
-              onClick={openModal}
-            />
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarMenu>
-          <SidebarMenuItem to={{ pathname: `/workspaces/${workspaceSlug}/actions` }}>
-            <ActionsIcon />
-            Actions
-          </SidebarMenuItem>
-        </SidebarMenu>
-        {boards && (
+        <View flexDirection="column">
           <SidebarMenu>
             <SidebarMenuItem>
-              <h5>Boards</h5>
+              <div>
+                <Workspaces workspaceSlug={workspaceSlug} />
+              </div>
             </SidebarMenuItem>
-            {boards.map(({ name, slug, id }) => (
-              <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}`}>
-                <BoardIcon />
-                {name}
-              </BoardMenuItem>
-            ))}
             <SidebarMenuItem>
-              <AddBoardForm />
+              <Input
+                type="search"
+                className="transparent full-width"
+                placeholder="Search..."
+                icon={SearchIcon}
+                onClick={openModal}
+              />
             </SidebarMenuItem>
           </SidebarMenu>
-        )}
+          <SidebarMenu>
+            <SidebarMenuItem to={{ pathname: `/workspaces/${workspaceSlug}/actions` }}>
+              <ActionsIcon />
+              Actions
+            </SidebarMenuItem>
+          </SidebarMenu>
+          {boards && (
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <h5>Boards</h5>
+              </SidebarMenuItem>
+              {boards.map(({ name, slug, id }) => (
+                <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}`}>
+                  <BoardIcon />
+                  {name}
+                </BoardMenuItem>
+              ))}
+              <SidebarMenuItem>
+                <AddBoardForm />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          )}
+        </View>
+        <UserMenu />
       </Sidebar>
       <main>
         <Routes>
@@ -88,12 +94,13 @@ export default styled(Workspace)`
 
   nav {
     grid-area: nav;
-    padding: 20px 10px;
   }
 
   main {
     grid-area: content;
     margin: 10px;
+    display: grid;
+    grid-template-rows: min-content 1fr;
   }
 
   footer {

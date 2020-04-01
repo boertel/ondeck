@@ -8,22 +8,28 @@ from .views import (
     TicketViewSet,
     ColumnViewSet,
     TagViewSet,
+    UserViewSet,
 )
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(
-    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tickets", TicketViewSet
+    r"workspaces/(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tickets",
+    TicketViewSet,
 )
 router.register(
-    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/columns", ColumnViewSet
+    r"workspaces/(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/columns",
+    ColumnViewSet,
 )
 router.register(
-    r"(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tags", TagViewSet
+    r"workspaces/(?P<workspace_slug>[\w-]+)/boards/(?P<board_slug>[\w-]+)/tags",
+    TagViewSet,
 )
-router.register(r"(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
-router.register(r"(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
-router.register(r"", WorkspaceViewSet)
+router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
+router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
+router.register(r"workspaces", WorkspaceViewSet)
+
+router.register(r"users", UserViewSet)
 
 urlpatterns = []
 

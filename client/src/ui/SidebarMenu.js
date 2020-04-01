@@ -15,6 +15,7 @@ const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
 })
 
 const StyledSidebarMenuItem = styled(SidebarMenuItem)`
+  padding: 0 10px;
   h5 {
     display: flex;
     align-items: center;

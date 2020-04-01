@@ -2,11 +2,11 @@ import { useQuery } from 'react-query'
 
 import api from './api'
 
-const getPath = ({ workspaceSlug,}) => {
+const getPath = (userId) => {
   let method = 'post'
   let path = ['', 'users']
-  if (workspaceSlug) {
-    path = path.concat([workspaceSlug])
+  if (userId) {
+    path = path.concat([userId])
   }
   path.push('')
   return {
@@ -15,14 +15,14 @@ const getPath = ({ workspaceSlug,}) => {
   }
 }
 
-const get = async (key, params={}) => {
-  const { path } = getPath(params)
+const get = async (key, userId) => {
+  const { path } = getPath(userId)
   const { data } = await api.get(path)
   return data
 }
 
-export const useUsers = (params) => {
-  const queryKey = ['users', params].filter(v => v !== undefined)
-  return useQuery(queryKey, get)
+export const useUsers = (userId) => {
+  const queryKey = ['users', userId].filter(v => v !== undefined)
+  return useQuery(queryKey, get, { retry: 0 })
 }
 

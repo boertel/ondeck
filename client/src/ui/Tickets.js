@@ -11,6 +11,8 @@ const Tickets = ({ children, ...props }) => {
 
 export default styled(Tickets)`
   flex-direction: column;
-  height: 100vh;
   overflow-y: auto;
+  > div {
+    width: 100%;
+  }
 `
