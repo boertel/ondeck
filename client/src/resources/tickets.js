@@ -58,6 +58,7 @@ export const mutateTicket = (params) => {
   const mutateFn = async data => await createOrUpdate(params, data)
   return useMutation(mutateFn, {
     onSuccess: (data, variables) => {
+      console.log({ data, variables, params })
       queryCache.refetchQueries(['tickets', params])
     }
   })

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
@@ -32,6 +32,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const {
     Form,
     meta: { canSubmit },
+    handleSubmit,
   } = useForm({
     defaultValues,
     onSubmit: async (values, { reset }) => {
@@ -44,6 +45,16 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
       }
     },
   })
+
+  useEffect(() => {
+    const onMetaEnter = (evt) => {
+      if (evt.metaKey && evt.key === 'Enter') {
+        handleSubmit()
+      }
+    }
+    window.addEventListener('keydown', onMetaEnter)
+    return () => window.removeEventListener('keydown', onMetaEnter)
+  }, [handleSubmit])
 
   const isEditing = !!id
   const back = `/workspaces/${workspaceSlug}/${boardSlug}`

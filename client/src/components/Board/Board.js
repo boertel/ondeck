@@ -6,7 +6,7 @@ import BoardHeader from './BoardHeader'
 import { Columns, Tickets } from '../../ui'
 import Column, { ColumnTitle } from '../Column'
 import Ticket from '../Ticket'
-import { AddColumnForm } from '../../form'
+import { AddColumnForm, AddQuickTicketForm, } from '../../form'
 import { useColumns, useTickets, useBoards } from '../../resources'
 
 const Board = props => {
@@ -32,6 +32,7 @@ const Board = props => {
             <Column key={id} id={id}>
               <ColumnTitle name={name} id={id} />
               <Tickets>
+                <AddQuickTicketForm column={id} />
                 {(ticketsGroupByColumns[id] || []).map(ticket => (
                   <Ticket key={ticket.key} to={`${ticket.key}`} {...ticket} />
                 ))}

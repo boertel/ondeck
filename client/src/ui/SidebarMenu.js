@@ -77,4 +77,5 @@ export default styled.ul`
   margin: 0;
   margin-top: 8px;
   width: 100%;
+  list-style: none;
 `

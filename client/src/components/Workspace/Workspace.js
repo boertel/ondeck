@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Routes, Route, useParams } from 'react-router-dom'
 
-import { useModal } from '../../hooks/useModal'
+import useModal from '../../hooks/useModal'
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
 import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'

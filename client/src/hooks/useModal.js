@@ -38,9 +38,11 @@ export const ModalProvider = ({ children }) => {
   )
 }
 
-export const useModal = (WrappedComponent, options) => {
+const useModal = (WrappedComponent, options) => {
   const { openModal, closeModal } = useContext(ModalContext)
   const open = openModal(WrappedComponent, options)
 
   return [open, closeModal]
 }
+
+export default useModal

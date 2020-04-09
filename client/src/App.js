@@ -4,6 +4,7 @@ import { DndProvider } from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 import { BrowserRouter } from 'react-router-dom'
 import { ModalProvider } from './hooks/useModal'
+import { Manager as PopperManager } from 'react-popper'
 
 import Routes from './Routes'
 import Favicon from './ui/Favicon'
@@ -15,11 +16,13 @@ const App = () => {
       <Favicon emoji="⛵️" />
       <GlobalStyle />
       <BrowserRouter>
-        <DndProvider backend={Backend}>
-          <ModalProvider>
-            <Routes />
-          </ModalProvider>
-        </DndProvider>
+        <PopperManager>
+          <DndProvider backend={Backend}>
+            <ModalProvider>
+              <Routes />
+            </ModalProvider>
+          </DndProvider>
+        </PopperManager>
       </BrowserRouter>
     </ThemeProvider>
   )
