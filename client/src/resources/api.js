@@ -1,8 +1,14 @@
 import axios from 'axios'
 
-export default axios.create({
-  baseURL: '/api/v1',
+const options = {
   withCredentials: true,
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFTOKEN',
+}
+
+export const upload = axios.create(options)
+
+export default axios.create({
+  ...options,
+  baseURL: '/api/v1',
 })

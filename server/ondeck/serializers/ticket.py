@@ -53,4 +53,5 @@ class TicketSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "assignees",
+            "position",
         )

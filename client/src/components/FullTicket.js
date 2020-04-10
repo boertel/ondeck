@@ -6,11 +6,11 @@ import { useTickets } from '../resources'
 import { View } from '../ui'
 import { TicketForm } from '../form'
 import Versions from './Ticket/Versions'
+import Resources from './Ticket/Resources'
 
 const FullTicket = ({ className }) => {
-  const params = useParams()
-  // TODO should we fetch only `ticketSlug` here?
-  const { data: ticket, isLoading } = useTickets(params)
+  const { workspaceSlug, boardSlug, ticketSlug } = useParams()
+  const { data: ticket, isLoading } = useTickets({ workspaceSlug, boardSlug, ticketSlug })
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -33,6 +33,7 @@ const FullTicket = ({ className }) => {
     <View className={className}>
       <TicketForm {...ticket} onSubmit={() => navigate(-1)} />
       <Versions ticket={ticket} />
+      <Resources />
     </View>
   )
 }

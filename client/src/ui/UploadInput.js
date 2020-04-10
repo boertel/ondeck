@@ -2,7 +2,7 @@ import { useEffect, useReducer, } from 'react'
 import axios from 'axios'
 import { v4 as uuid4 } from 'uuid'
 
-import api from '../resources/api'
+import { upload } from '../resources/api'
 
 
 const handleUpload = async (file, { dispatch }) => {
@@ -15,7 +15,7 @@ const handleUpload = async (file, { dispatch }) => {
     path: 'uploads',
   }
 
-  const response = await api.get('/upload', { params })
+  const response = await upload.get('/upload', { params })
   const { signedUrl, src, contentType } = response.data
 
   dispatch({

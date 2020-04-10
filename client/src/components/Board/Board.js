@@ -3,18 +3,17 @@ import { groupBy } from 'lodash'
 import { useParams, } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import { Columns, Tickets } from '../../ui'
-import Column, { ColumnTitle } from '../Column'
-import Ticket from '../Ticket'
-import { AddColumnForm, AddQuickTicketForm, } from '../../form'
+import { Columns, } from '../../ui'
+import Column from '../Column'
+import { AddColumnForm, } from '../../form'
 import { useColumns, useTickets, useBoards } from '../../resources'
 
 const Board = props => {
-  const params = useParams()
+  const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
-  const { data: board } = useBoards(params)
-  const { data: columns } = useColumns(params)
-  const { data: tickets } = useTickets(params)
+  const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })
+  const { data: columns } = useColumns({ workspaceSlug, boardSlug, ticketSlug })
+  const { data: tickets } = useTickets({ workspaceSlug, boardSlug, ticketSlug })
 
   const [showAddColumnForm, setShowAddColumnForm] = useState(false)
 
@@ -29,14 +28,7 @@ const Board = props => {
       <Columns>
         {columns &&
           columns.map(({ id, name }) => (
-            <Column key={id} id={id}>
-              <ColumnTitle name={name} id={id} />
-              <Tickets>
-                <AddQuickTicketForm column={id} />
-                {(ticketsGroupByColumns[id] || []).map(ticket => (
-                  <Ticket key={ticket.key} to={`${ticket.key}`} {...ticket} />
-                ))}
-              </Tickets>
+            <Column key={id} id={id} tickets={ticketsGroupByColumns[id]} name={name}>
             </Column>
           ))}
         {showAddColumnForm && (

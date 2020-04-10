@@ -1,17 +1,22 @@
 import reversion
+from django.db import transaction
+from django.db.models import F
 from reversion.models import Version
-from deepdiff import DeepDiff
+from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .viewsets import RootViewSet
-from ..serializers import TicketSerializer, UserSerializer
-from ..models import Ticket, Board
+from ..serializers import TicketSerializer, UserSerializer, ResourceSerializer
+from ..models import Ticket, Board, Resource
 
 
 class TicketViewSet(RootViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["position", "index"]
+    ordering = ["position"]
 
     def get_serializer_class(self):
         return self.serializer_class
@@ -35,8 +40,17 @@ class TicketViewSet(RootViewSet):
                 board = Board.objects.get(pk=data["board"])
                 first_column = board.columns.first()
                 kwargs["column_id"] = first_column.id
-            serializer.save(**kwargs)
+            before = self.get_object()
+            if before.position != data.get("position", before.position):
+                Ticket.objects.filter(
+                    column=data.get("column", before.column),
+                    board=data.get("board", before.board),
+                    position__gte=before.position,
+                ).update(position=F("position") + 1)
+            instance = serializer.save(**kwargs)
             reversion.set_user(self.request.user)
+            # TODO move to a queue
+            transaction.on_commit(instance.create_resources)
 
     def perform_create(self, serializer):
         with reversion.create_revision():
@@ -46,6 +60,15 @@ class TicketViewSet(RootViewSet):
             instance = serializer.save(**kwargs)
             instance.add_owner(self.request.user)
             reversion.set_user(self.request.user)
+            # TODO move to a queue
+            transaction.on_commit(instance.create_resources)
+
+    @action(detail=True, methods=["get"])
+    def resources(self, request, **kwargs):
+        ticket = self.get_object()
+        resources = Resource.objects.filter(ticket=ticket)
+        serializer = ResourceSerializer(resources, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
     def versions(self, request, **kwargs):
@@ -78,4 +101,5 @@ class TicketViewSet(RootViewSet):
                 )
             previous = version
             index += 1
+        # TODO use a serializer
         return Response(output)

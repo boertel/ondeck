@@ -8,8 +8,8 @@ function Input({ icon: Icon, as: As, type, label, htmlFor, className, ...props }
     <div className={className}>
       {!!label && (<label htmlFor={htmlFor || id || name}>{label}</label>)}
       <div className="input">
-        <As {...props} type={type} />
         {!!Icon && <Icon />}
+        <As {...props} type={type} />
       </div>
     </div>
   )
@@ -40,6 +40,8 @@ export default styled(Input)`
     position: relative;
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
+
 
     svg {
       margin: 0 0.5em;
@@ -52,6 +54,10 @@ export default styled(Input)`
         color: var(--primary);
       }
     }
+  }
+
+  svg + input {
+    padding-right: 34px;
   }
 
   input,

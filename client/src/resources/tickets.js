@@ -32,6 +32,13 @@ const getTicketVersions = async (key, params) => {
   return data
 }
 
+const getTicketResources = async (key, params) => {
+  const { path } = getPath(params)
+  const { data } = await api.get(`${path}resources/`)
+  return data
+}
+
+
 const createOrUpdate = async (params, variables) => {
   // TODO not clean
   const { path, method, } = getPath({ ...params, ticketSlug: variables.pk || params.ticketSlug })
@@ -54,6 +61,10 @@ export const useTicketVersions = (params) => {
   return useQuery(params.ticketSlug && ['versions', params], getTicketVersions)
 }
 
+export const useTicketResources = (params) => {
+  return useQuery(params.ticketSlug && ['resources', params], getTicketResources)
+}
+
 export const mutateTicket = (params) => {
   const mutateFn = async data => await createOrUpdate(params, data)
   return useMutation(mutateFn, {
@@ -66,5 +77,9 @@ export const mutateTicket = (params) => {
 
 export const deleteTicket = (params) => {
   const mutateFn = async data => await _delete(params)
-  return useMutation(mutateFn)
+  return useMutation(mutateFn, {
+    onSuccess: () => {
+      queryCache.removeQueries(['tickets', params], { exact: true })
+    }
+  })
 }

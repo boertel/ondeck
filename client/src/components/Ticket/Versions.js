@@ -36,12 +36,13 @@ const Version = ({ at, by, changes }) => {
 
 const Versions = ({ ticket }) => {
   const hasChanges = !moment(ticket.created_at).isSame(ticket.updated_at, 'seconds')
-  const params = useParams()
-  const { data: versions } = useTicketVersions(hasChanges && params)
+  const { workspaceSlug, boardSlug, ticketSlug } = useParams()
+  const { data: versions } = useTicketVersions(hasChanges && { workspaceSlug, boardSlug, ticketSlug })
   // TODO initial data? to avoid (versions || []) later
 
   return (
     <>
+      <h4>Versions</h4>
       {(versions || []).map(version => {
         return <Version key={version.id} {...version} />
       })}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
@@ -7,20 +7,19 @@ import { EditIcon, TrashIcon, AddIcon } from '../../ui/icons'
 import { AddColumnForm } from '../../form'
 import { deleteColumn } from '../../resources/columns'
 
-function ColumnTitle({ className, name, id, ...props }) {
+function ColumnTitle({ className, name, id, onAdd, ...props }) {
   const params = useParams()
   const [removeColumn] = deleteColumn(params)
-  const [readOnly, setReadOnly] = useState(true)
   return (
     <View>
-      <AddColumnForm name={name} id={id} readOnly={readOnly} />
+      <AddColumnForm name={name} id={id} />
       <Button>
         <EditIcon />
       </Button>
       <Button onClick={() => removeColumn(id)}>
         <TrashIcon />
       </Button>
-      <Button to={{ pathname: `new`, search: `?column=${id}` }} className="primary">
+      <Button onClick={onAdd} className="primary">
         <AddIcon />
       </Button>
     </View>

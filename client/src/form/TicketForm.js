@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
 
-import { Button, View } from '../ui'
+import { Button, View, Loading, } from '../ui'
 import { TrashIcon } from '../ui/icons'
 import { mutateTicket, deleteTicket, useTickets } from '../resources/tickets'
 import { SelectField, EditorField, InputField } from './fields'
 
 function TicketForm({ title, description, id, column, parent, onSubmit, className }) {
   const location = useLocation()
+  const { focus = 'title' } = location.state || {}
   const params = new URLSearchParams(location.search)
   const paramColumn = params.get('column') || column
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
@@ -31,7 +32,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
   const {
     Form,
-    meta: { canSubmit },
+    meta: { canSubmit, isSubmitting },
     handleSubmit,
   } = useForm({
     defaultValues,
@@ -73,8 +74,8 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
           </Button>
         )}
       </View>
-      <InputField label="Title" field="title" required={true} autoFocus={true} />
-      <EditorField label="Description" field="description" />
+      <InputField label="Title" field="title" required={true} autoFocus={focus === 'title'} />
+      <EditorField label="Description" field="description" autoFocus={focus === 'description'}/>
       <SelectField label="Parent" field="parent" filterValue={v => parseInt(v, 10)}>
         <option />
         {(tickets || [])
@@ -90,7 +91,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
           {isEditing ? 'Back' : 'Cancel'}
         </Button>
         <Button type="submit" disabled={!canSubmit}>
-          {!!id ? 'Save' : 'Create Ticket'}
+          {isSubmitting ? <Loading /> : !!id ? 'Save' : 'Create Ticket'}
         </Button>
       </View>
     </Form>

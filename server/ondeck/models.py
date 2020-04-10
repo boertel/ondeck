@@ -1,6 +1,9 @@
+import re
+
 from django.contrib.auth.models import AbstractUser
 from django.utils.text import slugify
 from django.db import models
+from django.db.models import F
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
@@ -113,7 +116,7 @@ class Assignee(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-@reversion.register()
+@reversion.register(exclude=["position"])
 class Ticket(models.Model):
     index = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
@@ -125,12 +128,31 @@ class Ticket(models.Model):
     board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag)
     assignees = models.ManyToManyField(User, through=Assignee)
+    position = models.IntegerField(null=True)
 
     def add_owner(self, user):
         owner = Assignee.objects.create(
             user=user, ticket=self, role=Assignee.Role.OWNER
         )
         return owner
+
+    def extract_urls(self):
+        if self.description:
+            return re.findall("(?P<url>https?://[^\s]+)", self.description)
+        return []
+
+    def create_resources(self):
+        resources = []
+        urls = self.extract_urls()
+        for url in urls:
+            try:
+                resource = Resource.objects.create(
+                    ticket=self, value=url, type=Resource.Type.LINK
+                )
+                resources.append(resource)
+            except:
+                pass
+        return resources
 
     @property
     def key(self):
@@ -151,18 +173,22 @@ def save_new_last_index(sender, instance, created, **kwargs):
         workspace.save()
 
 
-class Activity(models.Model):
+class Resource(models.Model):
     class Type:
         comment = "comment"
-        link = "link"
+        LINK = "link"
 
         @classmethod
         def as_choices(cls):
-            return ((cls.comment, "Comment"), (cls.link, "Link"))
+            return ((cls.comment, "Comment"), (cls.LINK, "Link"))
 
     type = models.CharField(max_length=100, choices=Type.as_choices())
+    value = models.CharField(max_length=500)
     message = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = [["ticket", "value"]]

@@ -4,24 +4,20 @@ import { useForm } from 'react-form'
 
 import { AddIcon } from '../ui/icons'
 import { InputField } from './fields'
-import { mutateTicket, } from '../resources/tickets'
+import { mutateTicket } from '../resources/tickets'
 
-const AddQuickTicketForm = ({ title, column }) => {
-  const { workspaceSlug, boardSlug, } = useParams()
+const AddQuickTicketForm = ({ title, column, cancel }) => {
+  const { workspaceSlug, boardSlug } = useParams()
   const navigate = useNavigate()
-  const [mutate] = mutateTicket({ workspaceSlug, boardSlug, })
+  const [mutate] = mutateTicket({ workspaceSlug, boardSlug })
 
-  const defaultValues = useMemo(() => ({ title,}), [title])
+  const defaultValues = useMemo(() => ({ title }), [title])
 
-  const {
-    Form,
-    handleSubmit,
-    setMeta,
-  } = useForm({
+  const { Form, handleSubmit, setMeta, reset, } = useForm({
     defaultValues,
-    onSubmit: async (values, { reset, meta, }) => {
+    onSubmit: async (values, { reset, meta }) => {
       try {
-        const data = await mutate({...values, column, })
+        const data = await mutate({ ...values, column })
         reset()
         if (meta.onSuccess) {
           meta.onSuccess(data)
@@ -33,19 +29,23 @@ const AddQuickTicketForm = ({ title, column }) => {
   })
 
   useEffect(() => {
-    const onMetaEnter = (evt) => {
+    const onKeyDown = evt => {
       if (evt.metaKey && evt.key === 'Enter') {
-        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk) }))
+        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description'}}) }))
         handleSubmit()
       }
+      if (evt.key === 'Escape') {
+        reset()
+        cancel()
+      }
     }
-    window.addEventListener('keydown', onMetaEnter)
-    return () => window.removeEventListener('keydown', onMetaEnter)
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
   }, [handleSubmit])
 
   return (
     <Form>
-      <InputField icon={AddIcon} field="title" className="full-width" placeholder="Add Ticket" />
+      <InputField icon={AddIcon} field="title" className="full-width" placeholder="Add Ticket" autoFocus={true} />
     </Form>
   )
 }
