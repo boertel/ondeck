@@ -45,6 +45,8 @@ class TicketViewSet(RootViewSet):
             updates = []
             if "column" in data and before.column.pk != data["column"]:
                 # TODO what if I dont have a position?
+                # update other tickets inside *new* column
+                # (the ones after the inserted one move 1 up)
                 updates.append(
                     {
                         "filters": {
@@ -54,6 +56,8 @@ class TicketViewSet(RootViewSet):
                         "increment": 1,
                     }
                 )
+                # update other tickets inside *old* column
+                # (the ones after the inserted one move 1 down)
                 updates.append(
                     {
                         "filters": {
@@ -65,6 +69,8 @@ class TicketViewSet(RootViewSet):
                 )
             elif "position" in data and before.position != data["position"]:
                 if data["position"] < before.position:
+                    # the ticket moved down
+                    # move up tickets between *old* and *new* position
                     updates.append(
                         {
                             "filters": {
@@ -75,6 +81,8 @@ class TicketViewSet(RootViewSet):
                         }
                     )
                 else:
+                    # the ticket moved up
+                    # move down tickets between *old* and *new* position
                     updates.append(
                         {
                             "filters": {
