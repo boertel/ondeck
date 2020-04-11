@@ -1,50 +1,13 @@
-import React, { Fragment, useState, useCallback } from 'react'
+import React, { Fragment, useState, } from 'react'
 import { sortBy } from 'lodash'
-import { useParams } from 'react-router-dom'
-import classNames from 'classnames'
 import styled from 'styled-components/macro'
-import { useDrop } from 'react-dnd'
 
-import { mutateTicket } from '../../resources/tickets'
 import { Tickets } from '../../ui'
 import View from '../../ui/View'
-import Ticket from '../Ticket'
+import Ticket, { TicketPosition } from '../Ticket'
 import ColumnTitle from './ColumnTitle'
 import { AddQuickTicketForm } from '../../form'
 
-
-function TicketPosition({ columnId, position, ...props }) {
-  const accept = ['TICKET']
-
-  const { workspaceSlug, boardSlug, ticketSlug } = useParams()
-  const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
-
-  const onDrop = useCallback(
-    ({ pk, fromColumnId, fromPosition }) => {
-      const data = {
-        pk,
-        column: columnId,
-        position,
-      }
-      console.log(data)
-      if (columnId !== fromColumnId || position !== fromPosition) {
-        mutate(data)
-      }
-    },
-    [columnId, position, mutate]
-  )
-
-  const [{ isHover, canDrop }, drop] = useDrop({
-    accept,
-    drop: onDrop,
-    collect: monitor => ({
-      isHover: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  })
-
-  return <div ref={drop} className={classNames({ canDrop, isHover })} style={{ height: '100px'}} {...props} />
-}
 
 function Column({ id: columnId, name, tickets=[], ...props }) {
   const [addTicket, setAddTicket] = useState(false)
@@ -54,6 +17,7 @@ function Column({ id: columnId, name, tickets=[], ...props }) {
       <ColumnTitle name={name} id={columnId} onAdd={() => setAddTicket(!addTicket)} />
       <Tickets>
         {addTicket && (<AddQuickTicketForm column={columnId} cancel={() => setAddTicket(false)} />)}
+        <TicketPosition position={0} columnId={columnId} />
         {sortBy(tickets, 'position').map(ticket => (
           <Fragment key={ticket.key}>
             <Ticket to={`${ticket.key}`} {...ticket} />

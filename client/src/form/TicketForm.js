@@ -40,7 +40,6 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
       try {
         await mutate(values)
         onSubmit()
-        reset()
       } catch (exception) {
         console.error(exception)
       }

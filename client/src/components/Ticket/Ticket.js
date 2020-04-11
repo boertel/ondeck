@@ -33,7 +33,6 @@ export default styled(Ticket)`
   border-radius: var(--border-radius);
   border: 2px solid transparent;
   padding: 10px;
-  margin-bottom: 8px;
   transition-property: border-color, color, opacity;
   transition-duration: .2s;
   transition-timing-function: ease-in-out;

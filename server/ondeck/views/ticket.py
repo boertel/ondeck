@@ -41,12 +41,28 @@ class TicketViewSet(RootViewSet):
                 first_column = board.columns.first()
                 kwargs["column_id"] = first_column.id
             before = self.get_object()
-            if before.position != data.get("position", before.position):
-                Ticket.objects.filter(
-                    column=data.get("column", before.column),
-                    board=data.get("board", before.board),
-                    position__gte=before.position,
-                ).update(position=F("position") + 1)
+            if "position" in data and before.position != data["position"]:
+                filters = {
+                    "column": data.get("column", before.column),
+                    "board": data.get("board", before.board),
+                }
+                if data["position"] < before.position:
+                    filters.update(
+                        {
+                            "position__gte": data["position"],
+                            "position__lt": before.position,
+                        }
+                    )
+                    increment = F("position") + 1
+                else:
+                    filters.update(
+                        {
+                            "position__lte": data["position"],
+                            "position__gt": before.position,
+                        }
+                    )
+                    increment = F("position") - 1
+                Ticket.objects.filter(**filters).update(position=increment)
             instance = serializer.save(**kwargs)
             reversion.set_user(self.request.user)
             # TODO move to a queue

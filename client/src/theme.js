@@ -25,6 +25,7 @@ export const GlobalStyle = createGlobalStyle`
     --default: ${({ theme }) => theme.color};
     --primary: ${({ theme }) => theme.primary};
     --primary-hover: ${({ theme }) => transparentize(0.8, theme.primary)};
+    --secondary: ${({ theme }) => theme.secondary};
     --border-color: ${({ theme }) => theme.borderColor};
     --border-color-hover: ${({ theme }) => theme.borderColor};
     --fg: ${({ theme }) => theme.foreground};
