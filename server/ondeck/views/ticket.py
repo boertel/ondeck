@@ -41,28 +41,61 @@ class TicketViewSet(RootViewSet):
                 first_column = board.columns.first()
                 kwargs["column_id"] = first_column.id
             before = self.get_object()
-            if "position" in data and before.position != data["position"]:
-                filters = {
-                    "column": data.get("column", before.column),
-                    "board": data.get("board", before.board),
-                }
-                if data["position"] < before.position:
-                    filters.update(
-                        {
+
+            updates = []
+            if "column" in data and before.column.pk != data["column"]:
+                # TODO what if I dont have a position?
+                updates.append(
+                    {
+                        "filters": {
                             "position__gte": data["position"],
-                            "position__lt": before.position,
-                        }
-                    )
-                    increment = F("position") + 1
-                else:
-                    filters.update(
+                            "column": data["column"],
+                        },
+                        "increment": 1,
+                    }
+                )
+                updates.append(
+                    {
+                        "filters": {
+                            "column": before.column,
+                            "position__gte": before.position,
+                        },
+                        "increment": -1,
+                    }
+                )
+            elif "position" in data and before.position != data["position"]:
+                if data["position"] < before.position:
+                    updates.append(
                         {
-                            "position__lte": data["position"],
-                            "position__gt": before.position,
+                            "filters": {
+                                "position__gte": data["position"],
+                                "position__lt": before.position,
+                            },
+                            "increment": 1,
                         }
                     )
-                    increment = F("position") - 1
-                Ticket.objects.filter(**filters).update(position=increment)
+                else:
+                    updates.append(
+                        {
+                            "filters": {
+                                "position__lte": data["position"],
+                                "position__gt": before.position,
+                            },
+                            "increment": -1,
+                        }
+                    )
+
+            if len(updates) > 0:
+                for update in updates:
+                    filters = {
+                        "column": data.get("column", before.column),
+                        "board": data.get("board", before.board),
+                    }
+                    filters.update(update["filters"])
+                    Ticket.objects.filter(**filters).update(
+                        position=F("position") + update["increment"]
+                    )
+
             instance = serializer.save(**kwargs)
             reversion.set_user(self.request.user)
             # TODO move to a queue

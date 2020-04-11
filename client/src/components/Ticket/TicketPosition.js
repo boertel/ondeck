@@ -17,7 +17,10 @@ function TicketPosition({ columnId, position, className, ...props }) {
       const data = {
         pk,
         column: columnId,
-        position: fromPosition < position ? position - 1 : position,
+        position,
+      }
+      if (columnId === fromColumnId) {
+        data.position = fromPosition < position ? position - 1 : position
       }
       if (columnId !== fromColumnId || ![fromPosition, fromPosition + 1].includes(position)) {
         await mutate(data)
@@ -29,14 +32,14 @@ function TicketPosition({ columnId, position, className, ...props }) {
   const [{ isHover, canDrop }, drop] = useDrop({
     accept,
     drop: onDrop,
-    canDrop: ({ fromPosition }) => ![fromPosition, fromPosition + 1].includes(position),
+    canDrop: ({ fromPosition, fromColumnId }) => fromColumnId !== columnId || ![fromPosition, fromPosition + 1].includes(position),
     collect: monitor => ({
       isHover: monitor.isOver(),
       canDrop: monitor.canDrop(),
     }),
   })
 
-  return <div ref={drop} className={classNames(className, { canDrop, isHover })} {...props} />
+  return <div ref={drop} className={classNames(className, { canDrop, isHover })} {...props}>{position}</div>
 }
 
 export default styled(TicketPosition)`
@@ -48,21 +51,23 @@ export default styled(TicketPosition)`
   margin: 4px 0;
   transition: border-color 250ms ease-in-out;
 
-  &.canDrop.isHover {
-    border-color: var(--secondary);
-  }
-  &::before,
-  &::after {
-    content: ' ';
-    position: absolute;
-    right: 0;
-    left: 0;
-    height: 22px;
-  }
-  &::after {
-    top: 0;
-  }
-  &::before {
-    bottom: 0;
+  &.canDrop {
+    &.isHover {
+      border-color: var(--secondary);
+    }
+    &::before,
+    &::after {
+      content: ' ';
+      position: absolute;
+      right: 0;
+      left: 0;
+      height: 22px;
+    }
+    &::after {
+      top: 0;
+    }
+    &::before {
+      bottom: 0;
+    }
   }
 `

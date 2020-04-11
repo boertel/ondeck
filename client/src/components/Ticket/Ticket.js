@@ -22,7 +22,7 @@ const Ticket = React.memo(({ title, className, pk, column: fromColumnId, board: 
   })
   return (
     <View forwardedAs={Link} className={className} to={to} ref={drag} style={{ opacity }}>
-      <TicketTitle>{title}</TicketTitle>
+      <TicketTitle>{title}<sup>{fromPosition}</sup></TicketTitle>
     </View>
   )
 })
