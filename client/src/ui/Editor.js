@@ -37,6 +37,7 @@ const CHARACTERS = {
   u: 'underline',
 }
 
+
 function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   const ref = useRef(null)
 
@@ -104,6 +105,27 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     const end = targetValue.substring(selectionEnd)
     const selection = targetValue.substring(selectionStart, selectionEnd)
 
+    if (evt.key === 'Enter') {
+      const lines = targetValue.split('\n')
+      if (lines.length > 0) {
+        const previousLine = lines[lines.length - 1]
+        let match
+        if (previousLine.startsWith(characters.list)) {
+          const newValue = start + '\n' + characters.list + end
+          ref.current.value = newValue
+          onChange({ target: { value: newValue }})
+          ref.current.selectionStart = ref.current.selectionEnd = selectionStart + characters.list.length + 1
+          evt.preventDefault()
+        } else if (match = previousLine.match(/^[\d]+\./)) {
+          const index = `${parseInt(match[0], 10) + 1}.`
+          const newValue = start + '\n' + index + end
+          onChange({ target: { value: newValue }})
+          ref.current.selectionStart = ref.current.selectionEnd = selectionStart + index.length + 1
+          evt.preventDefault()
+        }
+      }
+    }
+
     if (evt.key === 'Tab' && !evt.shiftKey) {
       const newValue = start + characters.tab + end
       // somehow we need both to keep caret at the right place
@@ -162,6 +184,7 @@ Editor.defaultProps = {
     italic: '_',
     strike: '~',
     underline: '__',
+    list: '- ',
   },
 }
 

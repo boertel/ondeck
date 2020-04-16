@@ -4,10 +4,11 @@ import { useForm } from 'react-form'
 
 import { InputField } from './fields'
 import { mutateColumn } from '../resources/columns'
+import useShortcut from '../hooks/useShortcut'
 
-function AddColumnForm({ name, id }) {
-  const params = useParams()
-  const [mutate] = mutateColumn(params)
+function AddColumnForm({ name, id, cancel }) {
+  const { workspaceSlug, boardSlug } = useParams()
+  const [mutate] = mutateColumn({ workspaceSlug, boardSlug })
 
   const isEditing = !!id
 
@@ -20,6 +21,13 @@ function AddColumnForm({ name, id }) {
       }
     },
   })
+
+  const callback = !!cancel && function() {
+    reset()
+    cancel()
+  }
+
+  useShortcut('escape', callback)
 
   return (
     <Form>

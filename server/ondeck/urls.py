@@ -27,9 +27,11 @@ router.register(
 )
 router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
 router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
+router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/users", UserViewSet)
 router.register(r"workspaces", WorkspaceViewSet)
 
-router.register(r"users", UserViewSet)
+# TODO update that to support only one user? more global user API
+# router.register(r"users", UserViewSet)
 
 urlpatterns = []
 

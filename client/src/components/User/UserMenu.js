@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { View } from '../../ui'
@@ -106,7 +107,11 @@ const Popper = ({ as: AsComponent, popperElement: PopperElement, children }) => 
 }
 
 function UserMenu(props) {
-  const { data: user, isLoading } = useUsers('me')
+  // TODO update to /auth and move menu at the top with workspace switcher
+  return null
+  /*
+  const { workspaceSlug } = useParams()
+  const { data: user, isLoading } = useUsers({ workspaceSlug, userId: 'me' })
   const [visible, setVisible] = useState(false)
   if (!user) {
     return null
@@ -119,6 +124,7 @@ function UserMenu(props) {
       </Popper>
     </View>
   )
+  */
 }
 
 export default styled(UserMenu)`

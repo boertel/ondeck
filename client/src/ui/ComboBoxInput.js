@@ -33,7 +33,7 @@ const theme = defaultTheme => ({
     primary25: 'var(--primary-hover)',
     neutral0: 'var(--bg)',
     neutral5: 'yellow',
-    neutral10: 'blue',
+    neutral10: 'var(--primary-hover)',
     neutral20: 'var(--border-color)',
     neutral30: 'var(--border-color-hover)',
     neutral40: 'green',

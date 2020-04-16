@@ -2,9 +2,12 @@ import { useQuery } from 'react-query'
 
 import api from './api'
 
-const getPath = (userId) => {
+const seconds = n => n * 1000
+const minutes = n => seconds(n * 60)
+
+const getPath = ({ workspaceSlug, userId }) => {
   let method = 'post'
-  let path = ['', 'users']
+  let path = ['', 'workspaces', workspaceSlug, 'users']
   if (userId) {
     path = path.concat([userId])
   }
@@ -21,8 +24,8 @@ const get = async (key, userId) => {
   return data
 }
 
-export const useUsers = (userId) => {
-  const queryKey = ['users', userId].filter(v => v !== undefined)
-  return useQuery(queryKey, get, { retry: 0 })
+export const useUsers = ({ workspaceSlug, userId }) => {
+  const queryKey = ['users', { workspaceSlug, userId }].filter(v => v !== undefined)
+  return useQuery(queryKey, get, { staleTime: minutes(5) })
 }
 

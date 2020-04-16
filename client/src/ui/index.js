@@ -4,7 +4,7 @@ import Editor from './Editor';
 import Favicon from './Favicon';
 import Input from './Input';
 import Loading from './Loading';
-import SearchInput from './SearchInput';
+import ComboBoxInput from './ComboBoxInput';
 import Sidebar from './Sidebar';
 import SidebarMenu from './SidebarMenu';
 import Tickets from './Tickets';
@@ -18,7 +18,7 @@ export {
   Favicon,
   Input,
   Loading,
-  SearchInput,
+  ComboBoxInput,
   Sidebar,
   SidebarMenu,
   Tickets,

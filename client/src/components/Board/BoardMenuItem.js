@@ -6,12 +6,15 @@ import classNames from 'classnames'
 import { mutateTicket, } from '../../resources/tickets'
 
 function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...props }) {
-  const params = useParams()
+  const { workspaceSlug, } = useParams()
+  const params = {
+    workspaceSlug,
+  }
   const [mutate] = mutateTicket(params)
 
   const onDrop = useCallback(
-    ({ pk, }) => {
-      mutate({
+    async ({ pk, fromBoardSlug }) => {
+      await mutate({
         pk,
         board: boardId,
       })

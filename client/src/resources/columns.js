@@ -56,6 +56,7 @@ export const mutateColumn = (params) => {
         })
       } else {
         queryCache.setQueryData(key, old => {
+          console.log(key, old)
           return old.concat([data])
         })
       }

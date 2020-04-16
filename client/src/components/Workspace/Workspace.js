@@ -10,14 +10,16 @@ import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
 import CommandKModal from '../../modals/CommandKModal'
 import { AddBoardForm } from '../../form'
-import { useBoards } from '../../resources'
 import Workspaces from './Workspaces'
 import UserMenu from '../User/UserMenu'
+
+import { useBoards, useUsers } from '../../resources'
 
 function Workspace({ className }) {
   const { workspaceSlug } = useParams()
 
   //const { workspace } = useWorkspaces()
+  const { data: users } = useUsers({ workspaceSlug })
   const { data: boards } = useBoards({ workspaceSlug })
 
   const [openModal] = useModal(CommandKModal)
@@ -98,7 +100,7 @@ export default styled(Workspace)`
 
   main {
     grid-area: content;
-    margin: 10px;
+    margin: 0 28px;
     display: grid;
     grid-template-rows: min-content 1fr;
   }

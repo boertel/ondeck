@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom'
 
-import SearchInput from '../../ui/SearchInput'
+import ComboBoxInput from '../../ui/ComboBoxInput'
 
 
 function CommandK() {
   console.log(useParams())
   return (
     <div>
-      <SearchInput />
+      <ComboBoxInput />
     </div>
   )
 }

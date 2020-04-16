@@ -33,35 +33,42 @@ class TicketViewSet(RootViewSet):
 
     def perform_update(self, serializer):
         with reversion.create_revision():
-            kwargs = {}
             data = self.request.data
+            kwargs = {}
+            if "column" in data:
+                kwargs["column_id"] = data["column"]
             if "board" in data:
-                # TODO limit that to valid board
-                board = Board.objects.get(pk=data["board"])
-                first_column = board.columns.first()
-                kwargs["column_id"] = first_column.id
+                kwargs["board_id"] = data["board"]
+            if "position" in data:
+                kwargs["position"] = data["position"]
             before = self.get_object()
 
             updates = []
-            if "column" in data and before.column.pk != data["column"]:
+            if kwargs.get("board_id") and before.board.pk != kwargs["board_id"]:
+                # TODO limit that to valid board
+                board = Board.objects.get(pk=kwargs["board_id"])
+                first_column = board.columns.first()
+                # TODO what happens when there is no column?!?!
+                kwargs["column_id"] = first_column.pk
+                kwargs["position"] = first_column.ticket_set.count()
+
+            if kwargs.get("column_id") and before.column.pk != kwargs["column_id"]:
                 # TODO what if I dont have a position?
                 # update other tickets inside *new* column
                 # (the ones after the inserted one move 1 up)
-                updates.append(
-                    {
-                        "filters": {
-                            "position__gte": data["position"],
-                            "column": data["column"],
-                        },
-                        "increment": 1,
-                    }
-                )
+                filters = {
+                    "position__gte": kwargs["position"],
+                    "column": kwargs["column_id"],
+                }
+                if kwargs.get("board_id"):
+                    filters["board"] = kwargs["board_id"]
+                updates.append({"filters": filters, "increment": 1})
                 # update other tickets inside *old* column
                 # (the ones after the inserted one move 1 down)
                 updates.append(
                     {
                         "filters": {
-                            "column": before.column,
+                            "column": before.column.pk,
                             "position__gte": before.position,
                         },
                         "increment": -1,
@@ -96,8 +103,8 @@ class TicketViewSet(RootViewSet):
             if len(updates) > 0:
                 for update in updates:
                     filters = {
-                        "column": data.get("column", before.column),
-                        "board": data.get("board", before.board),
+                        "column": kwargs.get("column_id", before.column.pk),
+                        "board": data.get("board", before.board.pk),
                     }
                     filters.update(update["filters"])
                     Ticket.objects.filter(**filters).update(

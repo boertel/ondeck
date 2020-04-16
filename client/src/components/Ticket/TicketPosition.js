@@ -39,7 +39,7 @@ function TicketPosition({ columnId, position, className, ...props }) {
     }),
   })
 
-  return <div ref={drop} className={classNames(className, { canDrop, isHover })} {...props}>{position}</div>
+  return <div ref={drop} className={classNames(className, { canDrop, isHover })} {...props} />
 }
 
 export default styled(TicketPosition)`

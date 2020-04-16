@@ -12,8 +12,7 @@ class BoardViewSet(RootViewSet):
         serializer.save(workspace=self.workspace)
 
     def perform_create(self, serializer):
-        instance = serializer.save(workspace=self.workspace)
-        instance.add_owner(self.request.user)
+        serializer.save(workspace=self.workspace)
 
     def get_queryset(self):
         return self.queryset.filter(workspace=self.workspace).order_by("position")

@@ -1,14 +1,11 @@
-from rest_framework.viewsets import ModelViewSet
+from .viewsets import RootViewSet
 from ..serializers import UserSerializer
 from ..models import User
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(RootViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def get_object(self):
-        pk = self.kwargs.get("pk")
-        if pk == "me":
-            return self.request.user
-        return super().get_object()
+    def get_queryset(self):
+        return self.workspace.members.all()

@@ -10,6 +10,7 @@
     "lodash": "^4.17.15",
     "marked": "^0.8.0",
     "moment": "^2.24.0",
+    "mousetrap": "^1.6.5",
     "polished": "^3.4.4",
     "react": "^16.13.1",
     "react-dnd": "^9.5.1",

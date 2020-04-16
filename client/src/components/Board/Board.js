@@ -3,7 +3,7 @@ import { groupBy } from 'lodash'
 import { useParams, } from 'react-router-dom'
 
 import BoardHeader from './BoardHeader'
-import { Columns, } from '../../ui'
+import { Columns, View } from '../../ui'
 import Column from '../Column'
 import { AddColumnForm, } from '../../form'
 import { useColumns, useTickets, useBoards } from '../../resources'
@@ -31,10 +31,10 @@ const Board = props => {
             <Column key={id} id={id} tickets={ticketsGroupByColumns[id]} name={name}>
             </Column>
           ))}
-        {showAddColumnForm && (
-          <Column>
-            <AddColumnForm />
-          </Column>
+          {showAddColumnForm && (
+          <View>
+            <AddColumnForm cancel={() => setShowAddColumnForm(false)} />
+          </View>
         )}
       </Columns>
     </>

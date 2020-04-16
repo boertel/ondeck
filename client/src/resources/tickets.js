@@ -38,48 +38,51 @@ const getTicketResources = async (key, params) => {
   return data
 }
 
-
 const createOrUpdate = async (params, variables) => {
   // TODO not clean
-  const { path, method, } = getPath({ ...params, ticketSlug: variables.pk || params.ticketSlug })
+  const { path, method } = getPath({ ...params, ticketSlug: variables.pk || params.ticketSlug })
   const { data } = await api[method](path, variables)
   return data
 }
 
-const _delete = async (params) => {
-  const { path, } = getPath(params)
+const _delete = async params => {
+  const { path } = getPath(params)
   await api.delete(path)
   return {}
 }
 
-
-export const useTickets = (params) => {
+export const useTickets = params => {
   return useQuery(['tickets', params], get)
 }
 
-export const useTicketVersions = (params) => {
+export const useTicketVersions = params => {
   return useQuery(params.ticketSlug && ['versions', params], getTicketVersions)
 }
 
-export const useTicketResources = (params) => {
+export const useTicketResources = params => {
   return useQuery(params.ticketSlug && ['resources', params], getTicketResources)
 }
 
-export const mutateTicket = (params) => {
-  const mutateFn = async data => await createOrUpdate(params, data)
+export const mutateTicket = params => {
+  const mutateFn = async ({ fromBoardSlug, ...data }) => await createOrUpdate(params, data)
   return useMutation(mutateFn, {
     onSuccess: (data, variables) => {
-      console.log({ data, variables, params })
-      queryCache.refetchQueries(['tickets', params])
-    }
+      const query = {
+        workspaceSlug: params.workspaceSlug,
+        boardSlug: params.boardSlug || variables.fromBoardSlug,
+        ticketSlug: params.ticketSlug,
+      }
+      console.log({ data, variables, params, query })
+      queryCache.refetchQueries(['tickets', query])
+    },
   })
 }
 
-export const deleteTicket = (params) => {
+export const deleteTicket = params => {
   const mutateFn = async data => await _delete(params)
   return useMutation(mutateFn, {
     onSuccess: () => {
       queryCache.removeQueries(['tickets', params], { exact: true })
-    }
+    },
   })
 }

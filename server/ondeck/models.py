@@ -3,7 +3,6 @@ import re
 from django.contrib.auth.models import AbstractUser
 from django.utils.text import slugify
 from django.db import models
-from django.db.models import F
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
@@ -26,19 +25,7 @@ class Organization(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Workspace(models.Model):
-    name = models.CharField(max_length=80)
-    key = models.CharField(max_length=12)
-    slug = models.SlugField(max_length=80, unique=True)
-    last_index = models.PositiveIntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    # organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    # TODO protected slug (actions)
-
-
-class Membership(models.Model):
+class WorkspaceMembership(models.Model):
     class Role:
         OWNER = "owner"
 
@@ -47,10 +34,28 @@ class Membership(models.Model):
             return ((cls.OWNER, "Owner"),)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    board = models.ForeignKey("Board", on_delete=models.CASCADE)
+    workspace = models.ForeignKey("Workspace", on_delete=models.CASCADE)
     role = models.CharField(max_length=100, choices=Role.as_choices())
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Workspace(models.Model):
+    name = models.CharField(max_length=80)
+    key = models.CharField(max_length=12)
+    slug = models.SlugField(max_length=80, unique=True)
+    last_index = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    members = models.ManyToManyField(User, through=WorkspaceMembership)
+    # organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    # TODO protected slug (actions)
+
+    def add_owner(self, user):
+        owner = WorkspaceMembership.objects.create(
+            user=user, workspace=self, role=WorkspaceMembership.Role.OWNER
+        )
+        return owner
 
 
 class Board(models.Model):
@@ -61,17 +66,10 @@ class Board(models.Model):
     workspace = models.ForeignKey(
         Workspace, on_delete=models.CASCADE, related_name="boards"
     )
-    members = models.ManyToManyField(User, through=Membership)
     position = models.PositiveIntegerField(null=True)
 
     class Meta:
         ordering = ("position",)
-
-    def add_owner(self, user):
-        owner = Membership.objects.create(
-            user=user, board=self, role=Membership.Role.OWNER
-        )
-        return owner
 
     def save(self, *args, **kwargs):
         # TODO what to do when renaming an board?
@@ -101,17 +99,18 @@ class Column(models.Model):
         return 'Column(id={}, name="{}")'.format(self.pk, self.name)
 
 
-class Assignee(models.Model):
+class TicketMembership(models.Model):
     class Role:
         OWNER = "owner"
+        ASSIGNEE = "assignee"
 
         @classmethod
         def as_choices(cls):
-            return ((cls.OWNER, "Owner"),)
+            return ((cls.OWNER, "Owner"), (cls.ASSIGNEE, "Assignee"))
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ticket = models.ForeignKey("Ticket", on_delete=models.CASCADE)
-    role = models.CharField(max_length=100, choices=Role.as_choices())
+    role = models.CharField(max_length=100, choices=Role.as_choices(), null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -127,12 +126,12 @@ class Ticket(models.Model):
     column = models.ForeignKey(Column, on_delete=models.SET_NULL, null=True)
     board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag)
-    assignees = models.ManyToManyField(User, through=Assignee)
+    members = models.ManyToManyField(User, through=TicketMembership)
     position = models.IntegerField(null=True)
 
     def add_owner(self, user):
-        owner = Assignee.objects.create(
-            user=user, ticket=self, role=Assignee.Role.OWNER
+        owner = TicketMembership.objects.create(
+            user=user, ticket=self, role=TicketMembership.Role.OWNER
         )
         return owner
 
@@ -163,6 +162,7 @@ class Ticket(models.Model):
 def assign_last_key(sender, instance, **kwargs):
     if instance.pk is None:
         instance.index = instance.board.workspace.last_index
+        instance.position = instance.column.ticket_set.count()
 
 
 @receiver(post_save, sender=Ticket)

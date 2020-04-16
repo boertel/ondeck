@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useWorkspaces } from '../../resources/workspaces'
-import { SearchInput, View } from '../../ui'
+import { ComboBoxInput, } from '../../ui'
 
 const Workspaces = ({ workspaceSlug} ) => {
   const navigate = useNavigate()
@@ -17,7 +17,7 @@ const Workspaces = ({ workspaceSlug} ) => {
 
   const onChange = ({ value }) => navigate(`/workspaces/${value}/`)
   return (
-    <SearchInput options={options} onChange={onChange} value={value} />
+    <ComboBoxInput options={options} onChange={onChange} value={value} />
   )
 }
 

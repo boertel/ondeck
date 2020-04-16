@@ -5,10 +5,12 @@ import { useForm } from 'react-form'
 
 import { Button, View, Loading, } from '../ui'
 import { TrashIcon } from '../ui/icons'
+import { useUsers } from '../resources'
 import { mutateTicket, deleteTicket, useTickets } from '../resources/tickets'
-import { SelectField, EditorField, InputField } from './fields'
+import { SelectField, EditorField, InputField, ComboBoxField } from './fields'
 
-function TicketForm({ title, description, id, column, parent, onSubmit, className }) {
+
+function TicketForm({ title, description, id, column, members, parent, onSubmit, className }) {
   const location = useLocation()
   const { focus = 'title' } = location.state || {}
   const params = new URLSearchParams(location.search)
@@ -16,6 +18,11 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
   const navigate = useNavigate()
 
+  const { data: users } = useUsers({ workspaceSlug })
+  const options = (users || []).map(({ name, id }) => ({
+    value: { id, role: 'assignee' },
+    label: name,
+  }))
   const { data: tickets } = useTickets({ workspaceSlug, boardSlug })
 
   const defaultValues = useMemo(
@@ -25,8 +32,9 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
       column: paramColumn,
       id,
       parent,
+      members,
     }),
-    [title, description, paramColumn, id, parent]
+    [title, description, paramColumn, id, parent, members]
   )
 
   const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
@@ -85,6 +93,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
             </option>
           ))}
       </SelectField>
+      <ComboBoxField label="Assignees" field="members" options={options} isMulti={true} />
       <View alignItems="center" justifyContent="space-between">
         <Button to={back} className="link">
           {isEditing ? 'Back' : 'Cancel'}
@@ -100,6 +109,7 @@ function TicketForm({ title, description, id, column, parent, onSubmit, classNam
 TicketForm.defaultProps = {
   title: '',
   description: '',
+  assignees: [],
 }
 
 export default styled(TicketForm)`

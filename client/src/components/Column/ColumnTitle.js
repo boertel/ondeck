@@ -8,8 +8,8 @@ import { AddColumnForm } from '../../form'
 import { deleteColumn } from '../../resources/columns'
 
 function ColumnTitle({ className, name, id, onAdd, ...props }) {
-  const params = useParams()
-  const [removeColumn] = deleteColumn(params)
+  const { workspaceSlug, boardSlug } = useParams()
+  const [removeColumn] = deleteColumn({ workspaceSlug, boardSlug })
   return (
     <View>
       <AddColumnForm name={name} id={id} />

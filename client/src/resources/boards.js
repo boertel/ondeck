@@ -53,7 +53,10 @@ export const deleteBoard = (params) => {
   const mutateFn = async data => _delete(params)
   return useMutation(mutateFn, {
     onSuccess: () => {
+      console.log(params)
       queryCache.removeQueries(['boards', params], { exact: true })
+      queryCache.removeQueries(['tickets', params], { exact: true })
+      queryCache.removeQueries(['columns', params], { exact: true })
       queryCache.refetchQueries(['boards', { workspaceSlug: params.workspaceSlug }])
     }
   })

@@ -5,6 +5,7 @@ import { useForm } from 'react-form'
 import { AddIcon } from '../ui/icons'
 import { InputField } from './fields'
 import { mutateTicket } from '../resources/tickets'
+import useShortcut from '../hooks/useShortcut'
 
 const AddQuickTicketForm = ({ title, column, cancel }) => {
   const { workspaceSlug, boardSlug } = useParams()
@@ -28,20 +29,17 @@ const AddQuickTicketForm = ({ title, column, cancel }) => {
     },
   })
 
-  useEffect(() => {
-    const onKeyDown = evt => {
-      if (evt.metaKey && evt.key === 'Enter') {
-        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description'}}) }))
-        handleSubmit()
-      }
-      if (evt.key === 'Escape') {
-        reset()
-        cancel()
-      }
+  useShortcut({
+    // TODO useCallback on these functions?
+    'meta+enter': () => {
+      setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description'}}) }))
+      handleSubmit()
+    },
+    'escape': () => {
+      reset()
+      cancel()
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [handleSubmit])
+  })
 
   return (
     <Form>
