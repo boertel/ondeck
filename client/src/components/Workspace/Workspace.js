@@ -46,7 +46,7 @@ function Workspace({ className }) {
             </SidebarMenuItem>
           </SidebarMenu>
           <SidebarMenu>
-            <SidebarMenuItem to={{ pathname: `/workspaces/${workspaceSlug}/actions` }}>
+            <SidebarMenuItem to={`/workspaces/${workspaceSlug}/actions`}>
               <ActionsIcon />
               Actions
             </SidebarMenuItem>

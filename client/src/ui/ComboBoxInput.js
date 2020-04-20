@@ -15,11 +15,25 @@ const styles = {
       borderWidth: '2px',
       borderRadius: 'var(--border-radius)',
       boxShadow: 'none',
-      backgroundColor: 'var(--bg)',
+      backgroundColor: 'var(--fg)',
       fontSize: '1rem',
       width: '100%',
     }
   },
+  input: (provided) => {
+    return {
+      ...provided,
+      '& input': {
+        height: 'auto',
+      }
+    }
+  },
+  menu: (provided) => {
+    return {
+      ...provided,
+      backgroundColor: 'var(--fg)',
+    }
+  }
 }
 
 const theme = defaultTheme => ({
@@ -45,7 +59,7 @@ const theme = defaultTheme => ({
   },
 })
 
-const SearchInput = ({ ...props }) => {
+const ComboBoxInput = ({ ...props }) => {
   const ref = useRef()
   useEffect(() => {
     ref.current.focus()
@@ -53,4 +67,4 @@ const SearchInput = ({ ...props }) => {
   const AsComponent = props.loadOptions ? AsyncSelect : Select
   return <AsComponent ref={ref} styles={styles} theme={theme} {...props} />
 }
-export default SearchInput
+export default ComboBoxInput

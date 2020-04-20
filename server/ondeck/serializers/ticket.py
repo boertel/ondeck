@@ -11,9 +11,13 @@ class ParentTicketSerializer(serializers.PrimaryKeyRelatedField):
         if not workspace or not queryset:
             return None
         queryset = queryset.filter(board__in=workspace.boards.all())
+        # FIXME: here pk is `OD-122` instead of `id`. Which one makes more
+        """
         pk = self.context.get("view").kwargs.get("pk")
+        # sense?
         if pk:
             queryset = queryset.exclude(pk=pk)
+        """
         return queryset
 
 
@@ -51,7 +55,9 @@ class TicketSerializer(serializers.ModelSerializer):
             # TODO handle other roles
             role = TicketMembership.Role.ASSIGNEE
             instance.members.set(users, through_defaults={"role": role})
-        instance.__dict__.update(**validated_data)
+        # from https://github.com/encode/django-rest-framework/blob/master/rest_framework/serializers.py#L974-L979
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
 

@@ -37,7 +37,6 @@ const CHARACTERS = {
   u: 'underline',
 }
 
-
 function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   const ref = useRef(null)
 
@@ -49,8 +48,8 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   useEffect(() => {
     const { selectionStart, selectionEnd } = ref.current
     for (const key in uploads) {
-    if (!done.current[key]) {
-        const { placeholder, content, src } = uploads[key];
+      if (!done.current[key]) {
+        const { placeholder, content, src } = uploads[key]
         const targetValue = ref.current.value
         const start = targetValue.substring(0, selectionStart)
         const end = targetValue.substring(selectionEnd)
@@ -61,7 +60,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
           ref.current.value = ref.current.value.replace(placeholder, content)
           done.current[key] = true
         }
-        onChange({ target: { value: ref.current.value }})
+        onChange({ target: { value: ref.current.value } })
       }
     }
   }, [uploads])
@@ -106,20 +105,24 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     const selection = targetValue.substring(selectionStart, selectionEnd)
 
     if (evt.key === 'Enter') {
-      const lines = targetValue.split('\n')
+      const lines = targetValue.slice(0, selectionStart).split('\n')
       if (lines.length > 0) {
         const previousLine = lines[lines.length - 1]
         let match
         if (previousLine.startsWith(characters.list)) {
-          const newValue = start + '\n' + characters.list + end
-          ref.current.value = newValue
-          onChange({ target: { value: newValue }})
-          ref.current.selectionStart = ref.current.selectionEnd = selectionStart + characters.list.length + 1
-          evt.preventDefault()
-        } else if (match = previousLine.match(/^[\d]+\./)) {
+          if (previousLine === characters.list) {
+            // TODO remove previous line
+          } else {
+            const newValue = start + '\n' + characters.list + end
+            ref.current.value = newValue
+            onChange({ target: { value: newValue } })
+            ref.current.selectionStart = ref.current.selectionEnd = selectionStart + characters.list.length + 1
+            evt.preventDefault()
+          }
+        } else if ((match = previousLine.match(/^[\d]+\./))) {
           const index = `${parseInt(match[0], 10) + 1}.`
           const newValue = start + '\n' + index + end
-          onChange({ target: { value: newValue }})
+          onChange({ target: { value: newValue } })
           ref.current.selectionStart = ref.current.selectionEnd = selectionStart + index.length + 1
           evt.preventDefault()
         }
@@ -130,7 +133,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
       const newValue = start + characters.tab + end
       // somehow we need both to keep caret at the right place
       ref.current.value = newValue
-      onChange({ target: { value: newValue }})
+      onChange({ target: { value: newValue } })
       ref.current.selectionStart = ref.current.selectionEnd = selectionStart + characters.tab.length
       evt.preventDefault()
     }
@@ -142,7 +145,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
         const character = characters[CHARACTERS[evt.key]]
         const newValue = start + character + selection + character + end
         ref.current.value = newValue
-        onChange({ target: { value: newValue }})
+        onChange({ target: { value: newValue } })
         ref.current.selectionStart = ref.current.selectionEnd = selectionStart + character.length * 2 + selection.length
         evt.preventDefault()
       }
@@ -201,7 +204,7 @@ function Preview({ value }) {
   return <div className="preview">{value ? <Markdown value={value} /> : 'Nothing to preview'}</div>
 }
 
-const MyEditor = React.forwardRef(({ className, value, onChange, name, id, }, ref) => {
+const MyEditor = React.forwardRef(({ className, value, onChange, name, id }, ref) => {
   return (
     <div className={className}>
       <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} />
@@ -271,6 +274,9 @@ export default styled(MyEditor)`
       padding: 12px;
       border-radius: var(--border-radius);
       overflow: scroll;
+    }
+    img {
+      max-height: 700px;
     }
   }
 `

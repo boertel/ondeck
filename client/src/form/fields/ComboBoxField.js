@@ -2,7 +2,7 @@ import React from 'react'
 import { isEqual } from 'lodash'
 import { useField, splitFormProps } from 'react-form'
 
-import { ComboBoxInput } from '../../ui'
+import { Input, ComboBoxInput } from '../../ui'
 
 const ComboBoxField = props => {
   const [field, fieldOptions, { options, isMulti, ...rest }] = splitFormProps(props)
@@ -18,7 +18,7 @@ const ComboBoxField = props => {
     setValue(args.map(({ value }) => value))
   }
 
-  return <ComboBoxInput {...rest} options={options} value={optionValues} onChange={handleChange} isMulti={isMulti} />
+  return <Input forwardedAs={ComboBoxInput} {...rest} options={options} value={optionValues} onChange={handleChange} isMulti={isMulti} />
 }
 
 export default ComboBoxField

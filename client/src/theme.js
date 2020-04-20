@@ -4,6 +4,7 @@ import { createGlobalStyle } from 'styled-components'
 const colors = {
   color: '#373737',
   primary: '#22986C',
+  primary: '#86608E',
   secondary: '#FCC530',
   danger: '#E96A73',
   foreground: '#FFF',

@@ -43,14 +43,14 @@ export default styled(Input)`
     flex-direction: row-reverse;
 
 
-    svg {
+    & > svg {
       margin: 0 0.5em;
       position: absolute;
       right: 0;
     }
 
     &:focus-within {
-      svg {
+      & > svg {
         color: var(--primary);
       }
     }
