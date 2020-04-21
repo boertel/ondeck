@@ -173,17 +173,7 @@ def save_new_last_index(sender, instance, created, **kwargs):
         workspace.save()
 
 
-class Resource(models.Model):
-    class Type:
-        comment = "comment"
-        LINK = "link"
-
-        @classmethod
-        def as_choices(cls):
-            return ((cls.comment, "Comment"), (cls.LINK, "Link"))
-
-    type = models.CharField(max_length=100, choices=Type.as_choices())
-    value = models.CharField(max_length=500)
+class Comment(models.Model):
     message = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
@@ -191,4 +181,4 @@ class Resource(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = [["ticket", "value"]]
+        ordering = ("-created_at",)

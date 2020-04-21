@@ -6,7 +6,7 @@ import { useTickets } from '../resources'
 import { View } from '../ui'
 import { TicketForm } from '../form'
 import Versions from './Ticket/Versions'
-import Resources from './Ticket/Resources'
+import Comments from './Ticket/Comments'
 
 const FullTicket = ({ className }) => {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
@@ -33,7 +33,7 @@ const FullTicket = ({ className }) => {
     <View className={className}>
       <TicketForm {...ticket} onSubmit={() => navigate(-1)} />
       <Versions ticket={ticket} />
-      <Resources />
+      <Comments />
     </View>
   )
 }

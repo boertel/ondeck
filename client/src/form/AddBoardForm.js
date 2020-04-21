@@ -7,7 +7,7 @@ import { InputField } from './fields'
 import { mutateBoard } from '../resources/boards'
 
 function AddBoardForm({ name }) {
-  const { workspaceSlug,  boardSlug } = useParams()
+  const { workspaceSlug, boardSlug } = useParams()
   const [mutate] = mutateBoard({ workspaceSlug, boardSlug })
 
   const navigate = useNavigate()

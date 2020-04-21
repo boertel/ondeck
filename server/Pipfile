@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 isort = "*"
 black = "==19.3b0"
+werkzeug = "*"
 
 [packages]
 django = "==2.2.*"

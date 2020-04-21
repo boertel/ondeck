@@ -31,7 +31,7 @@ const Board = props => {
             <Column key={id} id={id} tickets={ticketsGroupByColumns[id]} name={name}>
             </Column>
           ))}
-          {showAddColumnForm && (
+          {(!columns || columns.length === 0 || showAddColumnForm) && (
           <View>
             <AddColumnForm cancel={() => setShowAddColumnForm(false)} />
           </View>

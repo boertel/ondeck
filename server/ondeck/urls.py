@@ -9,6 +9,7 @@ from .views import (
     ColumnViewSet,
     TagViewSet,
     UserViewSet,
+    CommentViewSet,
 )
 
 # Create a router and register our viewsets with it.
@@ -28,6 +29,7 @@ router.register(
 router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/boards", BoardViewSet)
 router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/tickets", TicketViewSet)
 router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/users", UserViewSet)
+router.register(r"workspaces/(?P<workspace_slug>[\w-]+)/comments", CommentViewSet)
 router.register(r"workspaces", WorkspaceViewSet)
 
 # TODO update that to support only one user? more global user API

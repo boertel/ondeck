@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
-import { useLocation, useParams, useNavigate } from 'react-router-dom'
+import { useLocation, useParams, useNavigate, Prompt } from 'react-router-dom'
 import { useForm } from 'react-form'
 
 import { Button, View, Loading, } from '../ui'
@@ -40,7 +40,7 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
   const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
   const {
     Form,
-    meta: { canSubmit, isSubmitting },
+    meta: { canSubmit, isSubmitting, isTouched,isSubmitted },
     handleSubmit,
   } = useForm({
     defaultValues,
@@ -74,6 +74,7 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
   }
   return (
     <Form className={className}>
+      <Prompt when={isTouched === true && isSubmitted === false} message="Are you sure you want to leave this page?" />
       <View justifyContent="flex-end">
         {isEditing && (
           <Button onClick={onDelete} type="button">
@@ -84,7 +85,7 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
       <InputField label="Title" field="title" required={true} autoFocus={focus === 'title'} />
       <EditorField label="Description" field="description" autoFocus={focus === 'description'}/>
       <SelectField label="Parent" field="parent" filterValue={v => parseInt(v, 10)}>
-        <option />
+        <option value="" />
         {(tickets || [])
           .filter(ticket => ticket.id !== id && !ticket.parent)
           .map(({ id, title, key }) => (

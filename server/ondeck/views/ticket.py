@@ -7,8 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .viewsets import RootViewSet
-from ..serializers import TicketSerializer, UserSerializer, ResourceSerializer
-from ..models import Ticket, Board, Resource
+from ..serializers import TicketSerializer, UserSerializer, CommentSerializer
+from ..models import Ticket, Board, Comment
 
 
 class TicketViewSet(RootViewSet):
@@ -113,8 +113,6 @@ class TicketViewSet(RootViewSet):
 
             instance = serializer.save(**kwargs)
             reversion.set_user(self.request.user)
-            # TODO move to a queue
-            transaction.on_commit(instance.create_resources)
 
     def perform_create(self, serializer):
         with reversion.create_revision():
@@ -124,15 +122,22 @@ class TicketViewSet(RootViewSet):
             instance = serializer.save(**kwargs)
             instance.add_owner(self.request.user)
             reversion.set_user(self.request.user)
-            # TODO move to a queue
-            transaction.on_commit(instance.create_resources)
 
-    @action(detail=True, methods=["get"])
-    def resources(self, request, **kwargs):
-        ticket = self.get_object()
-        resources = Resource.objects.filter(ticket=ticket)
-        serializer = ResourceSerializer(resources, many=True)
-        return Response(serializer.data)
+    @action(detail=True, methods=["get", "post"])
+    def comments(self, request, **kwargs):
+        if request.method == "GET":
+            ticket = self.get_object()
+            comments = Comment.objects.filter(ticket=ticket)
+            serializer = CommentSerializer(comments, many=True)
+            return Response(serializer.data)
+        else:
+            ticket = self.get_object()
+            serializer = CommentSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(ticket=ticket, user=request.user)
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
 
     @action(detail=True, methods=["get"])
     def versions(self, request, **kwargs):

@@ -32,12 +32,6 @@ const getTicketVersions = async (key, params) => {
   return data
 }
 
-const getTicketResources = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(`${path}resources/`)
-  return data
-}
-
 const createOrUpdate = async (params, variables) => {
   // TODO not clean
   const { path, method } = getPath({ ...params, ticketSlug: variables.pk || params.ticketSlug })
@@ -57,10 +51,6 @@ export const useTickets = params => {
 
 export const useTicketVersions = params => {
   return useQuery(params.ticketSlug && ['versions', params], getTicketVersions)
-}
-
-export const useTicketResources = params => {
-  return useQuery(params.ticketSlug && ['resources', params], getTicketResources)
 }
 
 export const mutateTicket = params => {
