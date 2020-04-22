@@ -83,11 +83,8 @@ function Workspace({ className }) {
 
 export default styled(Workspace)`
   display: grid;
-  grid-template-areas:
-    'nav content'
-    'footer footer';
+  grid-template-areas: 'nav content';
   grid-template-columns: 260px 1fr;
-  grid-template-rows: 1fr auto;
   height: 100vh;
 
   header {
@@ -100,9 +97,10 @@ export default styled(Workspace)`
 
   main {
     grid-area: content;
-    margin: 0 28px;
-    display: grid;
-    grid-template-rows: min-content 1fr;
+    margin: 0 28px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   footer {

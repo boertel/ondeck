@@ -7,5 +7,5 @@ export default styled.div`
   grid-column-gap: 10px;
   grid-template-columns: repeat(${({ children }) => React.Children.count(children)}, 1fr);
   width: 100%;
-  height: 100%;
+  flex: 1;
 `

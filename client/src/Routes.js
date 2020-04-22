@@ -26,7 +26,6 @@ export default () => {
         <Route path="/workspaces" element={<Workspaces />} />
         <Route path="/workspaces/:workspaceSlug/*" element={<Workspace />} />
       </Routes>
-      <footer></footer>
       <ReactQueryDevtools initialIsOpen={false} />
     </ReactQueryConfigProvider>
   )

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
 
@@ -7,7 +7,7 @@ import { InputField } from './fields'
 import { mutateTicket } from '../resources/tickets'
 import useShortcut from '../hooks/useShortcut'
 
-const AddQuickTicketForm = ({ title, column, cancel }) => {
+const AddQuickTicketForm = ({ title, column, }) => {
   const { workspaceSlug, boardSlug } = useParams()
   const navigate = useNavigate()
   const [mutate] = mutateTicket({ workspaceSlug, boardSlug })
@@ -37,13 +37,12 @@ const AddQuickTicketForm = ({ title, column, cancel }) => {
     },
     'escape': () => {
       reset()
-      cancel()
     }
   })
 
   return (
     <Form>
-      <InputField icon={AddIcon} field="title" className="full-width" placeholder="Add Ticket" autoFocus={true} />
+      <InputField icon={AddIcon} field="title" className="full-width transparent" placeholder="Add Ticket" style={{ margin: '0px' }} />
     </Form>
   )
 }

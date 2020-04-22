@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components/macro';
 
 
-function Input({ icon: Icon, as: As, type, label, htmlFor, className, ...props }) {
+function Input({ icon: Icon, as: As, type, label, htmlFor, className, style, ...props }) {
   const { id, name } = props;
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       {!!label && (<label htmlFor={htmlFor || id || name}>{label}</label>)}
       <div className="input">
         {!!Icon && <Icon />}

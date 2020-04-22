@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6efab80bba771398a5b6bc3dc06fe61b2af62796eb5bff3d1c230242ea44692b"
+            "sha256": "0b75baba115d9a6ff2a737a2db0e1eb70d472f908c7d3deb76fc362975a11656"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -37,14 +37,6 @@
                 "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"
             ],
             "version": "==3.0.4"
-        },
-        "deepdiff": {
-            "hashes": [
-                "sha256:59fc1e3e7a28dd0147b0f2b00e3e27181f0f0ef4286b251d5f214a5bcd9a9bc4",
-                "sha256:91360be1d9d93b1d9c13ae9c5048fa83d9cff17a88eb30afaa0d7ff2d0fee17d"
-            ],
-            "index": "pypi",
-            "version": "==4.3.2"
         },
         "defusedxml": {
             "hashes": [
@@ -115,18 +107,20 @@
             ],
             "version": "==2.9"
         },
+        "meilisearch": {
+            "hashes": [
+                "sha256:bae466105c3f6d760c94e367d2616ae4076b954c00f5678ffad1660a5d47e39c",
+                "sha256:ce74e30201153fc5fe32910961fb35279abbf942cdfd18540fc0687b752f3425"
+            ],
+            "index": "pypi",
+            "version": "==0.10.0"
+        },
         "oauthlib": {
             "hashes": [
                 "sha256:bee41cc35fcca6e988463cacc3bcb8a96224f470ca547e697b604cc697b2f889",
                 "sha256:df884cd6cbe20e32633f1db1072e9356f53638e4361bef4e8b03c9127c9328ea"
             ],
             "version": "==3.1.0"
-        },
-        "ordered-set": {
-            "hashes": [
-                "sha256:a7bfa858748c73b096e43db14eb23e2bc714a503f990c89fac8fab9b0ee79724"
-            ],
-            "version": "==3.1.1"
         },
         "psycopg2-binary": {
             "hashes": [

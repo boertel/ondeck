@@ -10,6 +10,7 @@ const Tickets = ({ children, ...props }) => {
 }
 
 export default styled(Tickets)`
+  padding: 0 10px;
   flex-direction: column;
   > div {
     width: 100%;

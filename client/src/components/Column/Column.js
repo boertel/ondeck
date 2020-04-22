@@ -1,22 +1,41 @@
-import React, { Fragment, useState, } from 'react'
+import React, { Fragment, useState } from 'react'
 import { sortBy } from 'lodash'
 import styled from 'styled-components/macro'
 
 import { Tickets } from '../../ui'
 import View from '../../ui/View'
+import { AddQuickTicketForm } from '../../form'
 import Ticket, { TicketPosition } from '../Ticket'
 import ColumnTitle from './ColumnTitle'
-import { AddQuickTicketForm } from '../../form'
 
+const Sticky = styled(View)`
+  position: sticky;
+  right: 0;
+  left: 0;
+  padding: 10px;
+  z-index: 1;
 
-function Column({ id: columnId, name, tickets=[], ...props }) {
-  const [addTicket, setAddTicket] = useState(false)
+  background-color: var(--bg);
 
+  &:first-child {
+    top: 60px;
+    padding-bottom: 0;
+  }
+
+  &:last-child {
+    padding-top: 0;
+    bottom: 0;
+    top: 122px; // header + ColumnTitle (TODO definitely need a better solution)
+  }
+`
+
+function Column({ id: columnId, name, tickets = [], ...props }) {
   return (
     <View flexDirection="column" {...props}>
-      <ColumnTitle name={name} id={columnId} onAdd={() => setAddTicket(!addTicket)} />
+      <Sticky alignItems="center">
+        <ColumnTitle name={name} id={columnId}>{tickets.length > 0 && <>({tickets.length})</>}</ColumnTitle>
+      </Sticky>
       <Tickets>
-        {addTicket && (<AddQuickTicketForm column={columnId} cancel={() => setAddTicket(false)} />)}
         <TicketPosition position={0} columnId={columnId} />
         {sortBy(tickets, 'position').map(ticket => (
           <Fragment key={ticket.key}>
@@ -25,14 +44,16 @@ function Column({ id: columnId, name, tickets=[], ...props }) {
           </Fragment>
         ))}
       </Tickets>
+      <Sticky>
+        <AddQuickTicketForm column={columnId} />
+      </Sticky>
     </View>
   )
 }
 
 export default styled(Column)`
-  height: 100%;
+  position: relative;
   background-color: var(--bg);
-  padding: 10px;
 
   transition-property: background-color, border-color;
   transition-duration: 0.2s;

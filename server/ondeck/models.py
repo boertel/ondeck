@@ -6,6 +6,8 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
+from search import search
+
 import reversion
 
 
@@ -56,6 +58,29 @@ class Workspace(models.Model):
             user=user, workspace=self, role=WorkspaceMembership.Role.OWNER
         )
         return owner
+
+    def get_tickets_search_uid(self):
+        return "workspace-{}-tickets".format(self.pk)
+
+    def create_tickets_search_index(self, attributes):
+        # TODO can we have this abstracted?
+        # Workspace.search.create()? but it is linked with tickets?
+        # workspace is just for permission
+        index = search.create_index(uid=self.get_tickets_search_uid(), primary_key="pk")
+        # board is so we can navigate to the ticket
+        searchable_attributes = [key for key in attributes if key not in ["board"]]
+        displayed_attributes = attributes
+        settings = {
+            "searchableAttributes": searchable_attributes,
+            "displayedAttributes": displayed_attributes,
+            "distinctAttribute": "slug",
+        }
+        index.update_settings(settings)
+        return index
+
+    def get_tickets_search_index(self):
+        index = search.get_index(uid == self.get_tickets_search_uid(), primary_key="pk")
+        return index
 
 
 class Board(models.Model):
@@ -129,29 +154,20 @@ class Ticket(models.Model):
     members = models.ManyToManyField(User, through=TicketMembership)
     position = models.IntegerField(null=True)
 
+    def to_search_document(self):
+        return {
+            "title": self.title,
+            "description": self.description,
+            "key": self.key,
+            "board": self.board.slug,
+            "pk": self.pk,
+        }
+
     def add_owner(self, user):
         owner = TicketMembership.objects.create(
             user=user, ticket=self, role=TicketMembership.Role.OWNER
         )
         return owner
-
-    def extract_urls(self):
-        if self.description:
-            return re.findall("(?P<url>https?://[^\s]+)", self.description)
-        return []
-
-    def create_resources(self):
-        resources = []
-        urls = self.extract_urls()
-        for url in urls:
-            try:
-                resource = Resource.objects.create(
-                    ticket=self, value=url, type=Resource.Type.LINK
-                )
-                resources.append(resource)
-            except:
-                pass
-        return resources
 
     @property
     def key(self):
@@ -167,10 +183,17 @@ def assign_last_key(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Ticket)
 def save_new_last_index(sender, instance, created, **kwargs):
+    # TODO handle if the index doesn't exist
+    workspace = instance.board.workspace
+    index = workspace.get_tickets_search_index()
     if created:
-        workspace = instance.board.workspace
         workspace.last_index = instance.index + 1
         workspace.save()
+        # TODO move to a queue? https://docs.meilisearch.com/guides/advanced_guides/asynchronous_updates.html
+        index.add_documents([instance.to_search_document()])
+    else:
+        # TODO should it be ticket.add_to_search()
+        index.update_documents([instance.to_search_document()])
 
 
 class Comment(models.Model):
