@@ -59,11 +59,13 @@ const theme = defaultTheme => ({
   },
 })
 
-const ComboBoxInput = ({ ...props }) => {
+const ComboBoxInput = ({ autoFocus, ...props }) => {
   const ref = useRef()
   useEffect(() => {
-    ref.current.focus()
-  }, [])
+    if (autoFocus) {
+      ref.current.focus()
+    }
+  }, [autoFocus])
   const AsComponent = props.loadOptions ? AsyncSelect : Select
   return <AsComponent ref={ref} styles={styles} theme={theme} {...props} />
 }

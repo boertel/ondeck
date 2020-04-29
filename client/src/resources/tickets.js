@@ -63,6 +63,7 @@ export const mutateTicket = params => {
         ticketSlug: params.ticketSlug,
       }
       console.log({ data, variables, params, query })
+      // TODO update directly cache when moving position to have a snappier experience
       queryCache.refetchQueries(['tickets', query])
     },
   })

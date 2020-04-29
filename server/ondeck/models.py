@@ -79,7 +79,7 @@ class Workspace(models.Model):
         return index
 
     def get_tickets_search_index(self):
-        index = search.get_index(uid == self.get_tickets_search_uid(), primary_key="pk")
+        index = search.get_index(uid=self.get_tickets_search_uid())
         return index
 
 
@@ -94,6 +94,7 @@ class Board(models.Model):
     position = models.PositiveIntegerField(null=True)
 
     class Meta:
+        unique_together = [["slug", "workspace"]]
         ordering = ("position",)
 
     def save(self, *args, **kwargs):

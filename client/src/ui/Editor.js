@@ -164,6 +164,8 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
 
   useEffect(onResize, [])
 
+  console.log(props.autoFocus)
+
   return (
     <div className="editor" ref={dropzone}>
       <textarea
@@ -205,10 +207,10 @@ function Preview({ value }) {
   return <div className="preview">{value ? <Markdown value={value} /> : 'Nothing to preview'}</div>
 }
 
-const MyEditor = React.forwardRef(({ className, value, onChange, name, id }, ref) => {
+const MyEditor = React.forwardRef(({ className, value, onChange, name, id, autoFocus, }, ref) => {
   return (
     <div className={className}>
-      <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} />
+      <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} autoFocus={autoFocus} />
       <Preview value={value} />
     </div>
   )
