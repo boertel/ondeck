@@ -7,7 +7,7 @@ from ..models import Workspace
 class WorkspaceSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     slug = serializers.CharField()
-    boards = BoardSerializer(many=True)
+    boards = BoardSerializer(many=True, read_only=True)
 
     class Meta:
         model = Workspace
