@@ -17,6 +17,10 @@ import reversion
 # b = Board.objects.create(name="Parking Lot", slug="parking-lot", workspace=w)
 
 
+def search_tickets_uid(workspace):
+    return "workspace-{}-tickets".format(workspace.pk)
+
+
 class User(AbstractUser):
     name = models.CharField(max_length=250)
 
@@ -53,6 +57,9 @@ class Workspace(models.Model):
     members = models.ManyToManyField(User, through=WorkspaceMembership)
     # organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     # TODO protected slug (actions)
+
+    def search(self, query):
+        return search.query(search_tickets_uid(self), query)
 
     def __str__(self):
         return "{} ({})".format(self.slug, self.pk)
@@ -155,7 +162,7 @@ search.register(
     ("title", "description", "key", "board__slug", "pk"),
     exclude=("board_id",),
     distinct="key",
-    uid=lambda instance: "workspace-{}-tickets".format(instance.board.workspace.pk),
+    uid=lambda instance: search_tickets_uid(instance.board.workspace),
 )
 
 
