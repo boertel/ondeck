@@ -24,7 +24,7 @@ class TicketViewSet(RootViewSet):
     def get_object(self):
         pk = self.kwargs.get("pk")
         index = pk.split("-")[1]
-        return self.queryset.get(index=index)
+        return self.get_queryset().get(index=index)
 
     def get_queryset(self):
         if hasattr(self, "board"):
