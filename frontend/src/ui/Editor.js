@@ -156,15 +156,13 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     // max height when resizing automatically but not when the user does it manually
     const maxHeight = 200
     const { scrollHeight } = ref.current
-    if (scrollHeight <= maxHeight) {
+    if (scrollHeight >= maxHeight) {
       ref.current.style.height = `5px`
       ref.current.style.height = `${ref.current.scrollHeight}px`
     }
   }
 
   useEffect(onResize, [])
-
-  console.log(props.autoFocus)
 
   return (
     <div className="editor" ref={dropzone}>
