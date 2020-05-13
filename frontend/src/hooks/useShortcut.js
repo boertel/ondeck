@@ -1,4 +1,7 @@
-import { useEffect } from 'react'
+import _debug from 'debug'
+import { useCallback, useEffect } from 'react'
+
+const debug = _debug('shortcuts')
 
 const isShortcut = (shortcut, { key, metaKey, shiftKey, ctrlKey }) => {
   let parts = shortcut.split('+').map(v => v.trim().toLowerCase())
@@ -24,26 +27,31 @@ const isShortcut = (shortcut, { key, metaKey, shiftKey, ctrlKey }) => {
   return matches.every(match => match === true)
 }
 
-const useShortcut = (shortcut, callback) => {
-  useEffect(() => {
+const useShortcut = (shortcuts, ref) => {
+  const execute = useCallback((evt) => {
+    Object.keys(shortcuts).forEach(key => {
+      if (isShortcut(key, evt) && typeof shortcuts[key] === 'function') {
+        shortcuts[key](evt)
+      }
+    })
+  }, [shortcuts])
 
+  useEffect(() => {
     const onKeyDown = evt => {
-      if (typeof shortcut === 'string') {
-        if (isShortcut(shortcut, evt) && typeof callback === 'function') {
-          callback(evt)
+      if (ref && ref.current) {
+        const isFromCurrentRef = ref.current === evt.target || ref.current.contains(evt.target)
+        debug(evt.key, ref.current, evt.target, isFromCurrentRef)
+        if (isFromCurrentRef) {
+          execute(evt)
         }
-      } else if (typeof shortcut === 'object') {
-        Object.keys(shortcut).forEach(key => {
-          if (isShortcut(key, evt) && typeof shortcut[key] === 'function') {
-            shortcut[key](evt)
-          }
-        })
+      } else {
+        execute(evt)
       }
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [shortcut, callback])
+  }, [execute, ref])
 }
 
 export default useShortcut

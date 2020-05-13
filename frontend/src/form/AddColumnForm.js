@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-form'
 
@@ -22,12 +22,16 @@ function AddColumnForm({ name, id, cancel }) {
     },
   })
 
-  const callback = !!cancel && function() {
-    reset()
-    cancel()
+  function callback() {
+    if (!!cancel) {
+      reset()
+      cancel()
+    }
   }
 
-  useShortcut('escape', callback)
+  useShortcut({
+    'escape': useCallback(callback, [cancel])
+    })
 
   return (
     <Form>

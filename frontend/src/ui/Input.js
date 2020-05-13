@@ -1,19 +1,18 @@
 import React from 'react'
-import styled from 'styled-components/macro';
+import styled from 'styled-components/macro'
 
-
-function Input({ icon: Icon, as: As, type, label, htmlFor, className, style, ...props }) {
-  const { id, name } = props;
+const Input = React.forwardRef(({ icon: Icon, as: As, type, label, htmlFor, className, style, ...props }, ref) => {
+  const { id, name } = props
   return (
     <div className={className} style={style}>
-      {!!label && (<label htmlFor={htmlFor || id || name}>{label}</label>)}
+      {!!label && <label htmlFor={htmlFor || id || name}>{label}</label>}
       <div className="input">
         {!!Icon && <Icon />}
-        <As {...props} type={type} />
+        <As {...props} ref={ref} type={type} />
       </div>
     </div>
   )
-}
+})
 
 Input.defaultProps = {
   as: 'input',
@@ -35,13 +34,11 @@ export default styled(Input)`
     margin-bottom: 6px;
   }
 
-
   .input {
     position: relative;
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
-
 
     & > svg {
       margin: 0 0.5em;
@@ -56,7 +53,8 @@ export default styled(Input)`
     }
   }
 
-  svg + input {
+  svg + input,
+  svg + textarea {
     padding-right: 34px;
   }
 
@@ -80,7 +78,6 @@ export default styled(Input)`
   textarea {
     resize: vertical;
     box-sizing: border-box;
-    height: auto;
   }
 
   &.transparent {

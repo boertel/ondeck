@@ -1,20 +1,22 @@
-import React, { useMemo, } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
 
 import { AddIcon } from '../ui/icons'
+import { AutoResizeTextarea } from '../ui'
 import { InputField } from './fields'
 import { mutateTicket } from '../resources/tickets'
 import useShortcut from '../hooks/useShortcut'
 
-const AddQuickTicketForm = ({ title, column, }) => {
+
+const AddQuickTicketForm = ({ title, column }) => {
   const { workspaceSlug, boardSlug } = useParams()
   const navigate = useNavigate()
   const [mutate] = mutateTicket({ workspaceSlug, boardSlug })
 
   const defaultValues = useMemo(() => ({ title }), [title])
 
-  const { Form, handleSubmit, setMeta, reset, } = useForm({
+  const { Form, handleSubmit, setMeta, reset } = useForm({
     defaultValues,
     onSubmit: async (values, { reset, meta }) => {
       try {
@@ -29,20 +31,30 @@ const AddQuickTicketForm = ({ title, column, }) => {
     },
   })
 
+  const ref = useRef()
+
   useShortcut({
     // TODO useCallback on these functions?
     'meta+enter': () => {
-      setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description'}}) }))
+      setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description' } }) }))
       handleSubmit()
     },
     'escape': () => {
       reset()
-    }
-  })
+    },
+  }, ref)
 
   return (
     <Form>
-      <InputField icon={AddIcon} field="title" className="full-width transparent" placeholder="Add Ticket" style={{ margin: '0px' }} />
+      <InputField
+        ref={ref}
+        as={AutoResizeTextarea}
+        icon={AddIcon}
+        field="title"
+        className="full-width transparent"
+        placeholder="Add Ticket"
+        style={{ margin: '0px' }}
+      />
     </Form>
   )
 }

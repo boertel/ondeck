@@ -3,6 +3,7 @@ import Columns from './Columns';
 import Editor from './Editor';
 import Favicon from './Favicon';
 import Input from './Input';
+import AutoResizeTextarea from './AutoResizeTextarea';
 import Loading from './Loading';
 import ComboBoxInput from './ComboBoxInput';
 import Sidebar from './Sidebar';
@@ -17,6 +18,7 @@ export {
   Editor,
   Favicon,
   Input,
+  AutoResizeTextarea,
   Loading,
   ComboBoxInput,
   Sidebar,
