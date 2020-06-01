@@ -35,6 +35,10 @@ const AddQuickTicketForm = ({ title, column }) => {
 
   useShortcut({
     // TODO useCallback on these functions?
+    'enter': (evt) => {
+      handleSubmit()
+      evt.preventDefault()
+    },
     'meta+enter': () => {
       setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description' } }) }))
       handleSubmit()

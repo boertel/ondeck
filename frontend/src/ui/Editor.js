@@ -3,6 +3,8 @@ import styled from 'styled-components/macro'
 import marked from 'marked'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { useDrop } from 'react-dnd'
+import TextareaAutosize from 'react-textarea-autosize'
+
 
 import useUpload from './UploadInput'
 
@@ -120,7 +122,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
             evt.preventDefault()
           }
         } else if ((match = previousLine.match(/^[\d]+\./))) {
-          const index = `${parseInt(match[0], 10) + 1}.`
+          const index = `${parseInt(match[0], 10) + 1}. `
           const newValue = start + '\n' + index + end
           onChange({ target: { value: newValue } })
           ref.current.selectionStart = ref.current.selectionEnd = selectionStart + index.length + 1
@@ -152,28 +154,15 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     }
   }
 
-  const onResize = () => {
-    // max height when resizing automatically but not when the user does it manually
-    const maxHeight = 200
-    const { scrollHeight } = ref.current
-    if (scrollHeight >= maxHeight) {
-      ref.current.style.height = `5px`
-      ref.current.style.height = `${ref.current.scrollHeight}px`
-    }
-  }
-
-  useEffect(onResize, [])
-
   return (
     <div className="editor" ref={dropzone}>
-      <textarea
+      <TextareaAutosize
         ref={ref}
         placeholder="Leave a comment"
         onChange={evt => onChange(evt)}
         onPaste={onPaste}
         value={value}
         onKeyDown={onKeyDown}
-        onInput={onResize}
         {...props}
       />
       <DropArea />
