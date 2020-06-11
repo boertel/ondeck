@@ -231,13 +231,16 @@ export default styled(MyEditor)`
       max-width: 100%;
       padding: 8px;
       margin: 0;
-      resize: vertical;
       line-height: 1.6;
       font-size: 1rem;
       color: var(--default);
       background-color: transparent;
       outline: none;
       border: none;
+      resize: none;
+      &:hover, &:focus {
+        resize: vertical;
+      }
     }
 
     .dropArea {

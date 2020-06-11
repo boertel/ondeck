@@ -76,8 +76,11 @@ export default styled(Input)`
   }
 
   textarea {
-    resize: vertical;
     box-sizing: border-box;
+    resize: none;
+    &:hover, &:focus {
+      resize: vertical;
+    }
   }
 
   &.transparent {

@@ -5,7 +5,8 @@ const debug = _debug('shortcuts')
 
 const isShortcut = (shortcut, { key, metaKey, shiftKey, ctrlKey }) => {
   let parts = shortcut.split('+').map(v => v.trim().toLowerCase())
-  const matches = new Array(parts.length).fill(false)
+  const events = [!metaKey, !shiftKey, !ctrlKey, !key].filter(exists => !exists)
+  const matches = new Array(Math.max.call(Math, events.length, parts.length)).fill(false)
 
   do {
     const part = parts.shift()
