@@ -44,7 +44,7 @@ export const mutateBoard = (params) => {
   const mutateFn = async data => await createOrUpdate(params, data)
   return useMutation(mutateFn, {
     onSuccess: () => {
-      queryCache.refetchQueries(['boards', params])
+      queryCache.invalidateQueries(['boards', params])
     }
   })
 }

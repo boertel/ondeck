@@ -1,5 +1,4 @@
 import reversion
-from django.db import transaction
 from django.db.models import F
 from reversion.models import Version
 from rest_framework.filters import OrderingFilter

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { DndProvider } from 'react-dnd'
-import Backend from 'react-dnd-html5-backend'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { BrowserRouter } from 'react-router-dom'
 import { ModalProvider } from './hooks/useModal'
 import { Manager as PopperManager } from 'react-popper'
@@ -17,7 +17,7 @@ const App = () => {
       <GlobalStyle />
       <BrowserRouter>
         <PopperManager>
-          <DndProvider backend={Backend}>
+          <DndProvider backend={HTML5Backend}>
             <ModalProvider>
               <Routes />
             </ModalProvider>

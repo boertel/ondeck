@@ -50,7 +50,14 @@ export const useTickets = params => {
 }
 
 export const useTicketVersions = params => {
-  return useQuery(params.ticketSlug && ['versions', params], getTicketVersions)
+  return useQuery(['versions', params], getTicketVersions, { enabled: params.ticketSlug })
+}
+
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
+  return result
 }
 
 export const mutateTicket = params => {
@@ -62,9 +69,25 @@ export const mutateTicket = params => {
         boardSlug: params.boardSlug || variables.fromBoardSlug,
         ticketSlug: params.ticketSlug,
       }
-      console.log({ data, variables, params, query })
-      // TODO update directly cache when moving position to have a snappier experience
-      queryCache.refetchQueries(['tickets', query])
+      const { pk, position, column } = variables
+      if (position !== undefined) {
+        queryCache.setQueryData(['tickets', query], function (previous) {
+          const old = previous.find(ticket => pk === ticket.pk)
+          if (position !== undefined) {
+            const ticketsInColumn = previous.filter(ticket => ticket.column === column)
+            if (column === old.column) {
+              return reorder(ticketsInColumn, old.position, position).map((ticket, index) => ({
+                ...ticket,
+                position: index,
+              }))
+            } else {
+              return ticketsInColumn.splice(position, 0, {...old, position, })
+            }
+          }
+          return previous
+        })
+      }
+      queryCache.invalidateQueries(['tickets', query])
     },
   })
 }

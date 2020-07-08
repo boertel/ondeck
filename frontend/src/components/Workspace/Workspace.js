@@ -13,17 +13,14 @@ import { AddBoardForm } from '../../form'
 import Workspaces from './Workspaces'
 import UserMenu from '../User/UserMenu'
 
-import { useBoards, useUsers } from '../../resources'
+import { useBoards, } from '../../resources'
 
 function Workspace({ className }) {
   const { workspaceSlug } = useParams()
 
-  //const { workspace } = useWorkspaces()
-  const { data: users } = useUsers({ workspaceSlug })
   const { data: boards } = useBoards({ workspaceSlug })
 
   const [openModal] = useModal(CommandKModal)
-  //useEffect(() => openModal(), [])
 
   return (
     <div className={className}>

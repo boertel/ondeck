@@ -1,11 +1,13 @@
-import React, { Fragment, } from 'react'
+import React, { useCallback } from 'react'
+import classNames from 'classnames'
 import { sortBy } from 'lodash'
 import styled from 'styled-components/macro'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { Tickets } from '../../ui'
 import View from '../../ui/View'
 import { AddQuickTicketForm } from '../../form'
-import Ticket, { TicketPosition } from '../Ticket'
+import Ticket from '../Ticket'
 import ColumnTitle from './ColumnTitle'
 
 const Sticky = styled(View)`
@@ -29,25 +31,35 @@ const Sticky = styled(View)`
   }
 `
 
-function Column({ id: columnId, name, tickets = [], ...props }) {
+
+function Column({ id: columnId, name, index, className, tickets = [], ...props }) {
+  const sorted = sortBy(tickets, 'position')
+
+  const dndId = `${columnId}`
   return (
-    <View flexDirection="column" {...props}>
-      <Sticky alignItems="center">
-        <ColumnTitle name={name} id={columnId}>{tickets.length > 0 && <>({tickets.length})</>}</ColumnTitle>
-      </Sticky>
-      <Tickets>
-        <TicketPosition position={0} columnId={columnId} />
-        {sortBy(tickets, 'position').map(ticket => (
-          <Fragment key={ticket.key}>
-            <Ticket to={`${ticket.key}`} {...ticket} />
-            <TicketPosition position={ticket.position + 1} columnId={columnId} />
-          </Fragment>
-        ))}
-      </Tickets>
-      <Sticky>
-        <AddQuickTicketForm column={columnId} />
-      </Sticky>
-    </View>
+    <Draggable draggableId={dndId} index={index}>{(provided) => (
+      <View flexDirection="column" className={className} ref={provided.innerRef} {...provided.draggableProps}>
+        <Sticky alignItems="center" {...provided.dragHandleProps}>
+          <ColumnTitle name={name} id={columnId}>
+            {tickets.length > 0 && <>({tickets.length})</>}
+          </ColumnTitle>
+        </Sticky>
+        <Droppable droppableId={dndId} type="TICKET">
+          {(provided, snapshot) => (
+            <Tickets {...provided.droppableProps} ref={provided.innerRef}>
+              {sorted.map(ticket => (
+                <Ticket key={ticket.key} to={`${ticket.key}`} {...ticket} index={ticket.position} />
+              ))}
+              {provided.placeholder}
+            </Tickets>
+          )}
+        </Droppable>
+        <Sticky>
+          <AddQuickTicketForm column={columnId} />
+        </Sticky>
+      </View>
+    )}
+    </Draggable>
   )
 }
 
