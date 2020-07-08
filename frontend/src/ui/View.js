@@ -1,8 +1,14 @@
 import React from 'react'
+import _classNames from 'classnames'
 import styled from 'styled-components/macro'
 
-const _View = React.forwardRef(({ alignItems, radius, justifyContent, flexDirection, as: AsComponent, ...props }, ref) => {
-  return <AsComponent {...props} ref={ref} />
+const _View = React.forwardRef(({ alignItems, radius, justifyContent, flexDirection, as: AsComponent, classNames, className, ...props }, ref) => {
+  let _className = className
+  if (classNames) {
+    // FIXME probably want to memo this since classNames is an array
+    _className = _classNames.apply(_classNames, classNames)
+  }
+  return <AsComponent {...props} className={_className} ref={ref} />
 });
 
 const View = styled(_View)`

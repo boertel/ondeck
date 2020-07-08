@@ -33,14 +33,14 @@ const createOrUpdate = async (params, variables) => {
 }
 
 export const useComments = params => {
-  return useQuery(params.ticketSlug && ['comments', params], get)
+  return useQuery(['comments', params], get, { enabled: params.ticketSlug })
 }
 
 export const mutateComment = params => {
   const mutateFn = async (data) => await createOrUpdate(params, data)
   return useMutation(mutateFn, {
     onSuccess: (data, variables) => {
-      queryCache.refetchQueries(['comments', params])
+      queryCache.invalidateQueries(['comments', params])
     }
   })
 }

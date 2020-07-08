@@ -1,8 +1,7 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components/macro'
-
-import { useDrag } from 'react-dnd'
+import { Draggable } from 'react-beautiful-dnd'
 
 import { View } from '../../ui'
 
@@ -14,18 +13,22 @@ const TicketTitle = styled.h4`
 `
 
 const Ticket = React.memo(
-  ({ title, className, pk, column: fromColumnId, board: fromBoardId, position: fromPosition, to }) => {
-    const { boardSlug } = useParams()
-    const [{ opacity }, drag] = useDrag({
-      item: { type: 'TICKET', pk, fromColumnId, fromBoardId, fromPosition, fromBoardSlug: boardSlug },
-      collect: monitor => ({
-        opacity: monitor.isDragging() ? 0.4 : 1,
-      }),
-    })
+  ({ title, className, pk, column: fromColumnId, board: fromBoardId, position, to }) => {
     return (
-      <View forwardedAs={Link} className={className} to={to} ref={drag} style={{ opacity }}>
-        <TicketTitle>{title}</TicketTitle>
-      </View>
+      <Draggable draggableId={pk} index={position}>
+        {(provided, { isDragging }) => (
+          <View
+            forwardedAs={Link}
+            classNames={[className, { isDragging }]}
+            to={to}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <TicketTitle>{title}</TicketTitle>
+          </View>
+        )}
+      </Draggable>
     )
   }
 )
@@ -36,6 +39,7 @@ export default styled(Ticket)`
   border-radius: var(--border-radius);
   border: 2px solid transparent;
   padding: 10px;
+  margin-bottom: 12px;
   transition-property: border-color, color, opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
@@ -44,6 +48,7 @@ export default styled(Ticket)`
   text-decoration: none;
   outline: none;
 
+  &.isDragging,
   &:hover,
   &:focus {
     border-color: var(--primary);
