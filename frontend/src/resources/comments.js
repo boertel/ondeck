@@ -1,46 +1,25 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useQuery, useMutation, queryCache } from 'react-query'
-import api from './api'
+import useSWR, { mutate } from 'swr'
+import { update } from './api'
 
 
-const getPath = ({ workspaceSlug, boardSlug, ticketSlug, commentId }) => {
-  let method = 'post'
-  let path = ['', 'workspaces', workspaceSlug]
-  if (commentId) {
-    method = 'patch'
-    return {
-      path: path.concat(['comments', commentId, '']).join('/'),
-      method,
-    }
+export const useComments = (params) => {
+  let key = null
+  if (params) {
+    const { workspaceSlug, boardSlug, ticketSlug } = params
+    key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/comments/`
   }
-  path = path.concat(['boards', boardSlug, 'tickets', ticketSlug, 'comments', ''])
-  return {
-    path: path.join('/'),
-    method,
-  }
+  return useSWR(key)
 }
 
-const get = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(path)
-  return data
-}
-
-const createOrUpdate = async (params, variables) => {
-  const { path, method } = getPath(params)
-  const { data } = await api[method](path, variables)
-  return data
-}
-
-export const useComments = params => {
-  return useQuery(['comments', params], get, { enabled: params.ticketSlug })
-}
-
-export const mutateComment = params => {
-  const mutateFn = async (data) => await createOrUpdate(params, data)
-  return useMutation(mutateFn, {
-    onSuccess: (data, variables) => {
-      queryCache.invalidateQueries(['comments', params])
+export const mutateComment = ({ workspaceSlug, boardSlug, ticketSlug }, data) => {
+  const commentsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/comments/`
+  mutate(commentsKey, async comments => {
+    const [comment, created ] = await update(commentsKey, data)
+    if (created) {
+      return [comment, ...comments]
+    } else {
+      return comments.map(previous => previous.id === comment.id ? comment : previous)
     }
   })
 }

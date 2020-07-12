@@ -1,9 +1,9 @@
 import Column from './Column'
-import ColumnTitle from './ColumnTitle'
+import ColumnHeader from './ColumnHeader'
 
 
 export {
-  ColumnTitle,
+  ColumnHeader,
 }
 
 export default Column

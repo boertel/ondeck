@@ -1,64 +1,32 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useMutation, useQuery, queryCache } from 'react-query'
+import useSWR, { mutate } from 'swr'
+import { update, remove } from './api'
 
-import api from './api'
-
-const getPath = ({ workspaceSlug, boardSlug, }) => {
-  let method = 'post'
-  let path = ['', 'workspaces', workspaceSlug, 'boards']
+export const useBoards = ({ workspaceSlug, boardSlug }) => {
+  let key = `/workspaces/${workspaceSlug}/boards/`
   if (boardSlug) {
-    path.push(boardSlug)
-    method = 'patch'
+    key = `${key}${boardSlug}/`
   }
-  path.push('')
-  return {
-    path: path.join('/'),
-    method,
-  }
+  return useSWR(key)
 }
 
-
-const get = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(path)
-  return data
+export const mutateBoard = ({ workspaceSlug }, data) => {
+  const key = `/workspaces/${workspaceSlug}/boards/`
+  return mutate(
+    key,
+    async boards => {
+      const [board, created] = await update(key, data)
+      if (created) {
+        return [...boards, board]
+      }
+    },
+    false
+  )
 }
 
-const createOrUpdate = async (params, variables) => {
-  const { path, method } = getPath(params)
-  const { data } = await api[method](path, variables)
-  return data
+export const deleteBoard = ({ workspaceSlug, boardSlug }) => {
+  const boardsKey = `/worksaces/${workspaceSlug}/boards/`
+  const boardKey = `${boardsKey}${boardSlug}/`
+  mutate(boardsKey, boards => boards.filter(({ slug }) => slug !== boardSlug), false)
+  return mutate(boardKey, remove(boardKey))
 }
-
-const _delete = async (params) => {
-  const { path } = getPath(params)
-  await api.delete(path)
-  return {}
-}
-
-export const useBoards = (params) => {
-  return useQuery(['boards', params], get)
-}
-
-export const mutateBoard = (params) => {
-  const mutateFn = async data => await createOrUpdate(params, data)
-  return useMutation(mutateFn, {
-    onSuccess: () => {
-      queryCache.invalidateQueries(['boards', params])
-    }
-  })
-}
-
-export const deleteBoard = (params) => {
-  const mutateFn = async data => _delete(params)
-  return useMutation(mutateFn, {
-    onSuccess: () => {
-      console.log(params)
-      queryCache.removeQueries(['boards', params], { exact: true })
-      queryCache.removeQueries(['tickets', params], { exact: true })
-      queryCache.removeQueries(['columns', params], { exact: true })
-      queryCache.refetchQueries(['boards', { workspaceSlug: params.workspaceSlug }])
-    }
-  })
-}
-

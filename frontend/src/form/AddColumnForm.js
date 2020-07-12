@@ -8,14 +8,13 @@ import useShortcut from '../hooks/useShortcut'
 
 function AddColumnForm({ name, id, cancel }) {
   const { workspaceSlug, boardSlug } = useParams()
-  const [mutate] = mutateColumn({ workspaceSlug, boardSlug })
 
   const isEditing = !!id
 
   const { Form, reset } = useForm({
     defaultValues: useMemo(() => ({ name, id }), [name, id]),
     onSubmit: async (values, instance) => {
-      await mutate(values)
+      mutateColumn({ workspaceSlug, boardSlug }, values)
       if (!isEditing) {
         reset()
       }

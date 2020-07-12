@@ -37,16 +37,15 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
     [title, description, paramColumn, id, parent, members]
   )
 
-  const [mutate] = mutateTicket({ workspaceSlug, boardSlug, ticketSlug })
   const {
     Form,
-    meta: { canSubmit, isSubmitting, isTouched,isSubmitted },
+    meta: { canSubmit, isSubmitting, isTouched, isSubmitted },
     handleSubmit,
   } = useForm({
     defaultValues,
     onSubmit: async (values, { reset }) => {
       try {
-        await mutate(values)
+        mutateTicket({ workspaceSlug, boardSlug, ticketSlug }, values)
         onSubmit()
       } catch (exception) {
         console.error(exception)
@@ -67,9 +66,8 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
   const isEditing = !!id
   const back = `/workspaces/${workspaceSlug}/${boardSlug}`
 
-  const [remove] = deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
   const onDelete = async () => {
-    await remove(id)
+    deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
     navigate(back)
   }
   return (

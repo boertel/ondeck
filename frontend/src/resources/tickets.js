@@ -1,56 +1,24 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useQuery, useMutation, queryCache } from 'react-query'
-import api from './api'
+import { sortBy } from 'lodash'
+import useSWR, { mutate } from 'swr'
+import { update, remove } from './api'
 
-const getPath = ({ workspaceSlug, boardSlug, ticketSlug }) => {
-  let method = 'post'
-  let path = ['', 'workspaces', workspaceSlug]
-  if (boardSlug) {
-    path = path.concat(['boards', boardSlug])
-  }
-  path.push('tickets')
+
+export const useTickets = ({ workspaceSlug, boardSlug, ticketSlug }) => {
+  let key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
   if (ticketSlug) {
-    path.push(ticketSlug)
-    method = 'patch'
+    key += `${ticketSlug}/`
   }
-  path.push('')
-  return {
-    path: path.join('/'),
-    method,
+  return useSWR(key)
+}
+
+export const useTicketVersions = (params) => {
+  let key = null
+  if (params !== null) {
+    const { workspaceSlug, boardSlug, ticketSlug } = params
+    key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/`
   }
-}
-
-const get = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(path)
-  return data
-}
-
-const getTicketVersions = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(`${path}versions/`)
-  return data
-}
-
-const createOrUpdate = async (params, variables) => {
-  // TODO not clean
-  const { path, method } = getPath({ ...params, ticketSlug: variables.pk || params.ticketSlug })
-  const { data } = await api[method](path, variables)
-  return data
-}
-
-const _delete = async params => {
-  const { path } = getPath(params)
-  await api.delete(path)
-  return {}
-}
-
-export const useTickets = params => {
-  return useQuery(['tickets', params], get)
-}
-
-export const useTicketVersions = params => {
-  return useQuery(['versions', params], getTicketVersions, { enabled: params.ticketSlug })
+  return useSWR(key, { initialData: [] })
 }
 
 const reorder = (list, startIndex, endIndex) => {
@@ -60,43 +28,62 @@ const reorder = (list, startIndex, endIndex) => {
   return result
 }
 
-export const mutateTicket = params => {
-  const mutateFn = async ({ fromBoardSlug, ...data }) => await createOrUpdate(params, data)
-  return useMutation(mutateFn, {
-    onSuccess: (data, variables) => {
-      const query = {
-        workspaceSlug: params.workspaceSlug,
-        boardSlug: params.boardSlug || variables.fromBoardSlug,
-        ticketSlug: params.ticketSlug,
+export const mutateTicket = async ({ workspaceSlug, boardSlug, ticketSlug }, data) => {
+  let ticketsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
+  let path = ticketsKey
+  if (ticketSlug) {
+    path = `${path}${ticketSlug}/`
+  }
+
+  // Local mutate for drag and drop
+  await mutate(ticketsKey, tickets => {
+    const oldTicket = tickets.find(({ pk }) => pk === ticketSlug)
+    if (data.position !== undefined || data.column !== undefined) {
+      // ticket has moved
+      let newOrder = []
+      const ticketsInColumn = sortBy(tickets.filter(previous => previous.column === (data.column === undefined ? oldTicket.column : data.column)), 'position')
+      if (data.column !== oldTicket.column) {
+        newOrder = ticketsInColumn.splice(data.position, 0, {...oldTicket, column: data.column, position: data.position, })
+      } else if (data.position !== oldTicket.position) {
+        newOrder = reorder(ticketsInColumn, oldTicket.position, data.position)
       }
-      const { pk, position, column } = variables
-      if (position !== undefined) {
-        queryCache.setQueryData(['tickets', query], function (previous) {
-          const old = previous.find(ticket => pk === ticket.pk)
-          if (position !== undefined) {
-            const ticketsInColumn = previous.filter(ticket => ticket.column === column)
-            if (column === old.column) {
-              return reorder(ticketsInColumn, old.position, position).map((ticket, index) => ({
-                ...ticket,
-                position: index,
-              }))
-            } else {
-              return ticketsInColumn.splice(position, 0, {...old, position, })
-            }
+
+      const output = tickets.map(previous => {
+        const index = newOrder.indexOf(previous)
+        if (index !== -1) {
+          return {
+            ...previous,
+            position: index,
           }
+        } else {
           return previous
-        })
-      }
-      queryCache.invalidateQueries(['tickets', query])
-    },
-  })
+        }
+      })
+      return output
+    } else {
+      return tickets
+    }
+  }, false)
+
+  await mutate(ticketsKey, async tickets => {
+    const [ticket, created] = await update(path, data, { method: ticketSlug ? 'patch' : 'post' })
+    if (created) {
+      return [...tickets, ticket]
+    } else {
+      return tickets.map(previous => {
+        if (previous.id === ticket.id) {
+          return ticket
+        } else {
+          return previous
+        }
+      })
+    }
+  }, false)
 }
 
-export const deleteTicket = params => {
-  const mutateFn = async data => await _delete(params)
-  return useMutation(mutateFn, {
-    onSuccess: () => {
-      queryCache.removeQueries(['tickets', params], { exact: true })
-    },
-  })
+export const deleteTicket = ({ workspaceSlug, boardSlug, ticketSlug, }) => {
+  const ticketsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
+  const ticketKey = `${ticketsKey}${ticketSlug}/`
+  mutate(ticketsKey, columns => columns.filter(({ pk }) => pk !== ticketSlug), false)
+  return mutate(ticketKey, remove(ticketKey))
 }

@@ -1,77 +1,35 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useQuery, useMutation, queryCache, } from 'react-query'
-import api from './api'
+import useSWR, { mutate } from 'swr'
+import { update, remove } from './api'
 
-const getPath = ({ workspaceSlug, boardSlug, pk }) => {
-  let method = 'post'
-  let path = ['', 'workspaces', workspaceSlug, 'boards', boardSlug, 'columns']
-  if (pk) {
-    path.push(pk)
-    method = 'patch'
+
+export const useColumns = ({ workspaceSlug, boardSlug }) => {
+  return useSWR(`/workspaces/${workspaceSlug}/boards/${boardSlug}/columns/`)
+}
+
+export const mutateColumn = ({ workspaceSlug, boardSlug }, data) => {
+  const columnsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/columns/`
+  let path = columnsKey
+  if (data.id) {
+    path = `${path}${data.id}/`
   }
-  path.push('')
-  return {
-    path: path.join('/'),
-    method,
-  }
-}
-
-
-const get = async (key, params) => {
-  const { path } = getPath(params)
-  const { data } = await api.get(path)
-  return data
-}
-
-const createOrUpdate = async (params, variables) => {
-  const pk = variables.id
-  const { path, method } = getPath({ ...params, pk })
-  const { data } = await api[method](path, variables)
-  return data
-}
-
-const _delete = async (params, pk) => {
-  const { path } = getPath({ ...params, pk })
-  await api.delete(path)
-}
-
-export const useColumns = (params) => {
-  return useQuery(['columns', params], get)
-}
-
-
-export const mutateColumn = (params) => {
-  const mutateFn = async data => await createOrUpdate(params, data)
-  return useMutation(mutateFn, {
-    onSuccess: (data, variables) => {
-      const key = ['columns', params]
-      if (variables.id) {
-        queryCache.setQueryData(key, old => {
-          return old.map(column => {
-            if (column.id === variables.id) {
-              return data
-            }
-            return column
-          })
-        })
+  return mutate(
+    columnsKey,
+    async columns => {
+      const [column, created] = await update(path, data)
+      if (created) {
+        return [...columns, column]
       } else {
-        queryCache.setQueryData(key, old => {
-          console.log(key, old)
-          return old.concat([data])
-        })
+        return columns.map(previous => (previous.id === column.id ? column : previous))
       }
-    }
-  })
+    },
+    false
+  )
 }
 
-export const deleteColumn = (params) => {
-  const mutateFn = async pk => _delete(params, pk)
-  return useMutation(mutateFn, {
-    onSuccess: (data, pk) => {
-      const key = ['columns', params]
-      queryCache.setQueryData(key, old => {
-        return old.filter(({ id }) => id !== pk)
-      })
-    }
-  })
+export const deleteColumn = ({ workspaceSlug, boardSlug, columnId, }) => {
+  const columnsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/columns/`
+  const columnKey = `${columnsKey}${columnId}/`
+  mutate(columnsKey, columns => columns.filter(({ id }) => id !== columnId), false)
+  return mutate(columnKey, remove(columnKey))
 }

@@ -14,9 +14,8 @@ const Board = props => {
 
   const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })
   const { data: columns = [] } = useColumns({ workspaceSlug, boardSlug, ticketSlug })
-  const { data: tickets } = useTickets({ workspaceSlug, boardSlug, ticketSlug })
+  const { data: tickets, } = useTickets({ workspaceSlug, boardSlug, })
 
-  const [mutate] = mutateTicket({ workspaceSlug, boardSlug })
 
   const [showAddColumnForm, setShowAddColumnForm] = useState(false)
 
@@ -28,13 +27,12 @@ const Board = props => {
   const onDragEnd = useCallback(function({ draggableId, type, source, destination }) {
     if (type === 'TICKET' && !isEqual(source, destination)) {
       const data = {
-        pk: draggableId,
         column: parseInt(destination.droppableId, 10),
         position: destination.index,
       }
-      mutate(data)
+      mutateTicket({ workspaceSlug, boardSlug, ticketSlug: draggableId }, data)
     }
-  }, [mutate])
+  }, [workspaceSlug, boardSlug])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

@@ -8,7 +8,6 @@ import { mutateBoard } from '../resources/boards'
 
 function AddBoardForm({ name }) {
   const { workspaceSlug, boardSlug } = useParams()
-  const [mutate] = mutateBoard({ workspaceSlug, boardSlug })
 
   const navigate = useNavigate()
 
@@ -18,8 +17,9 @@ function AddBoardForm({ name }) {
   } = useForm({
     defaultValues: useMemo(() => ({ name, }), [name]),
     onSubmit: async (values, instance) => {
-      const { slug } = await mutate(values)
+      const boards = mutateBoard({ workspaceSlug, }, values)
       if (!boardSlug) {
+        const { slug } = boards[boards.length - 1]
         reset()
         navigate(`/workspaces/${workspaceSlug}/${slug}`)
       }

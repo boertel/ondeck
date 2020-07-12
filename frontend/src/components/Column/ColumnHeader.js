@@ -2,22 +2,21 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Button } from '../../ui'
-import { TrashIcon } from '../../ui/icons'
+import { TrashIcon, PopoverIcon } from '../../ui/icons'
 import { AddColumnForm } from '../../form'
 import { deleteColumn } from '../../resources/columns'
 
-function ColumnTitle({ name, id, children, ...props }) {
+function ColumnHeader({ name, id, children, ...props }) {
   const { workspaceSlug, boardSlug } = useParams()
-  const [removeColumn] = deleteColumn({ workspaceSlug, boardSlug })
+  const onClick = () => deleteColumn({ workspaceSlug, boardSlug, columnId: id})
   return (
     <>
       <AddColumnForm name={name} id={id} />
       {children}
-      <Button onClick={() => removeColumn(id)}>
-        <TrashIcon />
-      </Button>
+      <PopoverIcon />
+      {/*<Button onClick={onClick}> <TrashIcon /> </Button>*/}
     </>
   )
 }
 
-export default ColumnTitle
+export default ColumnHeader

@@ -7,19 +7,16 @@ import { mutateTicket, } from '../../resources/tickets'
 
 function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...props }) {
   const { workspaceSlug, } = useParams()
-  const params = {
-    workspaceSlug,
-  }
-  const [mutate] = mutateTicket(params)
 
   const onDrop = useCallback(
     async ({ pk, fromBoardSlug }) => {
-      await mutate({
+      const data = {
         pk,
         board: boardId,
-      })
+      }
+      mutateTicket({ workspaceSlug }, data)
     },
-    [boardId, mutate]
+    [boardId]
   )
 
   const accept = ['TICKET']

@@ -37,7 +37,7 @@ const Version = ({ at, by, changes }) => {
 const Versions = ({ ticket }) => {
   const hasChanges = !moment(ticket.created_at).isSame(ticket.updated_at, 'seconds')
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
-  const { data: versions } = useTicketVersions(hasChanges && { workspaceSlug, boardSlug, ticketSlug })
+  const { data: versions } = useTicketVersions(hasChanges ? { workspaceSlug, boardSlug, ticketSlug } : null)
   // TODO initial data? to avoid (versions || []) later
 
   return (

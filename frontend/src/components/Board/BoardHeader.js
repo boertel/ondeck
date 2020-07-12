@@ -10,10 +10,9 @@ import AddBoardForm from '../../form/AddBoardForm'
 const BoardHeader = ({ className, name, slug, onAddColumn, id, ...props }) => {
   const navigate = useNavigate()
   const { workspaceSlug } = useParams()
-  const [ remove ] = deleteBoard({ workspaceSlug, boardSlug: slug })
   const onDelete = async () => {
     if (window.confirm(`Are you sure to remove board: ${name}?`)) {
-      await remove()
+      deleteBoard({ workspaceSlug, boardSlug: slug })
       navigate(`/workspaces/${workspaceSlug}`)
     }
   }

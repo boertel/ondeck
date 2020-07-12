@@ -8,7 +8,6 @@ import { mutateComment } from '../resources/comments'
 
 function AddCommentForm({ message }) {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
-  const [mutate] = mutateComment({ workspaceSlug, boardSlug, ticketSlug })
 
   const {
     Form,
@@ -16,7 +15,7 @@ function AddCommentForm({ message }) {
   } = useForm({
     defaultValues: useMemo(() => ({ message, }), [message]),
     onSubmit: async (values, instance) => {
-      await mutate(values)
+      await mutateComment({ workspaceSlug, boardSlug, ticketSlug }, values)
       reset()
     },
   })

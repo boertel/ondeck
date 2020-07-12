@@ -8,11 +8,9 @@ import { InputField } from './fields'
 import { mutateTicket } from '../resources/tickets'
 import useShortcut from '../hooks/useShortcut'
 
-
 const AddQuickTicketForm = ({ title, column }) => {
   const { workspaceSlug, boardSlug } = useParams()
   const navigate = useNavigate()
-  const [mutate] = mutateTicket({ workspaceSlug, boardSlug })
 
   const defaultValues = useMemo(() => ({ title }), [title])
 
@@ -20,10 +18,10 @@ const AddQuickTicketForm = ({ title, column }) => {
     defaultValues,
     onSubmit: async (values, { reset, meta }) => {
       try {
-        const data = await mutate({ ...values, column })
+        await mutateTicket({ workspaceSlug, boardSlug }, { ...values, column })
         reset()
         if (meta.onSuccess) {
-          meta.onSuccess(data)
+         //meta.onSuccess(data)
         }
       } catch (exception) {
         console.error(exception)
@@ -33,20 +31,23 @@ const AddQuickTicketForm = ({ title, column }) => {
 
   const ref = useRef()
 
-  useShortcut({
-    // TODO useCallback on these functions?
-    'enter': (evt) => {
-      handleSubmit()
-      evt.preventDefault()
+  useShortcut(
+    {
+      // TODO useCallback on these functions?
+      enter: evt => {
+        handleSubmit()
+        evt.preventDefault()
+      },
+      'meta+enter': () => {
+        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description' } }) }))
+        handleSubmit()
+      },
+      escape: () => {
+        reset()
+      },
     },
-    'meta+enter': () => {
-      setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description' } }) }))
-      handleSubmit()
-    },
-    'escape': () => {
-      reset()
-    },
-  }, ref)
+    ref
+  )
 
   return (
     <Form>

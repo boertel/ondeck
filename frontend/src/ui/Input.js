@@ -29,6 +29,10 @@ export default styled(Input)`
 
   margin-bottom: 12px;
 
+  &:first-child:last-child {
+    margin-bottom: 0;
+  }
+
   & > label {
     display: inline-flex;
     margin-bottom: 6px;
