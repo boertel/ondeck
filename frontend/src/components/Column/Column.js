@@ -32,7 +32,7 @@ function Column({ id: columnId, name, index, className, tickets = [], ...props }
             )}
           </Droppable>
           <Sticky>
-            <AddQuickTicketForm column={columnId} />
+            <AddQuickTicketForm column={columnId} isFirst={index === 0} />
           </Sticky>
         </View>
       )}

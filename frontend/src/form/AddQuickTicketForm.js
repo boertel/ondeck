@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useCallback, useRef, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-form'
 
@@ -8,7 +8,7 @@ import { InputField } from './fields'
 import { mutateTicket } from '../resources/tickets'
 import useShortcut from '../hooks/useShortcut'
 
-const AddQuickTicketForm = ({ title, column }) => {
+const AddQuickTicketForm = ({ title, column, isFirst, }) => {
   const { workspaceSlug, boardSlug } = useParams()
   const navigate = useNavigate()
 
@@ -43,10 +43,26 @@ const AddQuickTicketForm = ({ title, column }) => {
         handleSubmit()
       },
       escape: () => {
+        if (ref.current.value.length === 0) {
+          ref.current.blur()
+        }
         reset()
       },
     },
     ref
+  )
+
+  const insertShortcut = useCallback(function (evt) {
+    if (isFirst && !['INPUT', 'TEXTAREA'].includes(evt.target.tagName)) {
+      ref.current.focus()
+      evt.preventDefault()
+    }
+  }, [isFirst])
+
+  useShortcut(
+    {
+      'i': insertShortcut
+    }
   )
 
   return (
