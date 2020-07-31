@@ -16,7 +16,7 @@ export const useTicketVersions = (params) => {
   let key = null
   if (params !== null) {
     const { workspaceSlug, boardSlug, ticketSlug } = params
-    key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/`
+    key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/versions/`
   }
   return useSWR(key, { initialData: [] })
 }
