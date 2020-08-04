@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Routes, Route, useParams } from 'react-router-dom'
+import { useNavigate, Routes, Route, useParams } from 'react-router-dom'
 
 import useModal from '../../hooks/useModal'
 import { Sidebar, Input, View } from '../../ui'
@@ -8,19 +8,29 @@ import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
 import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'
 import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
-import CommandKModal from '../../modals/CommandKModal'
 import { AddBoardForm } from '../../form'
-import Workspaces from './Workspaces'
 import UserMenu from '../User/UserMenu'
+import Command from '../../components/Command'
 
-import { useBoards, } from '../../resources'
+import { useBoards } from '../../resources'
+
 
 function Workspace({ className }) {
   const { workspaceSlug } = useParams()
 
   const { data: boards } = useBoards({ workspaceSlug })
 
-  const [openModal] = useModal(CommandKModal)
+  const navigate = useNavigate()
+
+  const options = (boards || []).map((board, index) => ({
+    name: board.name,
+    subtitle: 'board',
+    shortcut: `b ${index + 1}`,
+    callback: () => {
+      navigate(`/workspaces/${workspaceSlug}/${board.slug}`)
+      return { isOpen: false, query: '', activeIndex: 0, focused: null }
+    },
+  }))
 
   return (
     <div className={className}>
@@ -28,18 +38,19 @@ function Workspace({ className }) {
         <View flexDirection="column">
           <SidebarMenu>
             <SidebarMenuItem>
-              <div>
-                <Workspaces workspaceSlug={workspaceSlug} />
-              </div>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <Input
-                type="search"
-                className="transparent full-width"
-                placeholder="Search..."
-                icon={SearchIcon}
-                onClick={openModal}
-              />
+              {options.length > 0 && (
+                <Command placeholder="Search for a board or ticket...">
+                  {({ dispatch }) => (
+                    <Input
+                      type="search"
+                      className="transparent full-width"
+                      placeholder="Search..."
+                      onClick={() => dispatch({ type: 'open' })}
+                      icon={SearchIcon}
+                    />
+                  )}
+                </Command>
+              )}
             </SidebarMenuItem>
           </SidebarMenu>
           <SidebarMenu>

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from search import get_registered_models, add_to_search
+from search.register import get_registered_models, add_to_search
 
 
 class Command(BaseCommand):

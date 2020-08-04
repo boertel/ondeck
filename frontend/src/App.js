@@ -9,6 +9,7 @@ import { Manager as PopperManager } from 'react-popper'
 import Routes from './Routes'
 import Favicon from './ui/Favicon'
 import theme, { GlobalStyle } from './theme'
+import { CommandQuery } from './components/Command'
 
 const App = () => {
   return (
@@ -19,7 +20,9 @@ const App = () => {
         <PopperManager>
           <DndProvider backend={HTML5Backend}>
             <ModalProvider>
-              <Routes />
+              <CommandQuery>
+                <Routes />
+              </CommandQuery>
             </ModalProvider>
           </DndProvider>
         </PopperManager>
