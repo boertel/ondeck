@@ -1,27 +1,29 @@
-import React, { useMemo, useState, useContext } from 'react'
+import React, { useCallback } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import CmdK from 'cmdk'
 import 'cmdk/dist/cmdk.cjs.development.css'
 
-export const CommandContext = React.createContext({})
-export const CommandQuery = (props) => {
-  const [options, setOptions] = useState({})
-  const value = useMemo(() => ({
-    options,
-    set: function(data) {
-      setOptions(prev => ({
-        ...prev,
-        ...data,
-      }))
-    }
-  }), [options])
-  return <CommandContext.Provider {...props} value={value} />
+import { BoardIcon, TicketIcon, WorkspaceIcon } from '../../ui/icons'
+import { search } from '../../resources/api'
+
+const ICONS = {
+  board: BoardIcon,
+  ticket: TicketIcon,
+  workspace: WorkspaceIcon,
 }
 
-export const useCommand = () => useContext(CommandContext)
-
-const Command = (props) => {
-  const { options } = useCommand()
-  return Object.keys(options).length > 0 ? <CmdK {...props} options={Object.values(options)} /> : props.children({})
+const Command = props => {
+  const navigate = useNavigate()
+  const { workspaceSlug } = useParams()
+  const getOptions = useCallback(
+    q => {
+      return search
+        .get('/query/', { params: { q, workspace: workspaceSlug } })
+        .then(({ data }) => data.results.map(result => ({ ...result, icon: ICONS[result.subtitle], callback: () => navigate(result.to) })))
+    },
+    [navigate, workspaceSlug]
+  )
+  return <CmdK {...props} getOptions={getOptions} />
 }
 
 export default Command

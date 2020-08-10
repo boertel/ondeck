@@ -17,8 +17,8 @@ import reversion
 # b = Board.objects.create(name="Parking Lot", slug="parking-lot", workspace=w)
 
 
-def search_tickets_uid(workspace):
-    return "workspace-{}-tickets".format(workspace.pk)
+def search_workspace_uid(workspace):
+    return "workspace-{}".format(workspace.pk)
 
 
 class User(AbstractUser):
@@ -59,7 +59,7 @@ class Workspace(models.Model):
     # TODO protected slug (actions)
 
     def search(self, query):
-        return search.query(search_tickets_uid(self), query)
+        return search.query(search_workspace_uid(self), query)
 
     def __str__(self):
         return "{} ({})".format(self.slug, self.pk)
@@ -157,12 +157,18 @@ class Ticket(models.Model):
         return "{}-{}".format(self.board.workspace.key, self.index)
 
 
+"""
+search.register(
+    Board,
+    ("name", "slug",),
+    uid: lambda instance: search_worksace_uid(instance.workspace)
+)
+"""
 search.register(
     Ticket,
     ("title", "description", "key", "board__slug", "pk"),
-    exclude=("board_id",),
     distinct="key",
-    uid=lambda instance: search_tickets_uid(instance.board.workspace),
+    uid=lambda instance: search_workspace_uid(instance.board.workspace),
 )
 
 

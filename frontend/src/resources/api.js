@@ -8,6 +8,11 @@ const options = {
 
 export const upload = axios.create(options)
 
+export const search = axios.create({
+  ...options,
+  baseURL: '/command/',
+})
+
 
 const api = axios.create({
   ...options,

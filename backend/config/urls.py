@@ -20,6 +20,7 @@ from django.conf import settings
 from ondeck import urls
 from identity import urls as identity_urls
 from upload import urls as upload_urls
+from command import urls as command_urls
 
 from web.views import index
 
@@ -28,6 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("identity/", include(identity_urls)),
     path("upload/", include(upload_urls)),
+    path("command/", include(command_urls)),
 ]
 
 if settings.DEBUG:
