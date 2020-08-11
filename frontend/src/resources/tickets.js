@@ -65,8 +65,8 @@ export const mutateTicket = async ({ workspaceSlug, boardSlug, ticketSlug }, dat
     }
   }, false)
 
+  const [ticket, created] = await update(path, data, { method: ticketSlug ? 'patch' : 'post' })
   await mutate(ticketsKey, async tickets => {
-    const [ticket, created] = await update(path, data, { method: ticketSlug ? 'patch' : 'post' })
     if (created) {
       return [...tickets, ticket]
     } else {
@@ -79,6 +79,7 @@ export const mutateTicket = async ({ workspaceSlug, boardSlug, ticketSlug }, dat
       })
     }
   }, false)
+  return ticket
 }
 
 export const deleteTicket = ({ workspaceSlug, boardSlug, ticketSlug, }) => {

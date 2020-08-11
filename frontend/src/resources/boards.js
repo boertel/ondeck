@@ -10,18 +10,15 @@ export const useBoards = ({ workspaceSlug, boardSlug }) => {
   return useSWR(key)
 }
 
-export const mutateBoard = ({ workspaceSlug }, data) => {
+export const mutateBoard = async ({ workspaceSlug }, data) => {
   const key = `/workspaces/${workspaceSlug}/boards/`
-  return mutate(
-    key,
-    async boards => {
-      const [board, created] = await update(key, data)
-      if (created) {
-        return [...boards, board]
-      }
-    },
-    false
-  )
+  const [board, created] = await update(key, data)
+  await mutate(key, async boards => {
+    if (created) {
+      return [...boards, board]
+    }
+  }, false)
+  return board
 }
 
 export const deleteBoard = ({ workspaceSlug, boardSlug }) => {

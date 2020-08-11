@@ -18,10 +18,10 @@ const AddQuickTicketForm = ({ title, column, isFirst, }) => {
     defaultValues,
     onSubmit: async (values, { reset, meta }) => {
       try {
-        await mutateTicket({ workspaceSlug, boardSlug }, { ...values, column })
+        const data = await mutateTicket({ workspaceSlug, boardSlug }, { ...values, column })
         reset()
         if (meta.onSuccess) {
-         //meta.onSuccess(data)
+         meta.onSuccess(data)
         }
       } catch (exception) {
         console.error(exception)
@@ -39,7 +39,10 @@ const AddQuickTicketForm = ({ title, column, isFirst, }) => {
         evt.preventDefault()
       },
       'meta+enter': () => {
-        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => navigate(pk, { state: { focus: 'description' } }) }))
+        setMeta(meta => ({ ...meta, onSuccess: ({ pk }) => {
+          console.log(pk)
+          navigate(pk, { state: { focus: 'description' } }) }
+        }))
         handleSubmit()
       },
       escape: () => {

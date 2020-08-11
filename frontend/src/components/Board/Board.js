@@ -13,9 +13,10 @@ const Board = props => {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
   const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })
-  const { data: columns = [] } = useColumns({ workspaceSlug, boardSlug, ticketSlug })
+  const { data: columns, errors } = useColumns({ workspaceSlug, boardSlug, ticketSlug })
   const { data: tickets, } = useTickets({ workspaceSlug, boardSlug, })
 
+  const isLoading = !columns && !errors
 
   const [showAddColumnForm, setShowAddColumnForm] = useState(false)
 
@@ -40,10 +41,10 @@ const Board = props => {
       <Droppable droppableId="board" type="COLUMN" direction="horizontal">
         {(provided) => (
           <Columns ref={provided.innerRef} {...provided.droppableProps}>
-            {columns.map(({ id, name }, index) => (
+            {(columns || []).map(({ id, name }, index) => (
               <Column key={id} id={id} index={index} tickets={ticketsGroupByColumns[id]} name={name} />
             ))}
-            {(columns.length === 0 || showAddColumnForm) && (
+            {(!isLoading && (columns.length === 0 || showAddColumnForm)) && (
               <View>
                 <AddColumnForm cancel={() => setShowAddColumnForm(false)} />
               </View>
