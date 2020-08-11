@@ -6,6 +6,7 @@
     "@popperjs/core": "^2.1.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "history": "^5.0.0",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "marked": "^0.8.0",
@@ -22,9 +23,8 @@
     "react-helmet": "^5.2.1",
     "react-modal": "^3.11.1",
     "react-popper": "^2.0.0",
-    "react-query-devtools": "^1.0.13",
-    "react-router": "6.0.0-alpha.5",
-    "react-router-dom": "6.0.0-alpha.5",
+    "react-router": "6.0.0-beta.0",
+    "react-router-dom": "^6.0.0-beta.0",
     "react-select": "^3.1.0",
     "react-textarea-autosize": "^8.0.1",
     "styled-components": "^5.0.0",
@@ -32,12 +32,6 @@
     "uuid": "^7.0.2"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.3.17",
-    "@storybook/addon-knobs": "^5.3.17",
-    "@storybook/addon-links": "^5.3.17",
-    "@storybook/addons": "^5.3.17",
-    "@storybook/preset-create-react-app": "^2.0.0",
-    "@storybook/react": "^5.3.17",
     "prettier": "^2.0.0",
     "react-scripts": "3.4.1",
     "styled-components.macro": "^1.0.0"
@@ -46,9 +40,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

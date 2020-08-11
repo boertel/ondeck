@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 
 //const SidebarMenuItem = ({ to, className, ...rest }) => {
 const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
-  // TODO let see if react-router-v6 useMatch supports "not exact" match
   const children = to ? (
     <NavLink to={to} activeClassName="active">
       {rest.children}

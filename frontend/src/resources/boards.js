@@ -17,12 +17,13 @@ export const mutateBoard = async ({ workspaceSlug }, data) => {
     if (created) {
       return [...boards, board]
     }
+    return boards
   }, false)
   return board
 }
 
 export const deleteBoard = ({ workspaceSlug, boardSlug }) => {
-  const boardsKey = `/worksaces/${workspaceSlug}/boards/`
+  const boardsKey = `/workspaces/${workspaceSlug}/boards/`
   const boardKey = `${boardsKey}${boardSlug}/`
   mutate(boardsKey, boards => boards.filter(({ slug }) => slug !== boardSlug), false)
   return mutate(boardKey, remove(boardKey))

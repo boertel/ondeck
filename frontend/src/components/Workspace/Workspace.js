@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { useNavigate, Routes, Route, useParams } from 'react-router-dom'
 
-import useModal from '../../hooks/useModal'
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
 import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'
@@ -27,7 +26,7 @@ function Workspace({ className }) {
     subtitle: 'board',
     shortcut: `b ${index + 1}`,
     callback: () => {
-      navigate(`/workspaces/${workspaceSlug}/${board.slug}`)
+      navigate(`/workspaces/${workspaceSlug}/${board.slug}/`)
       return { isOpen: false, query: '', activeIndex: 0, focused: null }
     },
   }))
@@ -65,7 +64,7 @@ function Workspace({ className }) {
                 <h5>Boards</h5>
               </SidebarMenuItem>
               {boards.map(({ name, slug, id }) => (
-                <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}`}>
+                <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}/`}>
                   <BoardIcon />
                   {name}
                 </BoardMenuItem>
