@@ -93,7 +93,14 @@ export default styled(Input)`
     select {
       border-color: transparent;
       background-color: transparent;
+      transition-property: background-color;
+      transition-duration: .2s;
+      transition-timing-function: ease-in-out;
+      &:hover, &:focus {
+        background-color: var(--fg);
+      }
     }
+
 
     .input {
       color: var(--placeholder);

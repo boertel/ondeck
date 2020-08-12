@@ -40,7 +40,7 @@ export default styled(Ticket)`
   border: 2px solid transparent;
   padding: 10px;
   margin-bottom: 12px;
-  transition-property: border-color, color, opacity;
+  transition-property: border-color, color, background-color, opacity;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
 
@@ -52,6 +52,7 @@ export default styled(Ticket)`
   &:hover,
   &:focus {
     border-color: var(--primary);
+    background-color: var(--primary-hover);
     outline: none;
     text-decoration: none;
   }
