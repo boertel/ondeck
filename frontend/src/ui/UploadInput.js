@@ -15,7 +15,7 @@ const handleUpload = async (file, { dispatch }) => {
     path: 'uploads',
   }
 
-  const response = await upload.get('/upload', { params })
+  const response = await upload.get('/upload/', { params })
   const { signedUrl, src, contentType } = response.data
 
   dispatch({

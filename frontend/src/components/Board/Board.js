@@ -9,7 +9,8 @@ import Column from '../Column'
 import { AddColumnForm } from '../../form'
 import { useColumns, useTickets, useBoards, mutateTicket } from '../../resources'
 
-const Board = props => {
+
+const Board = ({ zoom, ...props }) => {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
   const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })

@@ -16,7 +16,7 @@ function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...prop
       }
       mutateTicket({ workspaceSlug }, data)
     },
-    [boardId]
+    [boardId, workspaceSlug]
   )
 
   const accept = ['TICKET']

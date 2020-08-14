@@ -269,6 +269,7 @@ export default styled(MyEditor)`
     }
     img {
       max-height: 700px;
+      width: 100%;
     }
   }
 `

@@ -5,7 +5,6 @@ import { SWRConfig } from 'swr'
 import { fetcher } from './resources/api'
 import Workspace, { Workspaces } from './components/Workspace'
 import { Login } from './components/Auth'
-import { BoardIcon } from './ui/icons'
 
 
 export default () => {

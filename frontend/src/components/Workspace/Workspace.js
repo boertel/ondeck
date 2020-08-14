@@ -8,7 +8,6 @@ import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'
 import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
 import { AddBoardForm } from '../../form'
-import UserMenu from '../User/UserMenu'
 import Command from '../../components/Command'
 
 import { useBoards } from '../../resources'
@@ -75,13 +74,12 @@ function Workspace({ className }) {
             </SidebarMenu>
           )}
         </View>
-        <UserMenu />
       </Sidebar>
       <main>
         <Routes>
-          <Route path=":boardSlug" element={<Board />} />
-          <Route path=":boardSlug/new" element={<FullTicket />} />
           <Route path=":boardSlug/:ticketSlug" element={<FullTicket />} />
+          <Route path=":boardSlug/new" element={<FullTicket />} />
+          <Route path=":boardSlug/" element={<Board />} />
         </Routes>
       </main>
     </div>
