@@ -26,8 +26,8 @@ def callback(request, slug):
 
     # START GITHUB
     access_token = payload["access_token"]
-    params = {"access_token": access_token}
-    response = requests.get("https://api.github.com/user", params=params)
+    headers = {"Authorization": "Bearer {}".format(access_token)}
+    response = requests.get("https://api.github.com/user", headers=headers)
     data = response.json()
     where = {"provider": "github", "uid": data["login"]}
     defaults = {"parameters": {"access_token": access_token}}
@@ -36,7 +36,7 @@ def callback(request, slug):
     identity, created = Identity.objects.get_or_create(defaults=defaults, **where)
     if created:
         emails = requests.get(
-            "https://api.github.com/user/emails", params=params
+            "https://api.github.com/user/emails", headers=headers
         ).json()
         # TODO auth pipeline to chooose/confirm/update emails
         user, user_created = User.objects.get_or_create(

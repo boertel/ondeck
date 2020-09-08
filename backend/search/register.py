@@ -75,11 +75,9 @@ def create_if_needed(opts, obj, **kwargs):
     try:
         create_or_update_document(index, **kwargs)
     except Exception as error:
-        if (
-            isinstance(error.args[0], requests.exceptions.HTTPError)
-            and error.args[0].response.status_code == 404
-        ):
-            index = client.create_index(uid=uid, primary_key=opts.primary_key)
+        if error.error_code == "index_not_found":
+            print(opts)
+            index = client.create_index(uid, {"primaryKey": opts.primary_key})
             index.update_settings(opts.settings)
             create_or_update_document(index, **kwargs)
         else:

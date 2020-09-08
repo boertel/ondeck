@@ -12,7 +12,7 @@ import { SelectField, EditorField, InputField, ComboBoxField } from './fields'
 
 function TicketForm({ title, description, id, column, members, parent, onSubmit, className }) {
   const location = useLocation()
-  const { focus = 'title' } = location.state || {}
+  const { focus = !!title ? 'description' : 'title' } = location.state || {}
   const params = new URLSearchParams(location.search)
   const paramColumn = params.get('column') || column
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()

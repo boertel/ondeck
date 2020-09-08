@@ -182,6 +182,7 @@ Editor.defaultProps = {
 }
 
 marked.setOptions({
+  breaks: true,
   gfm: true,
 })
 
