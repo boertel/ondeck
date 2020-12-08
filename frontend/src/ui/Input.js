@@ -73,6 +73,7 @@ export default styled(Input)`
     background-color: var(--fg);
     color: var(--default);
     border-radius: var(--border-radius);
+    font-family: 'Inter var', sans-serif;
     appearance: none;
     width: 100%;
     line-height: 1em;

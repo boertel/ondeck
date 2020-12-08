@@ -29,7 +29,7 @@ function AddColumnForm({ name, id, cancel }) {
   }
 
   useShortcut({
-    'escape': useCallback(callback, [cancel])
+    'escape': useCallback(callback, [cancel, reset])
     })
 
   return (

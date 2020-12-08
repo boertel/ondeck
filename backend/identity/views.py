@@ -25,7 +25,7 @@ def callback(request, slug):
     payload = provider.get_access_token(request.GET.get("code"))
 
     # START GITHUB
-    access_token = payload["access_token"]
+    access_token = payload["access_token"][0]
     headers = {"Authorization": "Bearer {}".format(access_token)}
     response = requests.get("https://api.github.com/user", headers=headers)
     data = response.json()

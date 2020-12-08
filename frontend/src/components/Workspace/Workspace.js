@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
+import { isEqual } from 'lodash'
 import { useNavigate, Routes, Route, useParams } from 'react-router-dom'
+import { Droppable, DragDropContext } from 'react-beautiful-dnd'
 
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
@@ -10,8 +12,7 @@ import Board, { BoardMenuItem } from '../Board'
 import { AddBoardForm } from '../../form'
 import Command from '../../components/Command'
 
-import { useBoards } from '../../resources'
-
+import { useBoards, mutateTicket } from '../../resources'
 
 function Workspace({ className }) {
   const { workspaceSlug } = useParams()
@@ -30,59 +31,72 @@ function Workspace({ className }) {
     },
   }))
 
+  const onDragEnd = useCallback(function({ draggableId, type, source, destination }) {
+    console.log({ draggableId, type, source, destination })
+    if (type === 'TICKET' && !isEqual(source, destination)) {
+      const data = {
+        ...JSON.parse(destination.droppableId),
+        position: destination.index,
+      }
+      mutateTicket({ workspaceSlug, ticketSlug: draggableId }, data)
+    }
+  }, [workspaceSlug])
+
   return (
-    <div className={className}>
-      <Sidebar>
-        <View flexDirection="column">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              {options.length > 0 && (
-                <Command placeholder="Search for a board or ticket...">
-                  {({ dispatch }) => (
-                    <Input
-                      type="search"
-                      className="transparent full-width"
-                      placeholder="Search..."
-                      onClick={() => dispatch({ type: 'open' })}
-                      icon={SearchIcon}
-                    />
-                  )}
-                </Command>
-              )}
-            </SidebarMenuItem>
-          </SidebarMenu>
-          <SidebarMenu>
-            <SidebarMenuItem to={`/workspaces/${workspaceSlug}/actions`}>
-              <ActionsIcon />
-              Actions
-            </SidebarMenuItem>
-          </SidebarMenu>
-          {boards && (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={className}>
+        <Sidebar>
+          <View flexDirection="column">
             <SidebarMenu>
               <SidebarMenuItem>
-                <h5>Boards</h5>
-              </SidebarMenuItem>
-              {boards.map(({ name, slug, id }) => (
-                <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}/`}>
-                  <BoardIcon />
-                  {name}
-                </BoardMenuItem>
-              ))}
-              <SidebarMenuItem>
-                <AddBoardForm />
+                {options.length > 0 && (
+                  <Command placeholder="Search for a board or ticket...">
+                    {({ dispatch }) => (
+                      <Input
+                        type="search"
+                        className="transparent full-width"
+                        placeholder="Search..."
+                        onClick={() => dispatch({ type: 'open' })}
+                        icon={SearchIcon}
+                      />
+                    )}
+                  </Command>
+                )}
               </SidebarMenuItem>
             </SidebarMenu>
-          )}
-        </View>
-      </Sidebar>
-      <main>
-        <Routes>
-          <Route path=":boardSlug/:ticketSlug" element={<FullTicket />} />
-          <Route path=":boardSlug/new" element={<FullTicket />} />
-          <Route path=":boardSlug/" element={<Board />} />
-        </Routes>
-      </main>
-    </div>
+            <SidebarMenu>
+              <SidebarMenuItem to={`/workspaces/${workspaceSlug}/actions`}>
+                <ActionsIcon />
+                Actions
+              </SidebarMenuItem>
+            </SidebarMenu>
+            {boards && (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <h5>Boards</h5>
+                </SidebarMenuItem>
+                {boards.map(({ name, slug, id }) => (
+                  <BoardMenuItem as={SidebarMenuItem} boardId={id} boardSlug={slug} key={slug} to={`${slug}/`}>
+                    <BoardIcon />
+                    {name}
+                  </BoardMenuItem>
+                ))}
+                <SidebarMenuItem>
+                  <AddBoardForm />
+                </SidebarMenuItem>
+              </SidebarMenu>
+            )}
+          </View>
+        </Sidebar>
+        <main>
+          <Routes>
+            <Route path=":boardSlug/:ticketSlug" element={<FullTicket />} />
+            <Route path=":boardSlug/new" element={<FullTicket />} />
+            <Route path=":boardSlug/" element={<Board />} />
+          </Routes>
+        </main>
+      </div>
+    </DragDropContext>
   )
 }
 

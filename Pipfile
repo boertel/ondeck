@@ -23,6 +23,7 @@ django-reversion = "*"
 python-decouple = "*"
 meilisearch = "*"
 django-storages = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"

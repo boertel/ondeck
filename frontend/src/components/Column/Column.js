@@ -21,7 +21,7 @@ function Column({ id: columnId, name, index, className, tickets = [], ...props }
             <ColumnHeader name={name} id={columnId}>
             </ColumnHeader>
           </Sticky>
-          <Droppable droppableId={dndId} type="TICKET">
+          <Droppable droppableId={JSON.stringify({"column": columnId})} type="TICKET">
             {(provided, snapshot) => (
               <Tickets {...provided.droppableProps} ref={provided.innerRef}>
                 {sorted.map(ticket => (

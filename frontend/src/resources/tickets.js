@@ -29,14 +29,21 @@ const reorder = (list, startIndex, endIndex) => {
 }
 
 export const mutateTicket = async ({ workspaceSlug, boardSlug, ticketSlug }, data) => {
-  let ticketsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
+  let ticketsKey = `/workspaces/${workspaceSlug}/tickets/`
+  if (boardSlug) {
+    ticketsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
+  }
   let path = ticketsKey
   if (ticketSlug) {
     path = `${path}${ticketSlug}/`
   }
+  console.log(ticketsKey, path)
 
   // Local mutate for drag and drop
   await mutate(ticketsKey, tickets => {
+    if (!tickets) {
+      return
+    }
     const oldTicket = tickets.find(({ pk }) => pk === ticketSlug)
     if (data.position !== undefined || data.column !== undefined) {
       // ticket has moved

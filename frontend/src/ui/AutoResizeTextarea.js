@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 
 
 const AutoResizeTextarea = React.forwardRef(({ style = {}, ...props }, ref) => {
-  ref = ref || useRef()
+  ref = useRef()
 
   useEffect(() => {
     const computedStyle = window.getComputedStyle(ref.current)

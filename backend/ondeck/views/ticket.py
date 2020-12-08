@@ -28,7 +28,9 @@ class TicketViewSet(RootViewSet):
     def get_queryset(self):
         if hasattr(self, "board"):
             return self.queryset.filter(board=self.board)
-        return self.queryset
+        else:
+            boards = Board.objects.filter(workspace__slug=self.kwargs["workspace_slug"])
+            return self.queryset.filter(board__in=boards)
 
     def perform_update(self, serializer):
         with reversion.create_revision():

@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components/macro'
-import marked from 'marked'
+import marked, { Renderer } from 'marked'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { useDrop } from 'react-dnd'
 import TextareaAutosize from 'react-textarea-autosize'
-
 
 import useUpload from './UploadInput'
 
@@ -181,7 +180,17 @@ Editor.defaultProps = {
   },
 }
 
+const renderer = new Renderer()
+renderer.link = function (href, title, text) {
+  const link = Renderer.prototype.link.apply(this, arguments)
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return link.replace('<a', "<a target='_blank'")
+  }
+  return link
+}
+
 marked.setOptions({
+  renderer,
   breaks: true,
   gfm: true,
 })
@@ -195,7 +204,7 @@ function Preview({ value }) {
   return <div className="preview">{value ? <Markdown value={value} /> : 'Nothing to preview'}</div>
 }
 
-const MyEditor = React.forwardRef(({ className, value, onChange, name, id, autoFocus, }, ref) => {
+const MyEditor = React.forwardRef(({ className, value, onChange, name, id, autoFocus }, ref) => {
   return (
     <div className={className}>
       <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} autoFocus={autoFocus} />
@@ -239,7 +248,8 @@ export default styled(MyEditor)`
       outline: none;
       border: none;
       resize: none;
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         resize: vertical;
       }
     }
