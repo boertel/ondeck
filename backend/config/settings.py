@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "corsheaders",
-    "search",
+    "django_meilisearch",
     "django_extensions",
     "reversion",
     "rest_framework",
