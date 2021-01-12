@@ -60,7 +60,7 @@ const AddQuickTicketForm = ({ title, column, isFirst, }) => {
       ref.current.focus()
       evt.preventDefault()
     }
-  }, [isFirst])
+  }, [isFirst, ref])
 
   useShortcut(
     {

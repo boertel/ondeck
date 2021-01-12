@@ -2,8 +2,6 @@ import React, { useRef, useEffect } from 'react'
 
 
 const AutoResizeTextarea = React.forwardRef(({ style = {}, ...props }, ref) => {
-  ref = useRef()
-
   useEffect(() => {
     const computedStyle = window.getComputedStyle(ref.current)
     const paddingTop = (parseInt(computedStyle['padding-top'], 10) || 0) / 2
