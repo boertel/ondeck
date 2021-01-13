@@ -16,6 +16,7 @@ django-cors-headers==3.5.0; python_version >= "3.5" \
 django-extensions==3.1.0; python_version >= "3.5" \
     --hash=sha256:7cd002495ff0a0e5eb6cdd6be759600905b4e4079232ea27618fc46bdd853651 \
     --hash=sha256:c7f88625a53f631745d4f2bef9ec4dcb999ed59476393bdbbe99db8596778846
+django-meilisearch @ git+https://github.com/boertel/django-meilisearch@main
 django-reversion==3.0.8; python_version >= "3.6" \
     --hash=sha256:49e9930f90322dc6a2754dd26144285cfcc1c5bd0c1c39ca95d5602c5054ae32 \
     --hash=sha256:9cfadeec2df37cb53d795ab79f6792f9eed8e70363dcf3a275dc19a58b971a8f
@@ -33,6 +34,9 @@ gunicorn==20.0.4; python_version >= "3.4" \
 idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" \
     --hash=sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0 \
     --hash=sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6
+meilisearch==0.14.0; python_version >= "3" \
+    --hash=sha256:8a2afe3294b9a9fa749806374ab618a3bc9c833f304a64049a04ae9dda7fa7a1 \
+    --hash=sha256:04fd632d9d7b8d60bfbbc8004497015965960316c2e6cd18c2487540115a98c0
 oauthlib==3.1.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" \
     --hash=sha256:df884cd6cbe20e32633f1db1072e9356f53638e4361bef4e8b03c9127c9328ea \
     --hash=sha256:bee41cc35fcca6e988463cacc3bcb8a96224f470ca547e697b604cc697b2f889
