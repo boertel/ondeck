@@ -67,8 +67,8 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "django-meilisearch"
-version = "0.1"
-description = ""
+version = "0.1.4"
+description = "A Django app to wrap your django model to a meilisearch index"
 category = "main"
 optional = false
 python-versions = "*"
@@ -81,8 +81,8 @@ meilisearch = ">=0.13.0"
 [package.source]
 type = "git"
 url = "https://github.com/boertel/django-meilisearch"
-reference = "e6ab906"
-resolved_reference = "e6ab90635f760303c467ea730afec46a40a5d950"
+reference = "11126d3"
+resolved_reference = "11126d35b6d10472b08210f460b200e5f4a0800c"
 
 [[package]]
 name = "django-reversion"
@@ -280,7 +280,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a7a0f6b1af14385cc5d455c6ea2756da04c2a9b4f16e81d7aa541aa446dd2df0"
+content-hash = "a9d131b5e55da5f67ffc833a587bb7fe4a7412807910e08ddb1a9e6995bd8779"
 
 [metadata.files]
 boto = [
