@@ -29,3 +29,5 @@ yarn-error.log*
 .env
 
 *.ms/
+
+backend/static/

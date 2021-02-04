@@ -188,6 +188,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "python-dotenv"
+version = "0.15.0"
+description = "Add .env support to your django/flask apps in development and deployments"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "pytz"
 version = "2020.5"
 description = "World timezone definitions, modern and historical"
@@ -280,7 +291,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a9d131b5e55da5f67ffc833a587bb7fe4a7412807910e08ddb1a9e6995bd8779"
+content-hash = "39dd40a0e250204fa6c1bb0cf63c1fa3ca71631bbe0a4d3cb027653dba1326ea"
 
 [metadata.files]
 boto = [
@@ -380,6 +391,10 @@ psycopg2-binary = [
 python-decouple = [
     {file = "python-decouple-3.4.tar.gz", hash = "sha256:2e5adb0263a4f963b58d7407c4760a2465d464ee212d733e2a2c179e54c08d8f"},
     {file = "python_decouple-3.4-py3-none-any.whl", hash = "sha256:a8268466e6389a639a20deab9d880faee186eb1eb6a05e54375bdf158d691981"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.15.0.tar.gz", hash = "sha256:587825ed60b1711daea4832cf37524dfd404325b7db5e25ebe88c495c9f807a0"},
+    {file = "python_dotenv-0.15.0-py2.py3-none-any.whl", hash = "sha256:0c8d1b80d1a1e91717ea7d526178e3882732420b03f08afea0406db6402e220e"},
 ]
 pytz = [
     {file = "pytz-2020.5-py2.py3-none-any.whl", hash = "sha256:16962c5fb8db4a8f63a26646d8886e9d769b6c511543557bc84e9569fb9a9cb4"},

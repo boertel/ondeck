@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import dj_database_url
+from dotenv import load_dotenv
 from decouple import config
+
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -70,10 +73,13 @@ CORS_ORIGIN_WHITELIST = ["http://localhost:3004"]
 
 ROOT_URLCONF = "config.urls"
 
+TEMPLATE_DIRS = []
+LOCAL_FRONTEND = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend/'))
+TEMPLATE_DIRS.append(LOCAL_FRONTEND)
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": TEMPLATE_DIRS,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -136,6 +142,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+WEB_DIRECTORY = config("COMMIT", default="build")
+STATICFILES_DIRS = [os.path.join(LOCAL_FRONTEND, 'build/static/')]
 
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
