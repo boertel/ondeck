@@ -9,6 +9,7 @@ from django.dispatch import receiver
 
 import django_meilisearch as search
 
+import tsvector_field
 import reversion
 
 
@@ -55,11 +56,13 @@ class Workspace(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     members = models.ManyToManyField(User, through=WorkspaceMembership)
+    search = tsvector_field.SearchVectorField([
+        tsvector_field.WeightedColumn("name", "A"),
+        tsvector_field.WeightedColumn("slug", "B"),
+        tsvector_field.WeightedColumn("key", "C"),
+    ], "english")
     # organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     # TODO protected slug (actions)
-
-    def search(self, query):
-        return search.query(search_workspace_uid(self), query)
 
     def __str__(self):
         return "{} ({})".format(self.slug, self.pk)
@@ -80,6 +83,10 @@ class Board(models.Model):
         Workspace, on_delete=models.CASCADE, related_name="boards"
     )
     position = models.PositiveIntegerField(null=True)
+    search = tsvector_field.SearchVectorField([
+        tsvector_field.WeightedColumn("name", "A"),
+        tsvector_field.WeightedColumn("slug", "B"),
+    ], "english")
 
     def __str__(self):
         return "{} ({})".format(self.slug, self.pk)
@@ -145,6 +152,10 @@ class Ticket(models.Model):
     tags = models.ManyToManyField(Tag)
     members = models.ManyToManyField(User, through=TicketMembership)
     position = models.IntegerField(null=True)
+    search = tsvector_field.SearchVectorField([
+        tsvector_field.WeightedColumn("title", "A"),
+        tsvector_field.WeightedColumn("description", "B"),
+    ], "english")
 
     def add_owner(self, user):
         owner = TicketMembership.objects.create(

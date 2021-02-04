@@ -22,6 +22,8 @@ gunicorn = "^20.0.4"
 django-meilisearch = {git = "https://github.com/boertel/django-meilisearch", rev = "11126d3"}
 sentry-sdk = "^0.19.5"
 python-dotenv = "^0.15.0"
+django-tsvector-field = "^0.9.5"
+Werkzeug = "^1.0.1"
 
 [tool.poetry.dev-dependencies]
 

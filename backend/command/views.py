@@ -1,4 +1,5 @@
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.db.models.expressions import F
 from django.http import JsonResponse
 
 from ondeck.models import Workspace, Board, Ticket, WorkspaceMembership
@@ -48,20 +49,9 @@ def query(request):
     user_tickets = Ticket.objects.none()
 
     if q:
-        ws_query = PrefixedPhraseQuery(q, config="simple")
-        workspaces = user_workspaces.annotate(
-            vector=SearchVector("name", "key", "slug", config="simple")
-        ).filter(vector=ws_query)
-
-        board_query = PrefixedPhraseQuery(q, config="simple")
-        boards = user_boards.annotate(
-            vector=SearchVector("name", "slug", config="simple")
-        ).filter(vector=board_query)
-
-        ticket_query = PrefixedPhraseQuery(q, config="simple")
-        tickets = Ticket.objects.annotate(
-            vector=SearchVector("title", "description", config="simple")
-        ).filter(vector=ticket_query, board__in=user_boards)
+        workspaces = user_workspaces.filter(search=q)
+        boards = user_boards.filter(search=q)
+        tickets = Ticket.objects.filter(board__in=user_boards, search=q)
     else:
         workspaces = user_workspaces
         boards = user_boards
