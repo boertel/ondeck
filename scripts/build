@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
-cd frontend && npm run build
-cd backend && python manage.py collectstatic
+GIT_ROOT=$(git root)
+
+cd "$GIT_ROOT/frontend" && npm run build
+cd "$GIT_ROOT/backend" && python manage.py collectstatic

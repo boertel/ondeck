@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Droppable, DragDropContext } from 'react-beautiful-dnd'
 
 import BoardHeader from './BoardHeader'
-import { Columns, View } from '../../ui'
+import { BrowserTitle, Columns, View } from '../../ui'
 import Column from '../Column'
 import { AddColumnForm } from '../../form'
 import { useColumns, useTickets, useBoards, mutateTicket } from '../../resources'
@@ -40,9 +40,10 @@ const Board = ({ zoom, ...props }) => {
 
   return (
     <>
+      <BrowserTitle>{board?.name}</BrowserTitle>
       <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)} />
       <Droppable droppableId="board" type="COLUMN" direction="horizontal">
-        {provided => (
+        {(provided) => (
           <Columns ref={provided.innerRef} {...provided.droppableProps}>
             {(columns || []).map(({ id, name }, index) => (
               <Column key={id} id={id} index={index} tickets={ticketsGroupByColumns[id]} name={name} />

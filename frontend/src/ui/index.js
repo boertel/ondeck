@@ -1,3 +1,4 @@
+import BrowserTitle from './BrowserTitle'
 import Button from './Button'
 import Columns from './Columns'
 import Editor from './Editor'
@@ -14,6 +15,7 @@ import View from './View'
 import Sticky from './Sticky'
 
 export {
+  BrowserTitle,
   Button,
   Columns,
   Editor,
