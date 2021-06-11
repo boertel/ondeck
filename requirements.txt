@@ -5,7 +5,7 @@ dj-database-url==0.5.0
 Django==2.2
 django-cors-headers==3.7.0
 django-extensions==3.1.0
-django-meilisearch==0.1.4
+git+https://github.com/boertel/django-meilisearch.git@11126d3#egg=django-meilisearch
 django-reversion==3.0.9
 django-storages==1.11.1
 django-tsvector-field==0.9.5
