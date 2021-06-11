@@ -14,8 +14,6 @@ gunicorn==20.0.4
 idna==2.10
 meilisearch==0.14.0
 oauthlib==3.1.0
-ondeck==0.1.0
-pip==20.2.2
 psycopg2-binary==2.8.6
 python-decouple==3.4
 python-dotenv==0.15.0

@@ -12,7 +12,7 @@ echo "$GIT_COMMIT" >> $BUILD_FOLDER/version.txt
 DIST="s3://$BUCKET_NAME/builds/$GIT_COMMIT"
 echo "Upload destination: $DIST"
 
-if aws s3 sync $BUILD_FOLDER/ "$DIST" --acl="public-read" --debug; then
+if aws s3 sync $BUILD_FOLDER/ "$DIST" --acl="public-read"; then
     cat $BUILD_FOLDER/version.txt
     cat $BUILD_FOLDER/asset-manifest.json
 else
