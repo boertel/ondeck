@@ -186,9 +186,6 @@ AWS_STORAGE_BUCKET_NAME = config("AWS_S3_BUCKET_NAME", default=None)
 AWS_DEFAULT_ACL = "public-read"
 AWS_QUERYSTRING_AUTH = False
 
-AWS_S3_ENDPOINT_URL = "https://{}.s3.amazonaws.com".format(
-    AWS_STORAGE_BUCKET_NAME
-)
 
 MEILISEARCH_URL = config("MEILISEARCH_URL", default="http://127.0.0.1:7700")
 MEILISEARCH_MASTER_KEY = config("MEILISEARCH_MASTER_KEY", default=None)
