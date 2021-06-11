@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.postgres",
     "corsheaders",
+    "storage",
     "django_meilisearch",
     "django_extensions",
     "reversion",
@@ -172,9 +173,19 @@ STATICFILES_DIRS = [os.path.join(LOCAL_FRONTEND, 'build/static/')]
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
 
-AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = config("AWS_S3_BUCKET_NAME")
+STATIC_URL = "/static/"
+STATICFILES_LOCATION = "static"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STATICFILES_DIRS = []
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default=None)
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default=None)
+AWS_STORAGE_BUCKET_NAME = config("AWS_S3_BUCKET_NAME", default=None)
+AWS_DEFAULT_ACL = "public-read"
+AWS_QUERYSTRING_AUTH = False
+
 AWS_S3_ENDPOINT_URL = "https://{}.s3.amazonaws.com".format(
     AWS_STORAGE_BUCKET_NAME
 )
