@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import { Draggable } from 'react-beautiful-dnd'
 
 import { View } from '../../ui'
@@ -12,26 +12,24 @@ const TicketTitle = styled.h4`
   margin: 0;
 `
 
-const Ticket = React.memo(
-  ({ title, className, pk, column: fromColumnId, board: fromBoardId, position, to }) => {
-    return (
-      <Draggable draggableId={pk} index={position}>
-        {(provided, { isDragging }) => (
-          <View
-            forwardedAs={Link}
-            classNames={[className, { isDragging }]}
-            to={to}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <TicketTitle>{title}</TicketTitle>
-          </View>
-        )}
-      </Draggable>
-    )
-  }
-)
+const Ticket = React.memo(({ title, className, pk, column: fromColumnId, board: fromBoardId, position, to }) => {
+  return (
+    <Draggable draggableId={pk} index={position}>
+      {(provided, { isDragging }) => (
+        <View
+          forwardedAs={Link}
+          classNames={[className, { isDragging }]}
+          to={to}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <TicketTitle>{title}</TicketTitle>
+        </View>
+      )}
+    </Draggable>
+  )
+})
 
 export default styled(Ticket)`
   width: 100%;

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
 //const SidebarMenuItem = ({ to, className, ...rest }) => {
@@ -11,7 +11,11 @@ const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
   ) : (
     rest.children
   )
-  return <li className={className} ref={ref}>{children}</li>
+  return (
+    <li className={className} ref={ref}>
+      {children}
+    </li>
+  )
 })
 
 const StyledSidebarMenuItem = styled(SidebarMenuItem)`

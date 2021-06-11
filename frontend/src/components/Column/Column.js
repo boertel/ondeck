@@ -1,6 +1,6 @@
 import React from 'react'
 import { sortBy } from 'lodash'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { Tickets, View, Sticky } from '../../ui'

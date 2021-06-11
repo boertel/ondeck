@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useTickets } from '../resources'
@@ -14,7 +14,7 @@ const FullTicket = ({ className }) => {
 
   const navigate = useNavigate()
   useEffect(() => {
-    const onEscape = evt => {
+    const onEscape = (evt) => {
       if (evt.key === 'Escape') {
         navigate(-1)
       }

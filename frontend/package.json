@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@boertel/cmdk": "^0.1.0",
     "@popperjs/core": "^2.1.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
@@ -34,8 +35,7 @@
   },
   "devDependencies": {
     "prettier": "^2.0.0",
-    "react-scripts": "4.0.3",
-    "styled-components.macro": "^1.0.0"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

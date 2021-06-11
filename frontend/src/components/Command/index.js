@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import CmdK from 'cmdk'
-import 'cmdk/dist/cmdk.cjs.development.css'
+import CmdK from '@boertel/cmdk'
+import '@boertel/cmdk/dist/cmdk.cjs.development.css'
 
 import { BoardIcon, TicketIcon, WorkspaceIcon } from '../../ui/icons'
 import { search } from '../../resources/api'
@@ -12,14 +12,18 @@ const ICONS = {
   workspace: WorkspaceIcon,
 }
 
-const Command = props => {
+const Command = (props) => {
   const navigate = useNavigate()
   const { workspaceSlug } = useParams()
   const getOptions = useCallback(
-    q => {
-      return search
-        .get('/query/', { params: { q, workspace: workspaceSlug } })
-        .then(({ data }) => data.results.map(result => ({ ...result, icon: ICONS[result.subtitle], callback: () => navigate(result.to) })))
+    (q) => {
+      return search.get('/query/', { params: { q, workspace: workspaceSlug } }).then(({ data }) =>
+        data.results.map((result) => ({
+          ...result,
+          icon: ICONS[result.subtitle],
+          callback: () => navigate(result.to),
+        }))
+      )
     },
     [navigate, workspaceSlug]
   )

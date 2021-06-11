@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 
 const Button = ({ to, ...props }) => {
   if (to) {
@@ -27,8 +27,7 @@ export default styled(Button)`
   border-radius: var(--border-radius);
   appearance: none;
   text-decoration: none;
-  transition: background-color 200ms ease-in-out, border 200ms ease-in-out,
-    transform 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out, border 200ms ease-in-out, transform 200ms ease-in-out;
   -webkit-touch-callout: none;
   user-select: none;
   line-height: 1rem;
@@ -44,11 +43,13 @@ export default styled(Button)`
     outline: none;
   }
 
-  &.primary, &[type="submit"] {
+  &.primary,
+  &[type='submit'] {
     background-color: var(--primary);
     color: var(--fg);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
     }
   }
 
@@ -57,7 +58,8 @@ export default styled(Button)`
     border-color: transparent;
     color: var(--primary);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: underline;
     }
   }
@@ -67,7 +69,8 @@ export default styled(Button)`
     border-color: var(--primary);
     color: var(--primary);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: var(--primary);
       color: var(--fg);
     }

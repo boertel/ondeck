@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 
 const Input = React.forwardRef(({ icon: Icon, as: As, type, label, htmlFor, className, style, ...props }, ref) => {
   const { id, name } = props
@@ -83,7 +83,8 @@ export default styled(Input)`
   textarea {
     box-sizing: border-box;
     resize: none;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       resize: vertical;
     }
   }
@@ -95,13 +96,13 @@ export default styled(Input)`
       border-color: transparent;
       background-color: transparent;
       transition-property: background-color;
-      transition-duration: .2s;
+      transition-duration: 0.2s;
       transition-timing-function: ease-in-out;
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         background-color: var(--fg);
       }
     }
-
 
     .input {
       color: var(--placeholder);

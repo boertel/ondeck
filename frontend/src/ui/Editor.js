@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 import marked, { Renderer } from 'marked'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import { useDrop } from 'react-dnd'
@@ -15,7 +15,7 @@ function useDropFiles() {
       const { files } = monitor.getItem()
       setFiles(files)
     },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
     }),
@@ -66,7 +66,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     }
   }, [uploads])
 
-  const onPaste = evt => {
+  const onPaste = (evt) => {
     const { files } = evt.clipboardData
     if (files.length) {
       uploadFiles(files)
@@ -98,7 +98,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   }, [JSON.stringify(f)])
   */
 
-  const onKeyDown = evt => {
+  const onKeyDown = (evt) => {
     const { selectionStart, selectionEnd } = ref.current
     const targetValue = ref.current.value
     const start = targetValue.substring(0, selectionStart)
@@ -158,7 +158,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
       <TextareaAutosize
         ref={ref}
         placeholder="Leave a comment"
-        onChange={evt => onChange(evt)}
+        onChange={(evt) => onChange(evt)}
         onPaste={onPaste}
         value={value}
         onKeyDown={onKeyDown}
