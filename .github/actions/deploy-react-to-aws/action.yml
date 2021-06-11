@@ -1,8 +1,8 @@
 name: React 2 S3
 description: Deploy a react app to AWS S3
 inputs:
-  working-directy:
-    description: working direction
+  working-directory:
+    description: working directory
     required: false
     default: '.'
 runs:
