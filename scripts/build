@@ -3,4 +3,4 @@
 GIT_ROOT=$(git root)
 
 cd "$GIT_ROOT/frontend" && npm run build
-cd "$GIT_ROOT/backend" && python manage.py collectstatic
+cd "$GIT_ROOT/backend" && python manage.py collectstatic --no-input
