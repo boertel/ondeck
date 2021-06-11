@@ -17,5 +17,5 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       shell: bash
     - name: Upload to S3
-      run: ./deploy_to_s3 "${{ inputs.working-directory }}/build"
+      run: ${{ github.action_path }}/deploy_to_s3 "${{ inputs.working-directory }}/build"
       shell: bash
