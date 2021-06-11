@@ -18,24 +18,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '15'
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - uses: actions/deploy-react-to-aws
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
-        working-directory: ${{env.working-directory}}
-      - name: Build
-        run: NODE_ENV="production" PUBLIC_URL="https://${{env.AWS_S3_BUCKET_NAME}}.s3.amazonaws.com/builds/latest" yarn build
-        working-directory: ${{env.working-directory}}
-      - name: Upload to S3
-        run: ./scripts/deploy_to_s3
-        working-directory: ${{env.working-directory}}
+          working-directory: ${{ env.working-directory }}

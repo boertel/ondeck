@@ -1,0 +1,21 @@
+#!/bin/bash
+
+GIT_COMMIT="$(git rev-parse --short HEAD)"
+
+function config_get {
+    APP_ID="$1"
+    COMMAND="heroku config:set COMMIT=\"$GIT_COMMIT\" --app \"$APP_ID\""
+    echo $COMMAND
+    eval $COMMAND
+}
+
+if [[ -z "$@" ]]; then
+    while read line
+    do
+      config_get "$line"
+    done < "${1:-/dev/stdin}"
+else
+    for APP_ID in "$@"; do
+        config_get "$APP_ID"
+    done
+fi
