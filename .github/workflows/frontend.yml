@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '15'
-      - run: echo "PUBLIC_URL=\"https://${{secrets.AWS_S3_BUCKET_NAME}}.s3.awsamazon.com/$(git rev-parse --short)\"" >> $GITHUB_ENV
+      - run: echo "PUBLIC_URL=https://${{secrets.AWS_S3_BUCKET_NAME}}.s3.awsamazon.com/$(git rev-parse --short)" >> $GITHUB_ENV
       - uses: ./.github/actions/deploy-react-to-aws
         with:
           working-directory: ${{ env.working-directory }}
