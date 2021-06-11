@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from 'react'
-import { isEqual, groupBy } from 'lodash'
+import React, { useState } from 'react'
+import { groupBy } from 'lodash'
 import { useParams } from 'react-router-dom'
-import { Droppable, DragDropContext } from 'react-beautiful-dnd'
+import { Droppable } from 'react-beautiful-dnd'
 
 import BoardHeader from './BoardHeader'
 import { BrowserTitle, Columns, View } from '../../ui'
 import Column from '../Column'
 import { AddColumnForm } from '../../form'
-import { useColumns, useTickets, useBoards, mutateTicket } from '../../resources'
+import { useColumns, useTickets, useBoards } from '../../resources'
 
-const Board = ({ zoom, ...props }) => {
+const Board = ({ zoom }) => {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
   const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })
@@ -24,19 +24,6 @@ const Board = ({ zoom, ...props }) => {
   if (tickets) {
     ticketsGroupByColumns = groupBy(tickets, 'column')
   }
-
-  const onDragEnd = useCallback(
-    function ({ draggableId, type, source, destination }) {
-      if (type === 'TICKET' && !isEqual(source, destination)) {
-        const data = {
-          column: parseInt(destination.droppableId, 10),
-          position: destination.index,
-        }
-        mutateTicket({ workspaceSlug, boardSlug, ticketSlug: draggableId }, data)
-      }
-    },
-    [workspaceSlug, boardSlug]
-  )
 
   return (
     <>

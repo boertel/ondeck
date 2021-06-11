@@ -1,13 +1,8 @@
-import React, { useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react'
 import { Droppable } from 'react-beautiful-dnd'
 import cn from 'classnames'
 
-import { mutateTicket } from '../../resources/tickets'
-
 function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...props }) {
-  const { workspaceSlug } = useParams()
-
   /*
   const onDrop = useCallback(
     async ({ pk, fromBoardSlug }) => {
@@ -22,8 +17,8 @@ function BoardMenuItem({ boardId, boardSlug, className, as: AsComponent, ...prop
   */
 
   return (
-    <Droppable droppableId={JSON.stringify({'board': boardId})} type="TICKET" direction="vertical" isCombineEnabled>
-      {provided => (
+    <Droppable droppableId={JSON.stringify({ board: boardId })} type="TICKET" direction="vertical" isCombineEnabled>
+      {(provided) => (
         <AsComponent ref={provided.innerRef} {...provided.droppableProps} {...props} className={cn(className)} />
       )}
     </Droppable>

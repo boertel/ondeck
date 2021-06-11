@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { isEqual } from 'lodash'
 import { useNavigate, Routes, Route, useParams } from 'react-router-dom'
-import { Droppable, DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
@@ -31,16 +31,19 @@ function Workspace({ className }) {
     },
   }))
 
-  const onDragEnd = useCallback(function({ draggableId, type, source, destination }) {
-    console.log({ draggableId, type, source, destination })
-    if (type === 'TICKET' && !isEqual(source, destination)) {
-      const data = {
-        ...JSON.parse(destination.droppableId),
-        position: destination.index,
+  const onDragEnd = useCallback(
+    function ({ draggableId, type, source, destination }) {
+      console.log({ draggableId, type, source, destination })
+      if (type === 'TICKET' && !isEqual(source, destination)) {
+        const data = {
+          ...JSON.parse(destination.droppableId),
+          position: destination.index,
+        }
+        mutateTicket({ workspaceSlug, ticketSlug: draggableId }, data)
       }
-      mutateTicket({ workspaceSlug, ticketSlug: draggableId }, data)
-    }
-  }, [workspaceSlug])
+    },
+    [workspaceSlug]
+  )
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

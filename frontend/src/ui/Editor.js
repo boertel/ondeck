@@ -41,7 +41,7 @@ const CHARACTERS = {
 function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   const ref = useRef(null)
 
-  const [collected, dropzone, files] = useDropFiles()
+  const [, dropzone, files] = useDropFiles()
   const { uploads, uploadFiles } = useUpload(files)
 
   const done = useRef({})
@@ -50,7 +50,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
     const { selectionStart, selectionEnd } = ref.current
     for (const key in uploads) {
       if (!done.current[key]) {
-        const { placeholder, content, src } = uploads[key]
+        const { placeholder, content } = uploads[key]
         const targetValue = ref.current.value
         const start = targetValue.substring(0, selectionStart)
         const end = targetValue.substring(selectionEnd)
@@ -64,7 +64,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
         onChange({ target: { value: ref.current.value } })
       }
     }
-  }, [uploads])
+  }, [uploads, onChange])
 
   const onPaste = (evt) => {
     const { files } = evt.clipboardData

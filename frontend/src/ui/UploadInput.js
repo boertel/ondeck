@@ -1,9 +1,8 @@
-import { useEffect, useReducer, } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import axios from 'axios'
 import { v4 as uuid4 } from 'uuid'
 
 import { upload } from '../resources/api'
-
 
 const handleUpload = async (file, { dispatch }) => {
   if (!file) {
@@ -25,20 +24,20 @@ const handleUpload = async (file, { dispatch }) => {
       placeholder: `![Uploading ${src}...]()`,
       src: '',
       //src: window.URL.createObjectURL(file),
-    }
+    },
   })
 
   await axios.put(signedUrl, file, {
-    headers: { 'Content-Type': contentType, },
+    headers: { 'Content-Type': contentType },
     onUploadProgress: ({ total, loaded }) => {
       dispatch({
         type: 'progress',
         key: file.key,
         payload: {
           progress: loaded / total,
-        }
+        },
       })
-    }
+    },
   })
 
   dispatch({
@@ -47,49 +46,50 @@ const handleUpload = async (file, { dispatch }) => {
     payload: {
       content: `![${src}](${src})`,
       src,
-    }
+    },
   })
 }
 
 function reducer(state, action) {
   const { key, payload } = action
-  switch(action.type) {
+  switch (action.type) {
     case 'start':
     case 'finish':
       return {
         ...state,
         [key]: {
           ...(state[key] || {}),
-          ...payload
-        }
+          ...payload,
+        },
       }
     default:
       return state
   }
 }
 
-const useUpload = files => {
+const useUpload = (files) => {
   const [state, dispatch] = useReducer(reducer, {})
 
-  const upload = (file) => {
-    file.key = uuid4()
-    return handleUpload(file, { dispatch })
-  }
+  const uploadFiles = useCallback(
+    (files) => {
+      const upload = (file) => {
+        file.key = uuid4()
+        return handleUpload(file, { dispatch })
+      }
+      const uploads = Array.from(files).map(async (file) => {
+        return await upload(file)
+      })
 
-  const uploadFiles = (files) => {
-    const uploads = Array.from(files).map(async file => {
-      return await upload(file)
-    })
-
-    Promise.all(uploads)
-  }
+      Promise.all(uploads)
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     if (files.length) {
       uploadFiles(files)
     }
-  }, [files])
-
+  }, [files, uploadFiles])
 
   return { uploads: state, uploadFiles }
 }

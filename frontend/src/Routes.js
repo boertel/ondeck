@@ -6,17 +6,18 @@ import { fetcher } from './resources/api'
 import Workspace, { Workspaces } from './components/Workspace'
 import { Login } from './components/Auth'
 
-
-export default () => {
+export default function MyRoutes() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const onError = useCallback(function(error) {
-    if (error.response?.status === 403) {
-      navigate(`/login?next=${location.pathname}`)
-    }
-  }, [navigate, location.pathname])
-
+  const onError = useCallback(
+    function (error) {
+      if (error.response?.status === 403) {
+        navigate(`/login?next=${location.pathname}`)
+      }
+    },
+    [navigate, location.pathname]
+  )
 
   const swrConfig = {
     fetcher,

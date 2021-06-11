@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from 'react'
-
+import React, { useEffect } from 'react'
 
 const AutoResizeTextarea = React.forwardRef(({ style = {}, ...props }, ref) => {
   useEffect(() => {
@@ -8,7 +7,7 @@ const AutoResizeTextarea = React.forwardRef(({ style = {}, ...props }, ref) => {
     ref.current.paddingTop = paddingTop
     ref.current.maxHeight = parseInt(computedStyle['min-height'], 10)
     onResize()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onResize = () => {
