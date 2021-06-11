@@ -30,9 +30,9 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = [config("HOST", "ondeck.test")]
+ALLOWED_HOSTS = [config("HOST", config('RAILWAY_STATIC_URL', 'ondeck.test'))]
 
-COOKIE_DOMAIN = config("HOST", "ondeck.test")
+COOKIE_DOMAIN = ALLOWED_HOSTS[0]
 CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
 SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
 
