@@ -24,6 +24,7 @@ sentry-sdk = "^0.19.5"
 python-dotenv = "^0.15.0"
 django-tsvector-field = "^0.9.5"
 Werkzeug = "^1.0.1"
+boto3 = "^1.17.92"
 
 [tool.poetry.dev-dependencies]
 

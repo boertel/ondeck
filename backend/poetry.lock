@@ -7,6 +7,35 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "boto3"
+version = "1.17.92"
+description = "The AWS SDK for Python"
+category = "main"
+optional = false
+python-versions = ">= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+
+[package.dependencies]
+botocore = ">=1.20.92,<1.21.0"
+jmespath = ">=0.7.1,<1.0.0"
+s3transfer = ">=0.4.0,<0.5.0"
+
+[[package]]
+name = "botocore"
+version = "1.20.92"
+description = "Low-level, data-driven core of boto 3."
+category = "main"
+optional = false
+python-versions = ">= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+
+[package.dependencies]
+jmespath = ">=0.7.1,<1.0.0"
+python-dateutil = ">=2.1,<3.0.0"
+urllib3 = ">=1.25.4,<1.27"
+
+[package.extras]
+crt = ["awscrt (==0.11.15)"]
+
+[[package]]
 name = "certifi"
 version = "2020.12.5"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -134,14 +163,6 @@ python-versions = ">=3.5"
 django = ">=2.2"
 
 [[package]]
-name = "dotenv"
-version = "0.0.5"
-description = "Handle .env files"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "gunicorn"
 version = "20.0.4"
 description = "WSGI HTTP Server for UNIX"
@@ -162,6 +183,14 @@ description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
+name = "jmespath"
+version = "0.10.0"
+description = "JSON Matching Expressions"
+category = "main"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "meilisearch"
@@ -194,6 +223,17 @@ description = "psycopg2 - Python-PostgreSQL Database Adapter"
 category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+
+[[package]]
+name = "python-dateutil"
+version = "2.8.1"
+description = "Extensions to the standard Python datetime module"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+
+[package.dependencies]
+six = ">=1.5"
 
 [[package]]
 name = "python-decouple"
@@ -256,6 +296,20 @@ requests = ">=2.0.0"
 rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
+name = "s3transfer"
+version = "0.4.2"
+description = "An Amazon S3 Transfer Manager"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+botocore = ">=1.12.36,<2.0a.0"
+
+[package.extras]
+crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
+
+[[package]]
 name = "sentry-sdk"
 version = "0.19.5"
 description = "Python client for Sentry (https://sentry.io)"
@@ -282,6 +336,14 @@ rq = ["rq (>=0.6)"]
 sanic = ["sanic (>=0.8)"]
 sqlalchemy = ["sqlalchemy (>=1.2)"]
 tornado = ["tornado (>=5)"]
+
+[[package]]
+name = "six"
+version = "1.16.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "sqlparse"
@@ -319,12 +381,20 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "1ed4ceee442511fd51ecbc98402700080aae99d6f0a76a7c7bfa1fd8b56fa24a"
+content-hash = "44097f79a66729a1cad3ebf9d73fe5bc39a2548aa44e58826d4775ab6695e23a"
 
 [metadata.files]
 boto = [
     {file = "boto-2.49.0-py2.py3-none-any.whl", hash = "sha256:147758d41ae7240dc989f0039f27da8ca0d53734be0eb869ef16e3adcfa462e8"},
     {file = "boto-2.49.0.tar.gz", hash = "sha256:ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a"},
+]
+boto3 = [
+    {file = "boto3-1.17.92-py2.py3-none-any.whl", hash = "sha256:ee1e64191de95e08e296b21cb262f38c8dc866cd7d33f86f753c6a74a0f95297"},
+    {file = "boto3-1.17.92.tar.gz", hash = "sha256:e9cf20918ed1b78f1aabbc57e02a126e835ccf7abe86d90646fc54a43ef7dc06"},
+]
+botocore = [
+    {file = "botocore-1.20.92-py2.py3-none-any.whl", hash = "sha256:950ff7d4985427f8dfbb90aa1a8b48da98506d25319f1af1fe20341be3365633"},
+    {file = "botocore-1.20.92.tar.gz", hash = "sha256:5adb6679e3bf7b5ea0ca3363118a0111d087dce18a94fc7a5a542fcc5cba0ddc"},
 ]
 certifi = [
     {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
@@ -367,9 +437,6 @@ djangorestframework = [
     {file = "djangorestframework-3.12.2-py3-none-any.whl", hash = "sha256:0209bafcb7b5010fdfec784034f059d512256424de2a0f084cb82b096d6dd6a7"},
     {file = "djangorestframework-3.12.2.tar.gz", hash = "sha256:0898182b4737a7b584a2c73735d89816343369f259fea932d90dc78e35d8ac33"},
 ]
-dotenv = [
-    {file = "dotenv-0.0.5.tar.gz", hash = "sha256:b58d2ab3f83dbd4f8a362b21158a606bee87317a9444485566b3c8f0af847091"},
-]
 gunicorn = [
     {file = "gunicorn-20.0.4-py2.py3-none-any.whl", hash = "sha256:cd4a810dd51bf497552cf3f863b575dabd73d6ad6a91075b65936b151cbf4f9c"},
     {file = "gunicorn-20.0.4.tar.gz", hash = "sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626"},
@@ -377,6 +444,10 @@ gunicorn = [
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
     {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
+]
+jmespath = [
+    {file = "jmespath-0.10.0-py2.py3-none-any.whl", hash = "sha256:cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f"},
+    {file = "jmespath-0.10.0.tar.gz", hash = "sha256:b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9"},
 ]
 meilisearch = [
     {file = "meilisearch-0.14.0-py3-none-any.whl", hash = "sha256:8a2afe3294b9a9fa749806374ab618a3bc9c833f304a64049a04ae9dda7fa7a1"},
@@ -423,6 +494,10 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.8.6-cp39-cp39-win32.whl", hash = "sha256:6422f2ff0919fd720195f64ffd8f924c1395d30f9a495f31e2392c2efafb5056"},
     {file = "psycopg2_binary-2.8.6-cp39-cp39-win_amd64.whl", hash = "sha256:15978a1fbd225583dd8cdaf37e67ccc278b5abecb4caf6b2d6b8e2b948e953f6"},
 ]
+python-dateutil = [
+    {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
+    {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
+]
 python-decouple = [
     {file = "python-decouple-3.4.tar.gz", hash = "sha256:2e5adb0263a4f963b58d7407c4760a2465d464ee212d733e2a2c179e54c08d8f"},
     {file = "python_decouple-3.4-py3-none-any.whl", hash = "sha256:a8268466e6389a639a20deab9d880faee186eb1eb6a05e54375bdf158d691981"},
@@ -444,9 +519,17 @@ requests-oauthlib = [
     {file = "requests_oauthlib-1.3.0-py2.py3-none-any.whl", hash = "sha256:7f71572defaecd16372f9006f33c2ec8c077c3cfa6f5911a9a90202beb513f3d"},
     {file = "requests_oauthlib-1.3.0-py3.7.egg", hash = "sha256:fa6c47b933f01060936d87ae9327fead68768b69c6c9ea2109c48be30f2d4dbc"},
 ]
+s3transfer = [
+    {file = "s3transfer-0.4.2-py2.py3-none-any.whl", hash = "sha256:9b3752887a2880690ce628bc263d6d13a3864083aeacff4890c1c9839a5eb0bc"},
+    {file = "s3transfer-0.4.2.tar.gz", hash = "sha256:cb022f4b16551edebbb31a377d3f09600dbada7363d8c5db7976e7f47732e1b2"},
+]
 sentry-sdk = [
     {file = "sentry-sdk-0.19.5.tar.gz", hash = "sha256:737a094e49a529dd0fdcaafa9e97cf7c3d5eb964bd229821d640bc77f3502b3f"},
     {file = "sentry_sdk-0.19.5-py2.py3-none-any.whl", hash = "sha256:0a711ec952441c2ec89b8f5d226c33bc697914f46e876b44a4edd3e7864cf4d0"},
+]
+six = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 sqlparse = [
     {file = "sqlparse-0.4.1-py3-none-any.whl", hash = "sha256:017cde379adbd6a1f15a61873f43e8274179378e95ef3fede90b5aa64d304ed0"},
