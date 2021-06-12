@@ -26,4 +26,4 @@ jobs:
         with:
           working-directory: ${{ env.working-directory }}
       - run: INSTALL_DIR="." sh -c "$(curl -sSL https://raw.githubusercontent.com/railwayapp/cli/master/install.sh)"
-      - run: RAILWAY_TOKEN=${{ env.RAILWAY_TOKEN }} ./railway vars set COMMIT=${{ env.GIT_SHORT_SHA }}
+      - run: RAILWAY_TOKEN=${{ env.RAILWAY_TOKEN }} ./railway variables set COMMIT=${{ env.GIT_SHORT_SHA }}
