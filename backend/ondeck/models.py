@@ -7,8 +7,6 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-import django_meilisearch as search
-
 import tsvector_field
 import reversion
 
@@ -16,10 +14,6 @@ import reversion
 # u = User.objects.create_user(username="ben", email="ben@comediadesign.com");
 # w = Workspace.objects.create(name="On deck", slug="ondeck", owner=u);
 # b = Board.objects.create(name="Parking Lot", slug="parking-lot", workspace=w)
-
-
-def search_workspace_uid(workspace):
-    return "workspace-{}".format(workspace.pk)
 
 
 class User(AbstractUser):
@@ -167,20 +161,6 @@ class Ticket(models.Model):
     def key(self):
         return "{}-{}".format(self.board.workspace.key, self.index)
 
-
-"""
-search.register(
-    Board,
-    ("name", "slug",),
-    uid: lambda instance: search_worksace_uid(instance.workspace)
-)
-"""
-search.register(
-    Ticket,
-    ("title", "description", "key", "board__slug", "pk"),
-    distinct="key",
-    uid=lambda instance: search_workspace_uid(instance.board.workspace),
-)
 
 
 @receiver(pre_save, sender=Ticket)
