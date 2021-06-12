@@ -25,5 +25,5 @@ jobs:
       - uses: ./.github/actions/deploy-react-to-aws
         with:
           working-directory: ${{ env.working-directory }}
-      - run: sh -c "$(curl -sSL https://raw.githubusercontent.com/railwayapp/cli/master/install.sh)"
-      - run: railway vars set COMMIT=${{ env.GIT_SHORT_SHA }}
+      - run: INSTALL_DIR="." sh -c "$(curl -sSL https://raw.githubusercontent.com/railwayapp/cli/master/install.sh)"
+      - run: ./railway vars set COMMIT=${{ env.GIT_SHORT_SHA }}
