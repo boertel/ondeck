@@ -26,7 +26,7 @@ jobs:
         with:
           working-directory: ${{ env.working-directory }}
       - run: npm install @railway/cli@0.2.35
-      - run: npx railway version
+      - run: npx railway --version
       - run: INSTALL_DIR="." sh -c "$(curl -sSL https://raw.githubusercontent.com/railwayapp/cli/master/install.sh)"
       - run: ./railway link ${{env.RAILWAY_PROJECT_ID}}
       - run: ./railway variables set COMMIT=${{ env.GIT_SHORT_SHA }}
