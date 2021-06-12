@@ -67,7 +67,7 @@ class CreateIdentity(AuthPipeline):
 class GithubOAuth2Provider(OAuth2Provider):
     CLIENT_ID = settings.GITHUB_CLIENT_ID
     CLIENT_SECRET = settings.GITHUB_CLIENT_SECRET
-    SCOPE = ["user", "user:email"]
+    SCOPE = ["user", "user:email", "write:repo_hook"]
     AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
     ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token"
 

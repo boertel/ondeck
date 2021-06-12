@@ -33,7 +33,7 @@ def callback(request, slug):
     defaults = {"parameters": {"access_token": access_token}}
     # END GITHUB
 
-    identity, created = Identity.objects.get_or_create(defaults=defaults, **where)
+    identity, created = Identity.objects.update_or_create(defaults=defaults, **where)
     if created:
         emails = requests.get(
             "https://api.github.com/user/emails", headers=headers
@@ -48,6 +48,8 @@ def callback(request, slug):
             identity.user = user
             identity.save()
             user.set_unusable_password()
+    else:
+        identity
 
     django_login(request, identity.user)
     return JsonResponse({"user": identity.user.id})
