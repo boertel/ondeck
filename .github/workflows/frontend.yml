@@ -14,6 +14,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       AWS_S3_BUCKET_NAME: ${{secrets.AWS_S3_BUCKET_NAME}}
+      RAILWAY_TOKEN: ${{secrets.RAILWAY_TOKEN}}
       RAILWAY_PROJECT_ID: ${{secrets.RAILWAY_PROJECT_ID}}
     steps:
       - uses: actions/checkout@v2
@@ -25,8 +26,5 @@ jobs:
       - uses: ./.github/actions/deploy-react-to-aws
         with:
           working-directory: ${{ env.working-directory }}
-      - run: npm install @railway/cli@0.2.35 -g
-      - run: npx railway --version
-      - run: INSTALL_DIR="." sh -c "$(curl -sSL https://raw.githubusercontent.com/railwayapp/cli/master/install.sh)"
-      - run: ./railway link ${{env.RAILWAY_PROJECT_ID}}
-      - run: ./railway variables set COMMIT=${{ env.GIT_SHORT_SHA }}
+      - run: npm install @railway/cli@0.2.35
+      - run: npx railway variales set COMMIT=${{ env.GIT_SHORT_SHA }}
