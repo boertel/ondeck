@@ -1,4 +1,3 @@
-from pprint import pprint
 import json
 
 from django.http import JsonResponse
@@ -14,6 +13,6 @@ def pull_request(request):
     if request.body:
         data = json.loads(request.body)
 
-    repositories = Repository.objects.filter(repo_id=data["repo"]["full_name"])
-    print(data)
+    repositories = Repository.objects.filter(repo_id=data["repository"]["full_name"])
+    print(repositories)
     return JsonResponse(data)
