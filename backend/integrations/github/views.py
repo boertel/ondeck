@@ -10,6 +10,7 @@ from integrations.models import Repository
 @csrf_exempt
 def pull_request(request):
     data = {}
+    print(request.body)
     if request.body:
         data = json.loads(request.body)
 
