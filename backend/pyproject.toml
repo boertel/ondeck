@@ -26,6 +26,7 @@ django-tsvector-field = "^0.9.5"
 Werkzeug = "^1.0.1"
 boto3 = "^1.17.92"
 ipython = "^7.24.1"
+pyOpenSSL = "^20.0.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"

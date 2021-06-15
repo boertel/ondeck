@@ -30,12 +30,12 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
+HOST = config("HOST", config("RAILWAY_STATIC_URL", "ondeck.test"))
 ALLOWED_HOSTS = [
-    config("HOST", config("RAILWAY_STATIC_URL", "ondeck.test")),
-    "ondeck.ngrok.io",
+    HOST,
 ]
 
-COOKIE_DOMAIN = ALLOWED_HOSTS[0]
+COOKIE_DOMAIN = HOST
 CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
 SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
 
@@ -176,6 +176,9 @@ STATICFILES_DIRS = [os.path.join(LOCAL_FRONTEND, "build/static/")]
 
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
+
+SLACK_CLIENT_ID = config("SLACK_CLIENT_ID")
+SLACK_CLIENT_SECRET = config("SLACK_CLIENT_SECRET")
 
 STATIC_URL = "/static/"
 STATICFILES_LOCATION = "static"

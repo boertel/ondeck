@@ -1,49 +1,16 @@
-import requests
-
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.contrib.auth import get_user_model
 
-from ondeck.models import User
+from auth.providers import GithubOAuth2Provider, SlackOAuth2Provider
 
-
-class GithubApi(object):
-    def __init__(self, access_token):
-        self.access_token = access_token
-
-    def request(self, method, path, **kwargs):
-        headers = {
-            "Authorization": f"token {self.access_token}",
-            "Accept": "application/vnd.github.v3+json",
-        }
-        headers |= kwargs.get("headers", {})
-        if not path.startswith("/"):
-            raise Error("path argument must start with a /")
-        url = f"https://api.github.com{path}"
-        response = requests.request(method, url, headers=headers, **kwargs)
-        response.raise_for_status()
-        if response.headers.get("Content-Type", "").startswith("application/json"):
-            return response.json()
-
-    def post(self, *args, **kwargs):
-        return self.request("post", *args, **kwargs)
-
-    def get(self, *args, **kwargs):
-        return self.request("get", *args, **kwargs)
-
-    def put(self, *args, **kwargs):
-        return self.request("put", *args, **kwargs)
-
-    def patch(self, *args, **kwargs):
-        return self.request("patch", *args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        return self.request("delete", *args, **kwargs)
+User = get_user_model()
 
 
 class Identity(models.Model):
     class Provider:
-        GITHUB = "github"
-        SLACK = "slack"
+        GITHUB = GithubOAuth2Provider.SLUG
+        SLACK = SlackOAuth2Provider.SLUG
 
         @classmethod
         def as_choices(cls):
@@ -56,4 +23,6 @@ class Identity(models.Model):
 
     def get_api(self):
         if self.provider == self.Provider.GITHUB:
-            return GithubApi(**self.parameters)
+            api = GithubOAuth2Provider.api
+            api.set_access_token(access_token=self.parameters["access_token"])
+            return api

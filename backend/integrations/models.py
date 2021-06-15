@@ -3,18 +3,52 @@ from identity.models import Identity
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import JSONField
 
 from config.base import BaseModel
 from ondeck.models import Workspace
 from identity.models import Identity
 
+from auth.providers.slack.api import SlackApi
+
 User = get_user_model()
+
+
+class Bot(BaseModel):
+    class Provider:
+        SLACK = "slack"
+
+        @classmethod
+        def as_choices(cls):
+            return ((cls.SLACK, "Slack"),)
+
+    provider = models.CharField(
+        max_length=255, choices=Provider.as_choices(), null=True
+    )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    bot_id = models.CharField(max_length=255)
+    parameters = JSONField()
+    workspaces = models.ManyToManyField(Workspace)
+
+    @property
+    def api(self):
+        if hasattr(self, "_api") is False:
+            self._api = SlackApi(access_token=self.parameters["access_token"])
+        return self._api
+
+    def send(self, to, message):
+        data = {
+            "channel": to,
+            "text": message,
+        }
+        return self.api.post("chat.postMessage", json=data)
 
 
 class Repository(BaseModel):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     repo_id = models.CharField(max_length=255)
     workspaces = models.ManyToManyField(Workspace)
+    watchers = models.ManyToManyField(Identity)
 
     class Meta:
         unique_together = ("owner", "repo_id")
