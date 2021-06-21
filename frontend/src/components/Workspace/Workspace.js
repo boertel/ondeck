@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
-import { BoardIcon, SearchIcon, ActionsIcon, LinksIcon } from '../../ui/icons'
+import { BoardIcon, SearchIcon, ActionsIcon, AttachmentIcon } from '../../ui/icons'
 import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
 import { AddBoardForm } from '../../form'
@@ -76,8 +76,8 @@ function Workspace({ className }) {
                 Actions
               </SidebarMenuItem>
               <SidebarMenuItem to={`/workspaces/${workspaceSlug}/links`}>
-                <LinksIcon />
-                Links
+                <AttachmentIcon />
+                Attachments
               </SidebarMenuItem>
             </SidebarMenu>
             {boards && (

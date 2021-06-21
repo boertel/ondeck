@@ -11,15 +11,16 @@ import {
   MoreHorizontal,
   CreditCard,
   Hexagon as WorkspaceIcon,
-  Link2,
+  Paperclip,
+  Eye,
 } from 'react-feather'
 
 export function SearchIcon(props) {
   return <Search width="1em" height="1em" {...props} />
 }
 
-export function LinksIcon(props) {
-  return <Link2 {...props} />
+export function AttachmentIcon(props) {
+  return <Paperclip {...props} />
 }
 
 export function BoardIcon(props) {
@@ -34,5 +35,6 @@ export {
   Box as ActionsIcon,
   MoreHorizontal as PopoverIcon,
   CreditCard as TicketIcon,
+  Eye as PreviewIcon,
   WorkspaceIcon,
 }
