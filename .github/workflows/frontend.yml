@@ -25,5 +25,5 @@ jobs:
       - uses: ./.github/actions/deploy-react-to-aws
         with:
           working-directory: ${{ env.working-directory }}
-      - run: npm install @railway/cli@0.2.35 -g
+      - run: npm install @railway/cli@0.2.36 -g
       - run: npx railway variables set COMMIT=${{ env.GIT_SHORT_SHA }}
