@@ -1,9 +1,11 @@
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseForbidden
-from django.contrib.auth import login as django_login
+from django.http import HttpResponseRedirect
 from django.db import transaction
 from django.contrib.auth import get_user_model
 
-from auth.providers import GithubOAuth2Provider, SlackOAuth2Provider
+from auth.providers import (
+    GithubOAuth2Provider,
+    SlackOAuth2Provider,
+)
 
 User = get_user_model()
 
@@ -31,8 +33,4 @@ def login(request, provider):
 @provider
 @transaction.atomic
 def callback(request, provider):
-    identity = provider.execute_pipeline(request)
-    if identity:
-        django_login(request, identity.user)
-        return JsonResponse({"user": identity.user.id})
-    return HttpResponseForbidden()
+    return provider.execute_pipeline(request)

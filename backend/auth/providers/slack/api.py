@@ -12,5 +12,6 @@ class SlackApi(ProviderApi):
 
     def get_user(self):
         user = self.get("users.identity")
+        print(user)
         user["uid"] = user["user"]["id"]
         return user

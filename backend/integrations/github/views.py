@@ -13,6 +13,8 @@ def pull_request(request):
     if request.body:
         data = json.loads(request.body)
 
+    print(data)
+
     message = (
         f"{data['action']} {data['pull_request']['url']} by {data['sender']['login']}"
     )

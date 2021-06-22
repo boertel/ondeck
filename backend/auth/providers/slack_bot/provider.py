@@ -1,14 +1,14 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect
 
 from ..base import OAuth2Provider
 from ..pipeline import get_access_token
 from ..slack.api import SlackApi
 
 
-def create_bot(provider, request, **kwargs):
+def create_bot(provider, request, state, **kwargs):
     from integrations.models import Bot
-    payload = provider.get_access_token(request.GET.get("code"))
-    print(payload)
+    payload = state['payload']
     filters = {
             "bot_id": payload["bot_user_id"],
             "provider": provider.SLUG,
@@ -17,11 +17,12 @@ def create_bot(provider, request, **kwargs):
     defaults = {
             "parameters": {
                 "app_id": payload["app_id"],
+                "team": payload["team"]["id"],
                 "access_token": payload["access_token"]
                 }
     }
     bot, _ = Bot.objects.update_or_create(defaults=defaults, **filters)
-    return bot
+    return HttpResponseRedirect('/?bot=true')
 
 
 class SlackBotOAuth2Provider(OAuth2Provider):
@@ -40,6 +41,9 @@ class SlackBotOAuth2Provider(OAuth2Provider):
 
     def get_redirect_uri(self, request):
         redirect_uri = request.build_absolute_uri(
-            f"/integrations/{self.SLUG}/callback"
+            f"/identity/callback/{self.SLUG}"
         )
         return redirect_uri
+
+    def parse_access_token(self, payload):
+        return payload['access_token']

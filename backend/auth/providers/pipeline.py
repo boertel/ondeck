@@ -1,14 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth import login as django_login
+from django.http.response import HttpResponseRedirect
 
 User = get_user_model()
 
 
 def get_access_token(provider, request, api, **kwargs):
-    payload = provider.get_access_token(request.GET.get("code"))
-    print(payload)
-    access_token = payload["access_token"]
-    if type(access_token) == list:
-        access_token = payload["access_token"][0]
+    access_token = provider.fetch_access_token(request.GET.get("code"))
     api.set_access_token(access_token)
 
 
@@ -16,12 +14,20 @@ def fetch_user(api, state, **kwargs):
     state.update({"user": api.get_user()})
 
 
+def login(state, request, **kwargs):
+    identity = state["identity"]
+    django_login(request, identity.user)
+    return HttpResponseRedirect("/")
+
+
 def create_identity(api, state, provider, request, **kwargs):
     from identity.models import Identity
 
     uid = state["user"]["uid"]
     filters = {"provider": provider.SLUG, "uid": uid}
-    defaults = {"parameters": {"access_token": api.access_token}}
+    parameters = {"access_token": api.access_token}
+    parameters.update(state.get("extra_parameters", {}))
+    defaults = {"parameters": parameters}
     identity, created = Identity.objects.update_or_create(defaults=defaults, **filters)
 
     is_authenticated = request.user.is_authenticated
@@ -44,4 +50,4 @@ def create_identity(api, state, provider, request, **kwargs):
                 identity.user = user
                 identity.save()
                 user.set_unusable_password()
-    return identity
+    state["identity"] = identity

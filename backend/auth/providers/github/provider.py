@@ -2,7 +2,7 @@ from django.conf import settings
 
 from ..base import OAuth2Provider
 from .api import GithubApi
-from ..pipeline import get_access_token, fetch_user, create_identity
+from ..pipeline import get_access_token, fetch_user, create_identity, login
 
 
 class GithubOAuth2Provider(OAuth2Provider):
@@ -17,6 +17,10 @@ class GithubOAuth2Provider(OAuth2Provider):
         get_access_token,
         fetch_user,
         create_identity,
+        login,
     ]
+
+    def parse_access_token(self, payload):
+        return payload["access_token"][0]
 
     api = GithubApi()

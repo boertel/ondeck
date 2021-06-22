@@ -16,10 +16,10 @@ class Pipeline(object):
     def execute(self, request, **kwargs):
         self.kwargs["request"] = request
         self.kwargs.update(kwargs)
-        identity = None
         for step in self.steps:
-            identity = step(**self.kwargs)
-        return identity
+            response = step(**self.kwargs)
+            if response:
+                return response
 
 
 class OAuth2Provider:
@@ -28,15 +28,22 @@ class OAuth2Provider:
 
     def authorize(self, request):
         redirect_uri = self.get_redirect_uri(request)
-        self.session = OAuth2Session(
-            self.CLIENT_ID, redirect_uri=redirect_uri, scope=self.SCOPE
-        )
+        self.session = OAuth2Session(self.CLIENT_ID, redirect_uri=redirect_uri)
+        scopes = self.get_scope()
+        scope = None
+        if "scope" in scopes:
+            scope = scopes.pop("scope")
+        self.session.scope = scope
         authorization_url, state = self.session.authorization_url(
-            self.get_authorize_url()
+            self.get_authorize_url(),
+            **scopes,
         )
         return authorization_url
 
-    def get_access_token(self, code):
+    def get_scope(self):
+        return {"scope": " ".join(self.SCOPE)}
+
+    def fetch_access_token(self, code):
         data = {
             "client_id": self.CLIENT_ID,
             "client_secret": self.CLIENT_SECRET,
@@ -44,11 +51,15 @@ class OAuth2Provider:
         }
 
         response = requests.post(self.ACCESS_TOKEN_URL, data)
+        payload = response
         if response.headers.get("Content-Type", "").startswith("application/json"):
-            return response.json()
+            payload = response.json()
         else:
             payload = parse_qs(response.text)
-            return payload
+        return self.parse_access_token(payload)
+
+    def parse_access_token(self, payload):
+        return payload
 
     def get_redirect_uri(self, request):
         redirect_uri = request.build_absolute_uri(
@@ -56,8 +67,11 @@ class OAuth2Provider:
         )
         return redirect_uri
 
+    def get_pipeline(self):
+        return Pipeline(self, self.PIPELINE)
+
     def execute_pipeline(self, request):
-        pipeline = Pipeline(self, self.PIPELINE)
+        pipeline = self.get_pipeline()
         return pipeline.execute(request=request)
 
 
@@ -83,10 +97,15 @@ class ProviderApi(object):
         url = self.get_url(path)
         headers = self.get_headers()
         headers |= kwargs.get("headers", {})
-        response = requests.request(method, url, headers=headers, **kwargs)
-        response.raise_for_status()
-        if response.headers.get("Content-Type", "").startswith("application/json"):
-            return response.json()
+        __import__("pdb").set_trace()
+        try:
+            response = requests.request(method, url, headers=headers, **kwargs)
+            response.raise_for_status()
+            if response.headers.get("Content-Type", "").startswith("application/json"):
+                return response.json()
+        except Exception as exception:
+            print(exception)
+            raise exception
 
     def post(self, *args, **kwargs):
         return self.request("post", *args, **kwargs)
