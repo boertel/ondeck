@@ -30,9 +30,12 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = [config("HOST", config('RAILWAY_STATIC_URL', 'ondeck.test'))]
+HOST = config("HOST", config("RAILWAY_STATIC_URL", "ondeck.test"))
+ALLOWED_HOSTS = [
+    HOST,
+]
 
-COOKIE_DOMAIN = ALLOWED_HOSTS[0]
+COOKIE_DOMAIN = HOST
 CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
 SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
 
@@ -57,6 +60,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "ondeck",
     "identity",
+    "integrations",
     "web",
 ]
 
@@ -76,7 +80,7 @@ CORS_ORIGIN_WHITELIST = ["http://localhost:3004"]
 ROOT_URLCONF = "config.urls"
 
 TEMPLATE_DIRS = []
-LOCAL_FRONTEND = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend/'))
+LOCAL_FRONTEND = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend/"))
 TEMPLATE_DIRS.append(LOCAL_FRONTEND)
 TEMPLATES = [
     {
@@ -111,7 +115,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-    }
+    },
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
@@ -121,7 +125,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {"default": dj_database_url.config(default=config("DATABASE_URL"))}
-DATABASES['default']['ENGINE'] = 'db'
+DATABASES["default"]["ENGINE"] = "db"
 
 
 # Password validation
@@ -168,10 +172,13 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 WEB_DIRECTORY = config("COMMIT", default="build")
-STATICFILES_DIRS = [os.path.join(LOCAL_FRONTEND, 'build/static/')]
+STATICFILES_DIRS = [os.path.join(LOCAL_FRONTEND, "build/static/")]
 
 GITHUB_CLIENT_ID = config("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = config("GITHUB_CLIENT_SECRET")
+
+SLACK_CLIENT_ID = config("SLACK_CLIENT_ID")
+SLACK_CLIENT_SECRET = config("SLACK_CLIENT_SECRET")
 
 STATIC_URL = "/static/"
 STATICFILES_LOCATION = "static"
@@ -189,3 +196,5 @@ AWS_QUERYSTRING_AUTH = False
 
 MEILISEARCH_URL = config("MEILISEARCH_URL", default="http://127.0.0.1:7700")
 MEILISEARCH_MASTER_KEY = config("MEILISEARCH_MASTER_KEY", default=None)
+
+WEBHOOK_SECRET = config("WEBHOOK_SECRET", default=None)

@@ -22,6 +22,7 @@ from ondeck import urls
 from identity import urls as identity_urls
 from upload import urls as upload_urls
 from command import urls as command_urls
+from integrations import urls as integrations_urls
 
 from web.views import index
 
@@ -31,6 +32,7 @@ urlpatterns = [
     path("identity/", include(identity_urls)),
     path("upload/", include(upload_urls)),
     path("command/", include(command_urls)),
+    path("integrations/", include(integrations_urls)),
 ]
 
 if settings.DEBUG:

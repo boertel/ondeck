@@ -1,5 +1,7 @@
 name: React
 on:
+  branches:
+    - 'dev'
   push:
     paths-ignore:
       - 'backend/**'

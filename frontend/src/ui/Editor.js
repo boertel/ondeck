@@ -5,6 +5,8 @@ import { NativeTypes } from 'react-dnd-html5-backend'
 import { useDrop } from 'react-dnd'
 import TextareaAutosize from 'react-textarea-autosize'
 
+import { PreviewIcon } from './icons'
+import Button from './Button'
 import useUpload from './UploadInput'
 
 function useDropFiles() {
@@ -38,7 +40,7 @@ const CHARACTERS = {
   u: 'underline',
 }
 
-function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
+function Editor({ value, onChange, characters, onMetaEnter, style, ...props }) {
   const ref = useRef(null)
 
   const [, dropzone, files] = useDropFiles()
@@ -154,7 +156,7 @@ function Editor({ value, onChange, characters, onMetaEnter, ...props }) {
   }
 
   return (
-    <div className="editor" ref={dropzone}>
+    <div className="editor" ref={dropzone} style={style}>
       <TextareaAutosize
         ref={ref}
         placeholder="Leave a comment"
@@ -200,15 +202,42 @@ function Markdown({ value, ...props }) {
   return <div dangerouslySetInnerHTML={{ __html }} {...props} />
 }
 
-function Preview({ value }) {
-  return <div className="preview">{value ? <Markdown value={value} /> : 'Nothing to preview'}</div>
+function Preview({ value, style }) {
+  return (
+    <div className="preview" style={style}>
+      {value ? <Markdown value={value} /> : 'Nothing to preview'}
+    </div>
+  )
 }
 
+const PreviewButton = styled((props) => {
+  return (
+    <Button {...props}>
+      <PreviewIcon />
+    </Button>
+  )
+})`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 12px;
+`
+
 const MyEditor = React.forwardRef(({ className, value, onChange, name, id, autoFocus }, ref) => {
+  const [showPreview, setShowPreview] = useState(false)
   return (
     <div className={className}>
-      <Editor ref={ref} value={value} onChange={onChange} name={name} id={id} autoFocus={autoFocus} />
-      <Preview value={value} />
+      <PreviewButton onClick={() => setShowPreview(!showPreview)} />
+      <Editor
+        style={{ display: showPreview ? 'none' : 'block' }}
+        ref={ref}
+        value={value}
+        onChange={onChange}
+        name={name}
+        id={id}
+        autoFocus={autoFocus}
+      />
+      <Preview style={{ display: showPreview ? 'block' : 'none' }} value={value} />
     </div>
   )
 })
@@ -269,8 +298,16 @@ export default styled(MyEditor)`
 
   .preview {
     border: 2px solid var(--border-color);
-    padding: 12px;
+    padding: 8px;
     border-radius: var(--border-radius);
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
 
     pre {
       background-color: #ccc;

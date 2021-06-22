@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react'
+import React, { useRef, useEffect } from 'react'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
 
@@ -25,7 +25,7 @@ const styles = {
       ...provided,
       '& input': {
         height: 'auto',
-      }
+      },
     }
   },
   menu: (provided) => {
@@ -33,10 +33,10 @@ const styles = {
       ...provided,
       backgroundColor: 'var(--fg)',
     }
-  }
+  },
 }
 
-const theme = defaultTheme => ({
+const theme = (defaultTheme) => ({
   ...defaultTheme,
   colors: {
     danger: 'var(--danger)',
@@ -50,7 +50,7 @@ const theme = defaultTheme => ({
     neutral10: 'var(--primary-hover)',
     neutral20: 'var(--border-color)',
     neutral30: 'var(--border-color-hover)',
-    neutral40: 'green',
+    neutral40: 'var(--primary)',
     neutral50: 'var(--placeholder)',
     neutral60: 'var(--default)',
     neutral70: 'pink',

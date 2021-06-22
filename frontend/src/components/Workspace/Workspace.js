@@ -6,11 +6,14 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
-import { BoardIcon, SearchIcon, ActionsIcon } from '../../ui/icons'
+import { BoardIcon, SearchIcon, ActionsIcon, AttachmentIcon } from '../../ui/icons'
 import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
 import { AddBoardForm } from '../../form'
 import Command from '../../components/Command'
+
+import Actions from '../Actions'
+import Links from '../Links'
 
 import { useBoards, mutateTicket } from '../../resources'
 
@@ -72,6 +75,10 @@ function Workspace({ className }) {
                 <ActionsIcon />
                 Actions
               </SidebarMenuItem>
+              <SidebarMenuItem to={`/workspaces/${workspaceSlug}/links`}>
+                <AttachmentIcon />
+                Attachments
+              </SidebarMenuItem>
             </SidebarMenu>
             {boards && (
               <SidebarMenu>
@@ -93,6 +100,8 @@ function Workspace({ className }) {
         </Sidebar>
         <main>
           <Routes>
+            <Route path="actions" element={<Actions />} />
+            <Route path="links" element={<Links />} />
             <Route path=":boardSlug/:ticketSlug" element={<FullTicket />} />
             <Route path=":boardSlug/new" element={<FullTicket />} />
             <Route path=":boardSlug/" element={<Board />} />

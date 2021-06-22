@@ -10,14 +10,13 @@ const colors = {
   foreground: '#FFF',
   background: '#F7F7F7',
   placeholder: '#999',
-  sidebar: '#F7F7F7',
   overlay: 'rgba(38, 38, 38, 0.8)',
 }
 
 const theme = {
   ...colors,
   borderColor: 'rgba(0, 0, 0, 0.15)',
-  hoverBackground: darken(0.10, colors.primary),
+  hoverBackground: darken(0.1, colors.primary),
   radius: '4px',
 }
 
@@ -35,6 +34,16 @@ export const GlobalStyle = createGlobalStyle`
     --border-radius: ${({ theme }) => theme.radius};
     --overlay: ${({ theme }) => theme.overlay};
   }
+
+  /*
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #2f3136;
+      --bg: #232529;
+      --default: #ffffff;
+    }
+  }
+  */
 
   html, body, #root {
     color: var(--default);
