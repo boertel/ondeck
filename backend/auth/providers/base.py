@@ -97,7 +97,6 @@ class ProviderApi(object):
         url = self.get_url(path)
         headers = self.get_headers()
         headers |= kwargs.get("headers", {})
-        __import__("pdb").set_trace()
         try:
             response = requests.request(method, url, headers=headers, **kwargs)
             response.raise_for_status()
