@@ -53,7 +53,7 @@ export const GlobalStyle = createGlobalStyle`
     color: var(--default);
     margin: 0;
     padding: 0;
-    height: 100%;
+    min-height: 100%;
     background-color: var(--fg);
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
