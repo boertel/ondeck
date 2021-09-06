@@ -27,7 +27,7 @@ const Command = (props) => {
     },
     [navigate, workspaceSlug]
   )
-  return <CmdK {...props} getOptions={getOptions} />
+  return <CmdK {...props} style={{ zIndex: 1002 }} getOptions={getOptions} />
 }
 
 export default Command
