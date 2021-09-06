@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useParams, } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-form'
 
 import { Button } from '../ui'
@@ -9,11 +9,8 @@ import { mutateComment } from '../resources/comments'
 function AddCommentForm({ message }) {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
-  const {
-    Form,
-    reset,
-  } = useForm({
-    defaultValues: useMemo(() => ({ message, }), [message]),
+  const { Form, reset } = useForm({
+    defaultValues: useMemo(() => ({ message }), [message]),
     onSubmit: async (values, instance) => {
       await mutateComment({ workspaceSlug, boardSlug, ticketSlug }, values)
       reset()
@@ -23,7 +20,7 @@ function AddCommentForm({ message }) {
   return (
     <Form>
       <EditorField field="message" placeholder="Add a comment" />
-      <Button type="submit">Save</Button>
+      <Button type="submit">Comment</Button>
     </Form>
   )
 }
