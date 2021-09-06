@@ -7,17 +7,14 @@ import { InputField } from './fields'
 import { mutateBoard } from '../resources/boards'
 
 function AddBoardForm({ name }) {
-  const { workspaceSlug, } = useParams()
+  const { workspaceSlug } = useParams()
 
   const navigate = useNavigate()
 
-  const {
-    Form,
-    reset,
-  } = useForm({
-    defaultValues: useMemo(() => ({ name, }), [name]),
+  const { Form, reset } = useForm({
+    defaultValues: useMemo(() => ({ name }), [name]),
     onSubmit: async (values, instance) => {
-      const board = await mutateBoard({ workspaceSlug, }, values)
+      const board = await mutateBoard({ workspaceSlug }, values)
       console.log(board)
       if (board) {
         const { slug } = board
@@ -29,7 +26,7 @@ function AddBoardForm({ name }) {
 
   return (
     <Form>
-      <InputField icon={AddIcon} field="name" className="transparent full-width" />
+      <InputField icon={AddIcon} field="name" className="transparent full-width" placeholder="Add a new board" />
     </Form>
   )
 }
