@@ -9,7 +9,7 @@ import Column from '../Column'
 import { AddColumnForm } from '../../form'
 import { useColumns, useTickets, useBoards } from '../../resources'
 
-const Board = ({ zoom }) => {
+const Board = ({ zoom, openSidebar }) => {
   const { workspaceSlug, boardSlug, ticketSlug } = useParams()
 
   const { data: board } = useBoards({ workspaceSlug, boardSlug, ticketSlug })
@@ -28,7 +28,7 @@ const Board = ({ zoom }) => {
   return (
     <>
       <BrowserTitle>{board?.name}</BrowserTitle>
-      <BoardHeader {...board} onAddColumn={() => setShowAddColumnForm(true)} />
+      <BoardHeader {...board} openSidebar={openSidebar} onAddColumn={() => setShowAddColumnForm(true)} />
       <Droppable droppableId="board" type="COLUMN" direction="horizontal">
         {(provided) => (
           <Columns ref={provided.innerRef} {...provided.droppableProps}>

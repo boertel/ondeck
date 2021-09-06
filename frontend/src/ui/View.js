@@ -3,7 +3,10 @@ import _classNames from 'classnames'
 import styled from 'styled-components'
 
 const _View = React.forwardRef(
-  ({ alignItems, radius, justifyContent, flexDirection, as: AsComponent, classNames, className, ...props }, ref) => {
+  (
+    { alignItems, radius, justifyContent, flexDirection, flexWrap, as: AsComponent, classNames, className, ...props },
+    ref
+  ) => {
     let _className = className
     if (classNames) {
       // FIXME probably want to memo this since classNames is an array
@@ -14,13 +17,14 @@ const _View = React.forwardRef(
 )
 
 const View = styled(_View)`
-  width: 100%;
+  width: ${({ $width }) => $width};
 
   display: flex;
   border-radius: ${({ radius }) => radius};
   flex-direction: ${({ flexDirection }) => flexDirection};
   align-items: ${({ alignItems }) => alignItems};
   justify-content: ${({ justifyContent }) => justifyContent};
+  flex-wrap: ${({ flexWrap }) => flexWrap};
 `
 
 View.defaultProps = {
@@ -28,7 +32,9 @@ View.defaultProps = {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   flexDirection: 'row',
+  flexWrap: 'initial',
   radius: 'var(--border-radius)',
+  $width: '100%',
 }
 
 export default View

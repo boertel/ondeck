@@ -1,12 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
+import cn from 'classnames'
 import { isEqual } from 'lodash'
 import { useNavigate, Routes, Route, useParams } from 'react-router-dom'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 import { Sidebar, Input, View } from '../../ui'
 import SidebarMenu, { SidebarMenuItem } from '../../ui/SidebarMenu'
-import { BoardIcon, SearchIcon, ActionsIcon, AttachmentIcon } from '../../ui/icons'
+import { BoardIcon, SearchIcon, ActionsIcon, AttachmentIcon, CloseIcon } from '../../ui/icons'
 import { FullTicket } from '../'
 import Board, { BoardMenuItem } from '../Board'
 import { AddBoardForm } from '../../form'
@@ -48,26 +49,32 @@ function Workspace({ className }) {
     [workspaceSlug]
   )
 
+  const [showSidebar, setShowSidebar] = useState(true)
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={className}>
-        <Sidebar>
+        <Sidebar className={cn({ show: showSidebar })}>
           <View flexDirection="column">
             <SidebarMenu>
               <SidebarMenuItem>
-                {options.length > 0 && (
-                  <Command placeholder="Search for a board or ticket...">
-                    {({ dispatch }) => (
-                      <Input
-                        type="search"
-                        className="transparent full-width"
-                        placeholder="Search..."
-                        onClick={() => dispatch({ type: 'open' })}
-                        icon={SearchIcon}
-                      />
-                    )}
-                  </Command>
-                )}
+                <View alignItems="center">
+                  {options.length > 0 && (
+                    <Command placeholder="Search for a board or ticket...">
+                      {({ dispatch }) => (
+                        <Input
+                          type="search"
+                          className="transparent full-width"
+                          placeholder="Search..."
+                          onClick={() => dispatch({ type: 'open' })}
+                          icon={SearchIcon}
+                          style={{ marginBottom: 0 }}
+                        />
+                      )}
+                    </Command>
+                  )}
+                  <CloseButton onClick={() => setShowSidebar(false)} />
+                </View>
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenu>
@@ -104,7 +111,7 @@ function Workspace({ className }) {
             <Route path="links" element={<Links />} />
             <Route path=":boardSlug/:ticketSlug" element={<FullTicket />} />
             <Route path=":boardSlug/new" element={<FullTicket />} />
-            <Route path=":boardSlug/" element={<Board />} />
+            <Route path=":boardSlug/" element={<Board openSidebar={() => setShowSidebar(true)} />} />
           </Routes>
         </main>
       </div>
@@ -112,10 +119,23 @@ function Workspace({ className }) {
   )
 }
 
+const CloseButton = styled((props) => {
+  return <CloseIcon {...props} />
+})`
+  margin-left: 12px;
+  display: none;
+  @media (max-width: ${({ theme: { devices } }) => devices.small}) {
+    display: block;
+  }
+`
+
 export default styled(Workspace)`
   display: grid;
   grid-template-areas: 'nav content';
   grid-template-columns: 260px 1fr;
+  @media (max-width: ${({ theme: { devices } }) => devices.small}) {
+    grid-template-columns: 0px 1fr;
+  }
   height: 100vh;
 
   header {

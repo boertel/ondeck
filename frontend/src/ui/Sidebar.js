@@ -20,5 +20,16 @@ export default styled(Sidebar)`
     bottom: 0;
     width: 260px;
     height: 100%;
+    background-color: var(--bg);
+    @media (max-width: ${({ theme: { devices } }) => devices.small}) {
+      z-index: -1;
+      width: 100%;
+    }
+  }
+
+  &.show > div {
+    @media (max-width: ${({ theme: { devices } }) => devices.small}) {
+      z-index: 10;
+    }
   }
 `

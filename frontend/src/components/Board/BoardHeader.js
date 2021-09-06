@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useParams, useNavigate, } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Button, View } from '../../ui'
 import { TrashIcon, AddIcon } from '../../ui/icons'
 import { deleteBoard } from '../../resources/boards'
 import AddBoardForm from '../../form/AddBoardForm'
 
-const BoardHeader = ({ className, name, slug, onAddColumn, id, ...props }) => {
+const BoardHeader = ({ className, name, slug, onAddColumn, id, openSidebar, ...props }) => {
   const navigate = useNavigate()
   const { workspaceSlug } = useParams()
   const onDelete = async () => {
@@ -18,18 +18,37 @@ const BoardHeader = ({ className, name, slug, onAddColumn, id, ...props }) => {
   }
   return (
     <View className={className} justifyContent="space-between" alignItems="center">
-      <h4><AddBoardForm name={name} /></h4>
-      <div>
+      <View as="h4" alignItems="center" $width="auto">
+        <SidebarIcon onClick={openSidebar} />
+        <AddBoardForm name={name} />
+      </View>
+      <View $width="auto">
         <Button onClick={onAddColumn}>
           <AddIcon />
         </Button>
         <Button onClick={onDelete}>
           <TrashIcon />
         </Button>
-      </div>
+      </View>
     </View>
   )
 }
+
+const SidebarIcon = styled(({ className, onClick }) => {
+  return (
+    <button onClick={onClick} className={className}>
+      ⛵️
+    </button>
+  )
+})`
+  border: none;
+  background: transparent;
+  font-size: 1.1em;
+  display: none;
+  @media (max-width: ${({ theme: { devices } }) => devices.small}) {
+    display: block;
+  }
+`
 
 export default styled(BoardHeader)`
   position: sticky;

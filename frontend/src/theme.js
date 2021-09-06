@@ -18,6 +18,10 @@ const theme = {
   borderColor: 'rgba(0, 0, 0, 0.15)',
   hoverBackground: darken(0.1, colors.primary),
   radius: '4px',
+  devices: {
+    small: '640px',
+    medium: '768px',
+  },
 }
 
 export const GlobalStyle = createGlobalStyle`

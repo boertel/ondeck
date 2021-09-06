@@ -13,6 +13,7 @@ import {
   Hexagon as WorkspaceIcon,
   Paperclip,
   Eye,
+  X,
 } from 'react-feather'
 
 export function SearchIcon(props) {
@@ -37,4 +38,5 @@ export {
   CreditCard as TicketIcon,
   Eye as PreviewIcon,
   WorkspaceIcon,
+  X as CloseIcon,
 }
