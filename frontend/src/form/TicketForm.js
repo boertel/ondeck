@@ -3,14 +3,13 @@ import styled from 'styled-components'
 import { useLocation, useParams, useNavigate, Prompt } from 'react-router-dom'
 import { useForm } from 'react-form'
 
-import { Button, View, Loading, } from '../ui'
+import { Button, View, Loading } from '../ui'
 import { TrashIcon } from '../ui/icons'
 import { useUsers } from '../resources'
 import { mutateTicket, deleteTicket, useTickets } from '../resources/tickets'
 import { SelectField, EditorField, InputField, ComboBoxField } from './fields'
 
-
-function TicketForm({ title, description, id, column, members, parent, onSubmit, className }) {
+function TicketForm({ title, description, id, column, members, parent, onSubmit, className, position }) {
   const location = useLocation()
   const { focus = !!title ? 'description' : 'title' } = location.state || {}
   const params = new URLSearchParams(location.search)
@@ -33,8 +32,9 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
       id,
       parent,
       members,
+      position,
     }),
-    [title, description, paramColumn, id, parent, members]
+    [title, description, paramColumn, id, parent, members, position]
   )
 
   const {
@@ -81,11 +81,11 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
         )}
       </View>
       <InputField label="Title" field="title" required={true} autoFocus={focus === 'title'} />
-      <EditorField label="Description" field="description" autoFocus={focus === 'description'}/>
-      <SelectField label="Parent" field="parent" filterValue={v => parseInt(v, 10)}>
+      <EditorField label="Description" field="description" autoFocus={focus === 'description'} />
+      <SelectField label="Parent" field="parent" filterValue={(v) => parseInt(v, 10)}>
         <option value="" />
         {(tickets || [])
-          .filter(ticket => ticket.id !== id && !ticket.parent)
+          .filter((ticket) => ticket.id !== id && !ticket.parent)
           .map(({ id, title, key }) => (
             <option value={id} key={id}>
               {key}: {title}
