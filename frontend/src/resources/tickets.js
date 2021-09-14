@@ -3,7 +3,6 @@ import { sortBy } from 'lodash'
 import useSWR, { mutate } from 'swr'
 import { update, remove } from './api'
 
-
 export const useTickets = ({ workspaceSlug, boardSlug, ticketSlug }) => {
   let key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
   if (ticketSlug) {
@@ -37,61 +36,77 @@ export const mutateTicket = async ({ workspaceSlug, boardSlug, ticketSlug }, dat
   if (ticketSlug) {
     path = `${path}${ticketSlug}/`
   }
-  console.log(ticketsKey, path)
 
   // Local mutate for drag and drop
-  await mutate(ticketsKey, tickets => {
-    if (!tickets) {
-      return
-    }
-    const oldTicket = tickets.find(({ pk }) => pk === ticketSlug)
-    if (data.position !== undefined || data.column !== undefined) {
-      // ticket has moved
-      let newOrder = []
-      const ticketsInColumn = sortBy(tickets.filter(previous => previous.column === (data.column === undefined ? oldTicket.column : data.column)), 'position')
-      if (data.column !== oldTicket.column) {
-        newOrder = ticketsInColumn.splice(data.position, 0, {...oldTicket, column: data.column, position: data.position, })
-      } else if (data.position !== oldTicket.position) {
-        newOrder = reorder(ticketsInColumn, oldTicket.position, data.position)
+  await mutate(
+    ticketsKey,
+    (tickets) => {
+      if (!tickets) {
+        return
       }
-
-      const output = tickets.map(previous => {
-        const index = newOrder.indexOf(previous)
-        if (index !== -1) {
-          return {
-            ...previous,
-            position: index,
-          }
-        } else {
-          return previous
+      const oldTicket = tickets.find(({ pk }) => pk === ticketSlug)
+      if (data.position !== undefined || data.column !== undefined) {
+        // ticket has moved
+        let newOrder = []
+        const ticketsInColumn = sortBy(
+          tickets.filter(
+            (previous) => previous.column === (data.column === undefined ? oldTicket.column : data.column)
+          ),
+          'position'
+        )
+        if (data.column !== oldTicket.column) {
+          newOrder = ticketsInColumn.splice(data.position, 0, {
+            ...oldTicket,
+            column: data.column,
+            position: data.position,
+          })
+        } else if (data.position !== oldTicket.position) {
+          newOrder = reorder(ticketsInColumn, oldTicket.position, data.position)
         }
-      })
-      return output
-    } else {
-      return tickets
-    }
-  }, false)
+
+        const output = tickets.map((previous) => {
+          const index = newOrder.indexOf(previous)
+          if (index !== -1) {
+            return {
+              ...previous,
+              position: index,
+            }
+          } else {
+            return previous
+          }
+        })
+        return output
+      } else {
+        return tickets
+      }
+    },
+    false
+  )
 
   const [ticket, created] = await update(path, data, { method: ticketSlug ? 'patch' : 'post' })
-  await mutate(ticketsKey, async tickets => {
-    if (created) {
-      return [...tickets, ticket]
-    } else {
-      return tickets.map(previous => {
-        if (previous.id === ticket.id) {
-          return ticket
-        } else {
-          return previous
-        }
-      })
-    }
-  }, false)
+  await mutate(
+    ticketsKey,
+    async (tickets) => {
+      if (created) {
+        return [...tickets, ticket]
+      } else {
+        return tickets.map((previous) => {
+          if (previous.id === ticket.id) {
+            return ticket
+          } else {
+            return previous
+          }
+        })
+      }
+    },
+    false
+  )
   return ticket
 }
 
-export const deleteTicket = ({ workspaceSlug, boardSlug, ticketSlug, }) => {
+export const deleteTicket = ({ workspaceSlug, boardSlug, ticketSlug }) => {
   const ticketsKey = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/`
   const ticketKey = `${ticketsKey}${ticketSlug}/`
-  mutate(ticketsKey, columns => columns.filter(({ pk }) => pk !== ticketSlug), false)
+  mutate(ticketsKey, (columns) => columns.filter(({ pk }) => pk !== ticketSlug), false)
   return mutate(ticketKey, remove(ticketKey))
 }

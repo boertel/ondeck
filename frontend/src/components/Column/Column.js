@@ -2,29 +2,30 @@ import React from 'react'
 import { sortBy } from 'lodash'
 import styled from 'styled-components'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { useParams } from 'react-router-dom'
 
 import { Tickets, View, Sticky } from '../../ui'
 import { AddQuickTicketForm } from '../../form'
 import Ticket from '../Ticket'
 import ColumnHeader from './ColumnHeader'
 
-
 function Column({ id: columnId, name, index, className, tickets = [], ...props }) {
   const sorted = sortBy(tickets, 'position')
+
+  const { boardSlug } = useParams()
 
   const dndId = `${columnId}`
   return (
     <Draggable draggableId={dndId} index={index}>
-      {provided => (
+      {(provided) => (
         <View flexDirection="column" className={className} ref={provided.innerRef} {...provided.draggableProps}>
-          <Sticky alignItems="center" style={{paddingBottom: '6px'}} {...provided.dragHandleProps}>
-            <ColumnHeader name={name} id={columnId}>
-            </ColumnHeader>
+          <Sticky alignItems="center" style={{ paddingBottom: '6px' }} {...provided.dragHandleProps}>
+            <ColumnHeader name={name} id={columnId}></ColumnHeader>
           </Sticky>
-          <Droppable droppableId={JSON.stringify({"column": columnId})} type="TICKET">
+          <Droppable droppableId={JSON.stringify({ column: columnId, boardSlug })} type="TICKET">
             {(provided, snapshot) => (
               <Tickets {...provided.droppableProps} ref={provided.innerRef}>
-                {sorted.map(ticket => (
+                {sorted.map((ticket) => (
                   <Ticket key={ticket.key} to={`${ticket.key}`} {...ticket} index={ticket.position} />
                 ))}
                 {provided.placeholder}

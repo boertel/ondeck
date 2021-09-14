@@ -39,11 +39,12 @@ function Workspace({ className }) {
     function ({ draggableId, type, source, destination }) {
       console.log({ draggableId, type, source, destination })
       if (type === 'TICKET' && !isEqual(source, destination)) {
+        const { boardSlug, ...rest } = JSON.parse(destination.droppableId)
         const data = {
-          ...JSON.parse(destination.droppableId),
+          ...rest,
           position: destination.index,
         }
-        mutateTicket({ workspaceSlug, ticketSlug: draggableId }, data)
+        mutateTicket({ workspaceSlug, boardSlug, ticketSlug: draggableId }, data)
       }
     },
     [workspaceSlug]
