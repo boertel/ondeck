@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
+import AsyncCreatableSelect from 'react-select/async-creatable'
+import CreatableSelect from 'react-select/creatable'
 
 const styles = {
   container: (provided) => {
@@ -66,7 +68,25 @@ const ComboBoxInput = ({ autoFocus, ...props }) => {
       ref.current.focus()
     }
   }, [autoFocus])
-  const AsComponent = props.loadOptions ? AsyncSelect : Select
-  return <AsComponent ref={ref} styles={styles} theme={theme} {...props} />
+  let onChange = props.onChange
+  let AsComponent = Select
+  if (props.loadOptions) {
+    AsComponent = AsyncSelect
+  }
+  if (props.onCreate) {
+    if (props.loadOptions) {
+      AsComponent = AsyncCreatableSelect
+    } else {
+      AsComponent = CreatableSelect
+    }
+    onChange = (option) => {
+      if (option.__isNew__) {
+        props.onCreate(option)
+      } else if (onChange) {
+        props.onChange(option)
+      }
+    }
+  }
+  return <AsComponent ref={ref} styles={styles} theme={theme} {...props} onChange={onChange} />
 }
 export default ComboBoxInput

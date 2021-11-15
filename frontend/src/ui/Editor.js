@@ -202,9 +202,9 @@ function Markdown({ value, ...props }) {
   return <div dangerouslySetInnerHTML={{ __html }} {...props} />
 }
 
-function Preview({ value, style }) {
+function Preview({ value, style, onDoubleClick }) {
   return (
-    <div className="preview" style={style}>
+    <div className="preview" style={style} onDoubleClick={onDoubleClick}>
       {value ? <Markdown value={value} /> : 'Nothing to preview'}
     </div>
   )
@@ -223,24 +223,31 @@ const PreviewButton = styled((props) => {
   margin: 12px;
 `
 
-const MyEditor = React.forwardRef(({ className, value, onChange, name, id, autoFocus }, ref) => {
-  const [showPreview, setShowPreview] = useState(false)
-  return (
-    <div className={className}>
-      <PreviewButton onClick={() => setShowPreview(!showPreview)} />
-      <Editor
-        style={{ display: showPreview ? 'none' : 'block' }}
-        ref={ref}
-        value={value}
-        onChange={onChange}
-        name={name}
-        id={id}
-        autoFocus={autoFocus}
-      />
-      <Preview style={{ display: showPreview ? 'block' : 'none' }} value={value} />
-    </div>
-  )
-})
+const MyEditor = React.forwardRef(
+  ({ className, value, onChange, name, id, autoFocus, preview = true, onBlur }, ref) => {
+    const [showPreview, setShowPreview] = useState(value ? preview : false)
+    return (
+      <div className={className}>
+        <PreviewButton onClick={() => setShowPreview(!showPreview)} />
+        <Editor
+          style={{ display: showPreview ? 'none' : 'block' }}
+          ref={ref}
+          value={value}
+          onChange={onChange}
+          name={name}
+          id={id}
+          autoFocus={autoFocus}
+          onBlur={onBlur}
+        />
+        <Preview
+          style={{ display: showPreview ? 'block' : 'none', minHeight: '64px' }}
+          onDoubleClick={() => setShowPreview(!showPreview)}
+          value={value}
+        />
+      </div>
+    )
+  }
+)
 
 export default styled(MyEditor)`
   width: 100%;

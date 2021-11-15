@@ -67,8 +67,10 @@ function TicketForm({ title, description, id, column, members, parent, onSubmit,
   const back = `/workspaces/${workspaceSlug}/${boardSlug}`
 
   const onDelete = async () => {
-    deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
-    navigate(back)
+    if (window.confirm('Are you sure you want to remove this ticket?')) {
+      deleteTicket({ workspaceSlug, boardSlug, ticketSlug })
+      navigate(back)
+    }
   }
   return (
     <Form className={className}>

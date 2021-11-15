@@ -17,7 +17,7 @@ export const useTicketVersions = (params) => {
     const { workspaceSlug, boardSlug, ticketSlug } = params
     key = `/workspaces/${workspaceSlug}/boards/${boardSlug}/tickets/${ticketSlug}/versions/`
   }
-  return useSWR(key, { initialData: [] })
+  return useSWR(key)
 }
 
 const reorder = (list, startIndex, endIndex) => {

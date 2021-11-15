@@ -25,6 +25,7 @@ const View = styled(_View)`
   align-items: ${({ alignItems }) => alignItems};
   justify-content: ${({ justifyContent }) => justifyContent};
   flex-wrap: ${({ flexWrap }) => flexWrap};
+  gap: ${({ $gap }) => $gap};
 `
 
 View.defaultProps = {

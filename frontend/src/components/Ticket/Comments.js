@@ -25,9 +25,9 @@ const Comments = () => {
 
   return (
     <>
-      <h4>Comments</h4>
+      <h4 style={{ padding: '28px 0 10px 0' }}>Comments</h4>
       <AddCommentForm />
-      {(comments || []).map(comment => {
+      {(comments || []).map((comment) => {
         return <Comment key={comment.id} {...comment} />
       })}
     </>

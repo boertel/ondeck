@@ -1,0 +1,21 @@
+name: Django
+on:
+  push:
+    branches:
+      - 'dev'
+    paths-ignore:
+      - 'frontend/**'
+      - '.github/workflows/frontend*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    env:
+      RAILWAY_TOKEN: ${{secrets.RAILWAY_TOKEN}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '15'
+      - run: npm i -g @railway/cli
+      - run: railway up

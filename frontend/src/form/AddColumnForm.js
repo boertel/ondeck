@@ -6,7 +6,7 @@ import { InputField } from './fields'
 import { mutateColumn } from '../resources/columns'
 import useShortcut from '../hooks/useShortcut'
 
-function AddColumnForm({ name, id, cancel }) {
+function AddColumnForm({ name, id, cancel, placeholder }) {
   const { workspaceSlug, boardSlug } = useParams()
 
   const isEditing = !!id
@@ -29,12 +29,18 @@ function AddColumnForm({ name, id, cancel }) {
   }
 
   useShortcut({
-    'escape': useCallback(callback, [cancel, reset])
-    })
+    escape: useCallback(callback, [cancel, reset]),
+  })
 
   return (
     <Form>
-      <InputField field="name" className="transparent" required={true} autoFocus={!isEditing} />
+      <InputField
+        field="name"
+        className="transparent"
+        required={true}
+        autoFocus={!isEditing}
+        placeholder={placeholder}
+      />
     </Form>
   )
 }

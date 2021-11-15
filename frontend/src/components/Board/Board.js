@@ -25,6 +25,8 @@ const Board = ({ zoom, openSidebar }) => {
     ticketsGroupByColumns = groupBy(tickets, 'column')
   }
 
+  const showAddColumnPlaceholder = columns?.length === 0 || showAddColumnForm
+
   return (
     <>
       <BrowserTitle>{board?.name}</BrowserTitle>
@@ -35,9 +37,12 @@ const Board = ({ zoom, openSidebar }) => {
             {(columns || []).map(({ id, name }, index) => (
               <Column key={id} id={id} index={index} tickets={ticketsGroupByColumns[id]} name={name} />
             ))}
-            {!isLoading && (columns.length === 0 || showAddColumnForm) && (
+            {!isLoading && showAddColumnPlaceholder && (
               <View>
-                <AddColumnForm cancel={() => setShowAddColumnForm(false)} />
+                <AddColumnForm
+                  cancel={() => setShowAddColumnForm(false)}
+                  placeholder={showAddColumnPlaceholder && 'Add a new column'}
+                />
               </View>
             )}
           </Columns>
