@@ -56,7 +56,7 @@ function Workspace({ className }) {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={className}>
         <Sidebar className={cn({ show: showSidebar })}>
-          <View flexDirection="column">
+          <View flexDirection="column" style={{ overflowY: 'auto' }}>
             <SidebarMenu>
               <SidebarMenuItem>
                 <View alignItems="center">
@@ -99,7 +99,7 @@ function Workspace({ className }) {
                     {name}
                   </BoardMenuItem>
                 ))}
-                <SidebarMenuItem>
+                <SidebarMenuItem style={{ position: 'sticky', bottom: 0, backgroundColor: 'var(--bg)' }}>
                   <AddBoardForm />
                 </SidebarMenuItem>
               </SidebarMenu>

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
 //const SidebarMenuItem = ({ to, className, ...rest }) => {
-const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
+const SidebarMenuItem = React.forwardRef(({ to, className, style, ...rest }, ref) => {
   const children = to ? (
     <NavLink to={to} activeClassName="active">
       {rest.children}
@@ -12,7 +12,7 @@ const SidebarMenuItem = React.forwardRef(({ to, className, ...rest }, ref) => {
     rest.children
   )
   return (
-    <li className={className} ref={ref}>
+    <li className={className} ref={ref} style={style}>
       {children}
     </li>
   )
