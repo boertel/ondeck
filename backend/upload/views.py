@@ -1,3 +1,4 @@
+import os
 import boto
 import mimetypes
 from uuid import uuid4
@@ -8,6 +9,8 @@ from django.http import JsonResponse
 
 s3 = boto.connect_s3(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
 
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
+
 
 def sign_s3_upload(request):
     filename = request.GET["filename"]
@@ -17,7 +20,7 @@ def sign_s3_upload(request):
 
     key = "{}.{}".format(uuid4(), extension).lower()
 
-    src = "{}/{}/{}".format(settings.AWS_S3_ENDPOINT_URL, folder, key)
+    src = "{}/{}/{}".format(AWS_S3_ENDPOINT_URL, folder, key)
 
     signed_url = s3.generate_url(
         300,
