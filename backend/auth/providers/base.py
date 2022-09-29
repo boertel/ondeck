@@ -51,6 +51,7 @@ class OAuth2Provider:
             "code": code,
         }
 
+        print("fetch_access_token", data)
         response = requests.post(self.ACCESS_TOKEN_URL, data)
         payload = response
         if response.headers.get("Content-Type", "").startswith("application/json"):

@@ -21,6 +21,10 @@ class GithubOAuth2Provider(OAuth2Provider):
     ]
 
     def parse_access_token(self, payload):
+        """
+        if "error" in payload:
+            raise Exception("")
+        """
         return payload["access_token"][0]
 
     api = GithubApi()
