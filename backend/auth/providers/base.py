@@ -28,6 +28,7 @@ class OAuth2Provider:
 
     def authorize(self, request):
         redirect_uri = self.get_redirect_uri(request)
+        print(redirect_uri)
         self.session = OAuth2Session(self.CLIENT_ID, redirect_uri=redirect_uri)
         scopes = self.get_scope()
         scope = None
