@@ -98,7 +98,7 @@ class ProviderApi(object):
     def request(self, method, path, **kwargs):
         url = self.get_url(path)
         headers = self.get_headers()
-        headers |= kwargs.get("headers", {})
+        headers = headers.update(kwargs.get("headers", {}))
         try:
             response = requests.request(method, url, headers=headers, **kwargs)
             response.raise_for_status()
